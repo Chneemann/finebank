@@ -1,6 +1,7 @@
 import { Routes } from '@angular/router';
 import { LayoutComponent } from './core/layout/layout.component';
 import { OverviewComponent } from './features/overview/overview.component';
+import { BalancesComponent } from './features/balances/balances.component';
 
 export const routes: Routes = [
   {
@@ -8,7 +9,7 @@ export const routes: Routes = [
     component: LayoutComponent,
     children: [
       { path: 'overview', component: OverviewComponent },
-      { path: 'balances', component: OverviewComponent },
+      { path: 'balances', component: BalancesComponent },
       { path: 'transactions', component: OverviewComponent },
       { path: 'bills', component: OverviewComponent },
       { path: 'expenses', component: OverviewComponent },
