@@ -2,18 +2,68 @@
 
 .navbar {
   height: 504px;
+  width: 100%;
 }
 
 .logo {
   display: flex;
+  justify-content: center;
   font-family: "Poppins", sans-serif;
   color: var(--color-white);
   font-size: 24px;
   letter-spacing: 2px;
+
   .logo-part {
     font-weight: 800;
   }
+
   .logo-accent {
     font-weight: 400;
+  }
+}
+
+nav ul {
+  display: flex;
+  flex-direction: column;
+  margin-top: 24px;
+  list-style: none;
+  padding: 0px;
+  gap: 12px;
+  li {
+    width: 100%;
+
+    img {
+      width: 24px;
+      height: 24px;
+      margin: 0 16px;
+    }
+
+    a {
+      display: flex;
+      align-items: center;
+      text-decoration: none;
+      color: #ffffffb2;
+      height: 48px;
+      font-size: 16px;
+      font-weight: 400;
+      border-radius: 4px;
+      transition: 0.5s ease;
+      cursor: pointer;
+
+      &.active {
+        font-weight: 600;
+        color: var(--color-white);
+        background-color: var(--color-primary);
+        cursor: auto;
+        img {
+          filter: brightness(0) saturate(100%) invert(99%) sepia(1%)
+            saturate(616%) hue-rotate(155deg) brightness(118%) contrast(100%);
+        }
+      }
+
+      &:hover:not(.active) {
+        background-color: #2b2b2b;
+      }
+    }
   }
 }
