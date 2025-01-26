@@ -1,6 +1,6 @@
-@import "./assets/styles/colors.scss";
-@import "./assets/styles/fonts.scss";
-@import "./assets/styles/scrollbar.scss";
+@use "./assets/styles/colors.scss" as *;
+@use "./assets/styles/fonts.scss" as *;
+@use "./assets/styles/scrollbar.scss" as *;
 
 * {
   margin: 0;

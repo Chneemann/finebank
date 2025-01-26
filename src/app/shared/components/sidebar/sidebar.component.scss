@@ -1,0 +1,11 @@
+@use "./../../../../assets/styles/colors.scss" as *;
+
+.sidebar {
+  display: flex;
+  justify-content: center;
+  padding: 48px 24px;
+  width: 280px;
+  height: 100vh;
+  background-color: var(--color-black);
+  color: var(--color-white);
+}
