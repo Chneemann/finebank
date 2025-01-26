@@ -1,1 +1,61 @@
 @use "./../../../assets/styles/colors.scss" as *;
+
+.headline {
+  font-size: 22px;
+  font-weight: 400;
+  height: 40px;
+  color: #878787;
+}
+
+.overview {
+  display: flex;
+  flex-direction: column;
+
+  .overview-top {
+    display: flex;
+    gap: 24px;
+  }
+
+  .overview-bottom {
+    display: flex;
+    margin-top: 32px;
+    gap: 24px;
+
+    .right-column {
+      display: flex;
+      flex-direction: column;
+    }
+  }
+}
+
+.balances,
+.goals,
+.bills {
+  width: 352px;
+  height: 272px;
+}
+
+.transactions {
+  width: 352px;
+  height: 582px;
+}
+
+.statistic {
+  width: 728px;
+  height: 298px;
+}
+
+.expenses {
+  margin-top: 32px;
+  width: 728px;
+  height: 252px;
+}
+
+.content {
+  width: 100%;
+  height: calc(100% - 40px);
+  padding: 20px 24px;
+  border-radius: 8px;
+  background-color: var(--color-white);
+  box-shadow: 0px 20px 25px 0px #4c67641a;
+}
