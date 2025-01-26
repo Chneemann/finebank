@@ -1,1 +1,22 @@
-/* You can add global styles to this file, and also import other style files */
+@import "./assets/styles/colors.scss";
+@import "./assets/styles/fonts.scss";
+@import "./assets/styles/scrollbar.scss";
+
+* {
+  margin: 0;
+  box-sizing: border-box;
+  scroll-behavior: smooth;
+}
+
+html,
+body {
+  display: block;
+}
+
+body {
+  max-width: 1440px;
+  width: 100%;
+  margin: 0;
+  font-family: "Inter", sans-serif;
+  background-color: var(--color-background);
+}
