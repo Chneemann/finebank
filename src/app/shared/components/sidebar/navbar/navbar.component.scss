@@ -1,0 +1,19 @@
+@use "./../../../../../assets/styles/colors.scss" as *;
+
+.navbar {
+  height: 504px;
+}
+
+.logo {
+  display: flex;
+  font-family: "Poppins", sans-serif;
+  color: var(--color-white);
+  font-size: 24px;
+  letter-spacing: 2px;
+  .logo-part {
+    font-weight: 800;
+  }
+  .logo-accent {
+    font-weight: 400;
+  }
+}
