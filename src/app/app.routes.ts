@@ -1,19 +1,19 @@
 import { Routes } from '@angular/router';
 import { LayoutComponent } from './core/layout/layout.component';
-import { DashboardComponent } from './features/dashboard/dashboard.component';
+import { OverviewComponent } from './features/overview/overview.component';
 
 export const routes: Routes = [
   {
     path: '',
     component: LayoutComponent,
     children: [
-      { path: 'overview', component: DashboardComponent },
-      { path: 'balances', component: DashboardComponent },
-      { path: 'transactions', component: DashboardComponent },
-      { path: 'bills', component: DashboardComponent },
-      { path: 'expenses', component: DashboardComponent },
-      { path: 'goals', component: DashboardComponent },
-      { path: 'settings', component: DashboardComponent },
+      { path: 'overview', component: OverviewComponent },
+      { path: 'balances', component: OverviewComponent },
+      { path: 'transactions', component: OverviewComponent },
+      { path: 'bills', component: OverviewComponent },
+      { path: 'expenses', component: OverviewComponent },
+      { path: 'goals', component: OverviewComponent },
+      { path: 'settings', component: OverviewComponent },
       { path: '', redirectTo: 'overview', pathMatch: 'full' },
     ],
   },
