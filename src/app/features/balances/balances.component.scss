@@ -20,3 +20,21 @@
   background-color: var(--color-white);
   box-shadow: 0px 20px 25px 0px #4c67641a;
 }
+
+.add-account {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  gap: 24px;
+  .link {
+    font-size: 16px;
+    font-weight: 500;
+    color: #9f9f9f;
+    cursor: pointer;
+    &:hover {
+      color: var(--color-primary);
+    }
+  }
+}
