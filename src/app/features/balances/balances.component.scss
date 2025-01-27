@@ -77,12 +77,12 @@
 
     .account-info {
       height: 52px;
-      gap: 4px;
 
       p {
         font-size: 20px;
         font-weight: 600;
         color: var(--color-black);
+        margin-bottom: 4px;
       }
 
       span {
@@ -95,6 +95,7 @@
 
   .footer {
     display: flex;
+    align-items: center;
     justify-content: space-between;
 
     .link {
