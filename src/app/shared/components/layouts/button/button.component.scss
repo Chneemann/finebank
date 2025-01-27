@@ -1,0 +1,40 @@
+@use "./../../../../../assets/styles/colors.scss" as *;
+
+button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 208px;
+  height: 48px;
+  padding: 12px 32px;
+  border: 0px;
+  border-radius: 4px;
+  background-color: var(--color-primary);
+  box-shadow: 2px 2px 4px 2px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+
+  p {
+    font-size: 16px;
+    font-weight: 700;
+    text-shadow: 1px 1px 1px var(--color-black);
+    color: var(--color-white);
+  }
+
+  &:hover {
+    transform: translateY(-1px);
+    box-shadow: 4px 4px 8px 2px rgba(0, 0, 0, 0.2);
+  }
+
+  &:active {
+    transform: translateY(1px);
+    box-shadow: 1px 1px 3px 1px rgba(0, 0, 0, 0.3);
+  }
+
+  &:disabled {
+    cursor: not-allowed;
+    opacity: 0.5;
+    background-color: #272727;
+    pointer-events: none;
+    box-shadow: none;
+  }
+}

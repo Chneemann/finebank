@@ -57,6 +57,7 @@ nav ul {
         font-weight: 600;
         color: var(--color-white);
         background-color: var(--color-primary);
+        text-shadow: 1px 1px 1px var(--color-black);
         cursor: auto;
         img {
           filter: brightness(0) saturate(100%) invert(99%) sepia(1%)
