@@ -1,6 +1,6 @@
 @use "./../../../assets/styles/colors.scss" as *;
 
-.content {
+.balance {
   display: flex;
   gap: 24px;
 }
@@ -28,12 +28,78 @@
   align-items: center;
   height: 100%;
   gap: 24px;
+
   .link {
     font-size: 16px;
     font-weight: 500;
     color: #9f9f9f;
     cursor: pointer;
+
     &:hover {
+      color: var(--color-primary);
+    }
+  }
+}
+
+.existing-account {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 100%;
+
+  .header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 44px;
+    padding: 12px;
+    gap: 0px;
+    box-shadow: 0px 1px 0px rgba(0, 0, 0, 0.05);
+
+    .account-type {
+      font-size: 16px;
+      font-weight: 700;
+      color: #878787;
+    }
+
+    .account-provider {
+      font-size: 12px;
+      font-weight: 500;
+      color: #666666;
+    }
+  }
+
+  .content {
+    display: flex;
+    flex-direction: column;
+    height: 120px;
+    gap: 16px;
+
+    .account-info {
+      height: 52px;
+      gap: 4px;
+
+      p {
+        font-size: 20px;
+        font-weight: 600;
+        color: var(--color-black);
+      }
+
+      span {
+        font-size: 14px;
+        font-weight: 400;
+        color: #9f9f9f;
+      }
+    }
+  }
+
+  .footer {
+    display: flex;
+    justify-content: space-between;
+
+    .link {
+      font-size: 16px;
+      font-weight: 400;
       color: var(--color-primary);
     }
   }
