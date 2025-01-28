@@ -1,0 +1,73 @@
+@use "./../../../../../assets/styles/colors.scss" as *;
+
+.slider {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.next {
+  display: flex;
+  justify-content: flex-end;
+  width: 80px;
+
+  a {
+    display: flex;
+    gap: 4px;
+    cursor: pointer;
+
+    p {
+      font-size: 14px;
+      font-weight: 500;
+    }
+
+    img {
+      width: 16px;
+      height: 16px;
+      filter: brightness(0) saturate(100%) invert(0%) sepia(0%) saturate(15%)
+        hue-rotate(337deg) brightness(100%) contrast(107%);
+    }
+
+    &:hover {
+      filter: brightness(0) saturate(100%) invert(48%) sepia(19%)
+        saturate(1388%) hue-rotate(125deg) brightness(105%) contrast(90%);
+    }
+  }
+}
+
+.previous {
+  display: flex;
+  justify-content: flex-start;
+  width: 80px;
+
+  a {
+    display: flex;
+    gap: 4px;
+
+    p {
+      font-size: 14px;
+      font-weight: 500;
+      color: #d1d1d1;
+    }
+
+    img {
+      width: 16px;
+      height: 16px;
+      filter: brightness(0) saturate(100%) invert(100%) sepia(0%)
+        saturate(5543%) hue-rotate(170deg) brightness(113%) contrast(64%);
+      transform: scaleX(-1);
+    }
+  }
+}
+
+.ellipses {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+
+  img {
+    width: 8px;
+    height: 8px;
+  }
+}
