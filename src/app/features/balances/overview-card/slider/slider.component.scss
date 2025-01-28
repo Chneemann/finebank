@@ -6,7 +6,8 @@
   justify-content: space-between;
 }
 
-.next {
+.next,
+.previous {
   display: flex;
   justify-content: flex-end;
   width: 80px;
@@ -36,27 +37,10 @@
 }
 
 .previous {
-  display: flex;
   justify-content: flex-start;
-  width: 80px;
 
-  a {
-    display: flex;
-    gap: 4px;
-
-    p {
-      font-size: 14px;
-      font-weight: 500;
-      color: #d1d1d1;
-    }
-
-    img {
-      width: 16px;
-      height: 16px;
-      filter: brightness(0) saturate(100%) invert(100%) sepia(0%)
-        saturate(5543%) hue-rotate(170deg) brightness(113%) contrast(64%);
-      transform: scaleX(-1);
-    }
+  a img {
+    transform: scaleX(-1);
   }
 }
 
@@ -70,4 +54,11 @@
     width: 8px;
     height: 8px;
   }
+}
+
+.previous.disabled,
+.next.disabled {
+  filter: brightness(0) saturate(100%) invert(100%) sepia(0%) saturate(5543%)
+    hue-rotate(170deg) brightness(113%) contrast(64%);
+  pointer-events: none;
 }

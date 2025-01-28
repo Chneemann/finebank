@@ -1,16 +1,30 @@
 <div class="slider">
-  <div class="previous">
+  <div
+    class="previous"
+    (click)="prevSlide()"
+    [class.disabled]="currentIndex === 0"
+  >
     <a>
       <img src="assets/img/button/chevron-right.svg" alt="" />
       <p>Previous</p>
     </a>
   </div>
   <div class="ellipses">
-    <img src="assets/img/ellipse-colored.svg" alt="" />
-    <img src="assets/img/ellipse-blank.svg" alt="" />
-    <img src="assets/img/ellipse-blank.svg" alt="" />
+    <img
+      *ngFor="let i of [].constructor(totalSlides); let idx = index"
+      [src]="
+        idx === currentIndex
+          ? 'assets/img/ellipse-colored.svg'
+          : 'assets/img/ellipse-blank.svg'
+      "
+      alt=""
+    />
   </div>
-  <div class="next">
+  <div
+    class="next"
+    (click)="nextSlide()"
+    [class.disabled]="currentIndex === totalSlides - 1"
+  >
     <a>
       <p>Next</p>
       <img src="assets/img/button/chevron-right.svg" alt="" />
