@@ -50,22 +50,33 @@
   .header {
     display: flex;
     justify-content: space-between;
-    align-items: center;
+    align-items: top;
     height: 44px;
-    padding: 12px;
     gap: 0px;
     box-shadow: 0px 1px 0px rgba(0, 0, 0, 0.05);
 
     .account-type {
+      display: flex;
+      align-items: center;
+      height: 32px;
       font-size: 16px;
       font-weight: 700;
       color: #878787;
     }
 
     .account-provider {
+      display: flex;
+      align-items: center;
+      height: 32px;
       font-size: 12px;
       font-weight: 500;
+      gap: 3px;
       color: #666666;
+
+      img {
+        width: 48px;
+        height: 32px;
+      }
     }
   }
 
