@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { OverviewCardBalancesComponent } from '../balances/overview-card/overview-card.component';
+import { OverviewCardBalancesComponent } from '../balances/components/overview-card/overview-card.component';
 
 @Component({
   selector: 'app-overview',
