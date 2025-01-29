@@ -3,23 +3,28 @@
 
   <div class="balance">
     <!-- Existing account -->
+    @for(account of allAccounts$ | async; track account.id) {
     <div class="account">
       <div class="existing-account">
         <div class="header">
-          <div class="account-type">Credit Card</div>
+          <div class="account-type">{{ account.name }}</div>
           <div class="account-provider">
-            Master Card
+            {{ account.type }}
+            @if (account.type == "Master Card") {
             <img src="assets/img/balances/mastercard.svg" alt="" />
+            } @if (account.type == "Bank Account") {
+            <img src="assets/img/balances/ec-card.svg" alt="" />
+            }
           </div>
         </div>
 
         <div class="content">
           <div class="account-info">
-            <p>3388 4556 8860 8***</p>
+            <p>{{ account.number }}</p>
             <span>Account Number</span>
           </div>
           <div class="account-info">
-            <p>$25,000</p>
+            <p>{{ account.balance }} €</p>
             <span>Total Balance</span>
           </div>
         </div>
@@ -34,6 +39,7 @@
         </div>
       </div>
     </div>
+    }
 
     <!-- Add account -->
     <div class="account">
