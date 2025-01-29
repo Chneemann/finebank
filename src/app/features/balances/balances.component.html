@@ -8,13 +8,18 @@
       <div class="existing-account">
         <div class="header">
           <div class="account-type">{{ account.name }}</div>
-          <div class="account-provider">
+          <div class="account-provider" [ngSwitch]="account.type">
             {{ account.type }}
-            @if (account.type == "Master Card") {
-            <img src="assets/img/balances/mastercard.svg" alt="" />
-            } @if (account.type == "Bank Account") {
-            <img src="assets/img/balances/ec-card.svg" alt="" />
-            }
+            <img
+              *ngSwitchCase="'Master Card'"
+              src="assets/img/balances/mastercard.svg"
+              alt="Master Card"
+            />
+            <img
+              *ngSwitchCase="'Bank Account'"
+              src="assets/img/balances/ec-card.svg"
+              alt="Bank Account"
+            />
           </div>
         </div>
 
