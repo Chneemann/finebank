@@ -40,8 +40,7 @@
             buttonText="Details"
             buttonSize="small"
             [buttonIcon]="true"
-            [routerLink]="['/account-details']"
-            [queryParams]="{ id: account.id }"
+            [routerLink]="['/account-details', account.id]"
           />
         </div>
       </div>

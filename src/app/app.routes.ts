@@ -12,7 +12,7 @@ export const routes: Routes = [
     children: [
       { path: 'overview', component: OverviewComponent },
       { path: 'balances', component: BalancesComponent },
-      { path: 'account-details', component: AccountDetailsComponent },
+      { path: 'account-details/:id', component: AccountDetailsComponent },
       { path: 'transactions', component: TransactionsComponent },
       { path: 'bills', component: OverviewComponent },
       { path: 'expenses', component: OverviewComponent },
