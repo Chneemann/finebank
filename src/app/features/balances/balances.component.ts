@@ -3,11 +3,12 @@ import { ButtonComponent } from '../../shared/components/layouts/button/button.c
 import { Observable } from 'rxjs';
 import { BalancesService } from './services/balances.service';
 import { CommonModule } from '@angular/common';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-balances',
   standalone: true,
-  imports: [CommonModule, ButtonComponent],
+  imports: [CommonModule, ButtonComponent, RouterLink],
   templateUrl: './balances.component.html',
   styleUrl: './balances.component.scss',
 })
