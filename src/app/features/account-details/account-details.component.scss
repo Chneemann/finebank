@@ -1,8 +1,8 @@
 @use "./../../../assets/styles/colors.scss" as *;
 
-.balance {
+.account-details {
   display: flex;
-  gap: 24px;
+  flex-direction: column;
 }
 
 .headline {
@@ -10,4 +10,22 @@
   font-weight: 400;
   color: #878787;
   margin-bottom: 12px;
+}
+
+.details,
+.history {
+  width: 100%;
+  padding: 24px;
+  border-radius: 8px;
+  background-color: var(--color-white);
+  box-shadow: 0px 20px 25px 0px #4c67641a;
+}
+
+.details {
+  height: 110px;
+  margin-bottom: 24px;
+}
+
+.history {
+  height: fit-content;
 }
