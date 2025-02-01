@@ -30,6 +30,9 @@
   </div>
 
   <div class="history-button">
-    <app-button buttonText="Load More" />
+    <app-button
+      buttonText="Load More"
+      [disabled]="(transactionsData$ | async)?.length <= 8"
+    />
   </div>
 </div>
