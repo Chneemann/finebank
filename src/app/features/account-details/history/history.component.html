@@ -27,6 +27,12 @@
         </tr>
       </tbody>
     </table>
+    <div
+      class="no-transactions"
+      *ngIf="(transactionsData$ | async)?.length === 0"
+    >
+      No transactions available
+    </div>
   </div>
 
   <div class="history-button">

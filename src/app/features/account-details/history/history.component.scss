@@ -10,13 +10,21 @@
   margin-top: 24px;
 }
 
+.no-transactions {
+  font-size: 16px;
+  font-weight: 400;
+  color: #696969;
+  padding-top: 15px;
+  border-top: 1px solid rgba($color: #000000, $alpha: 0.1);
+}
+
 table {
   width: 100%;
   border-collapse: collapse;
 
   th {
-    font-size: 16px;
-    font-weight: 700;
+    font-size: 16px !important;
+    font-weight: 700 !important;
     padding: 15px 0;
     text-align: left;
   }
