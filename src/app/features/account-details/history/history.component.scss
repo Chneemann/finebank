@@ -1,0 +1,10 @@
+@use "./../../../../assets/styles/colors.scss" as *;
+
+.history {
+  height: fit-content;
+}
+
+.history-button {
+  display: flex;
+  justify-content: center;
+}

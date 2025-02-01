@@ -7,20 +7,12 @@
   margin-bottom: 12px;
 }
 
-.account-details-content {
+.account-details-content,
+.transaction-history-content {
   width: 100%;
   padding: 24px;
   border-radius: 8px;
   background-color: var(--color-white);
   box-shadow: 0px 20px 25px 0px #4c67641a;
   margin-bottom: 24px;
-}
-
-.history {
-  height: fit-content;
-}
-
-.history-button {
-  display: flex;
-  justify-content: center;
 }
