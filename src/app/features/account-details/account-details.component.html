@@ -1,13 +1,15 @@
+@if (accountExists) {
 <section class="account-details">
   <div class="headline">Account Details</div>
   <div class="account-details-content">
-    <app-details />
+    <app-details></app-details>
   </div>
 </section>
 
 <section class="transaction-history">
   <div class="headline">Transactions History</div>
   <div class="transaction-history-content">
-    <app-history />
+    <app-history></app-history>
   </div>
 </section>
+}

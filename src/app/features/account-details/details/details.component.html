@@ -1,28 +1,28 @@
 <section class="details">
-  <div class="details-content">
+  <div class="details-content" *ngIf="accountData$ | async as account">
     <div class="details-item">
       <label>Bank Name</label>
-      <span></span>
+      <span>{{ account.name }}</span>
     </div>
 
     <div class="details-item">
       <label>Account Type</label>
-      <span></span>
+      <span>{{ account.type }}</span>
     </div>
 
     <div class="details-item">
       <label>Balance</label>
-      <span></span>
+      <span>{{ account.balance }} €</span>
     </div>
 
     <div class="details-item">
       <label>Account Number</label>
-      <span></span>
+      <span>{{ account.number }}</span>
     </div>
 
     <div class="details-item">
       <label>Added Date</label>
-      <span></span>
+      <span>{{ account.added }}</span>
     </div>
 
     <div class="details-item placeholder"></div>
