@@ -1,6 +1,8 @@
 <div class="overview">
   <div class="header">
-    <div class="total-ammount">$25,000</div>
+    <div class="total-ammount">
+      {{ 25000 | currency : "USD" : "symbol" : "1.0-2" }}
+    </div>
     <div class="all-accounts">All Accounts</div>
   </div>
 
@@ -13,7 +15,7 @@
     <div class="account-ammount">
       <img src="assets/img/balances/mastercard.svg" alt="" />
       <div class="account-ammount-details">
-        <p>$25000</p>
+        <p>{{ 25000 | currency : "USD" : "symbol" : "1.0-2" }}</p>
         <img src="assets/img/balances/arrow-top-right.svg" alt="" />
       </div>
     </div>
