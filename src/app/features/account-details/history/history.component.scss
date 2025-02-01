@@ -7,4 +7,24 @@
 .history-button {
   display: flex;
   justify-content: center;
+  margin-top: 24px;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+
+  th {
+    padding: 8px;
+    text-align: left;
+  }
+
+  td {
+    font-size: 16px;
+    font-weight: 400;
+    color: #696969;
+    padding: 8px;
+    text-align: left;
+    border-top: 1px solid rgba($color: #000000, $alpha: 0.1);
+  }
 }

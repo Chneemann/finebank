@@ -4,7 +4,16 @@ import {
   Injectable,
   runInInjectionContext,
 } from '@angular/core';
-import { Firestore, doc, docData, getDoc } from '@angular/fire/firestore';
+import {
+  Firestore,
+  collection,
+  collectionData,
+  doc,
+  docData,
+  getDoc,
+  query,
+  where,
+} from '@angular/fire/firestore';
 import { from, map, Observable } from 'rxjs';
 
 @Injectable({
@@ -18,6 +27,14 @@ export class AccountDetailsService {
     return runInInjectionContext(this.injector, () =>
       docData(doc(this.firestore, `accounts/${accountId}`))
     );
+  }
+
+  getTransactionDataByAccountId(accountId: string): Observable<any> {
+    return runInInjectionContext(this.injector, () => {
+      const transactionsRef = collection(this.firestore, 'transactions');
+      const q = query(transactionsRef, where('accountId', '==', accountId));
+      return collectionData(q, { idField: 'id' });
+    });
   }
 
   existAccountId(accountId: string): Observable<boolean> {
