@@ -1,10 +1,5 @@
 @use "./../../../assets/styles/colors.scss" as *;
 
-.account-details {
-  display: flex;
-  flex-direction: column;
-}
-
 .headline {
   font-size: 22px;
   font-weight: 400;
@@ -22,8 +17,37 @@
 }
 
 .details {
-  height: 110px;
+  height: fit-content;
   margin-bottom: 24px;
+}
+
+.details-content {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 24px;
+  margin-bottom: 24px;
+
+  .placeholder {
+    visibility: hidden;
+  }
+
+  .details-item {
+    display: flex;
+    flex-direction: column;
+    min-width: 200px;
+    flex: 1;
+
+    label {
+      font-size: 14px;
+      font-weight: 400;
+      margin-bottom: 3px;
+      color: #9f9f9f;
+    }
+    span {
+      font-size: 16px;
+      font-weight: 600;
+    }
+  }
 }
 
 .details-buttons {
