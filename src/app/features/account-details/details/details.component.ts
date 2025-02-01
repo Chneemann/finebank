@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { ButtonComponent } from '../../../shared/components/layouts/button/button.component';
 import { AccountDetailsService } from '../services/account-details.service';
 import { Observable, of } from 'rxjs';
@@ -14,6 +14,8 @@ import { CommonModule } from '@angular/common';
   styleUrls: ['./details.component.scss'],
 })
 export class DetailsComponent implements OnInit {
+  @Output() accountDataEmitter = new EventEmitter<Observable<any>>();
+
   accountData$!: Observable<any>;
 
   constructor(
@@ -34,5 +36,6 @@ export class DetailsComponent implements OnInit {
           : of(null)
       )
     );
+    this.accountDataEmitter.emit(this.accountData$);
   }
 }

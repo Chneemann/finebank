@@ -18,7 +18,7 @@
           <td>{{ transaction.date | date : "MMM d, yyyy" }}</td>
           <td>{{ transaction.description }}</td>
           <td>{{ transaction.shop }}</td>
-          <td>{{ transaction.type }}</td>
+          <td *ngIf="accountData$ | async as account">{{ account.type }}</td>
           <td>{{ transaction.amount / 100 | currency : "USD" }}</td>
         </tr>
       </tbody>

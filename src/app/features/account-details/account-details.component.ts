@@ -4,6 +4,7 @@ import { DetailsComponent } from './details/details.component';
 import { HistoryComponent } from './history/history.component';
 import { AccountDetailsService } from './services/account-details.service';
 import { CommonModule } from '@angular/common';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-account-details',
@@ -13,6 +14,7 @@ import { CommonModule } from '@angular/common';
 })
 export class AccountDetailsComponent {
   accountExists = false;
+  accountData$!: Observable<any>;
 
   constructor(
     private router: Router,
@@ -44,5 +46,9 @@ export class AccountDetailsComponent {
 
   private redirectToBalance() {
     this.router.navigate(['/balances']);
+  }
+
+  receiveAccountData(accountData$: Observable<any>) {
+    this.accountData$ = accountData$;
   }
 }
