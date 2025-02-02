@@ -1,4 +1,9 @@
-import { inject, Injectable } from '@angular/core';
+import {
+  EnvironmentInjector,
+  inject,
+  Injectable,
+  runInInjectionContext,
+} from '@angular/core';
 import { Firestore, collection, collectionData } from '@angular/fire/firestore';
 import { Observable } from 'rxjs';
 
@@ -6,10 +11,13 @@ import { Observable } from 'rxjs';
   providedIn: 'root',
 })
 export class BalancesService {
-  private firestore: Firestore = inject(Firestore);
+  private readonly firestore = inject(Firestore);
+  private readonly injector = inject(EnvironmentInjector);
 
   getAllAccounts(): Observable<any[]> {
-    const collectionRef = collection(this.firestore, 'accounts');
-    return collectionData(collectionRef, { idField: 'id' });
+    return runInInjectionContext(this.injector, () => {
+      const collectionRef = collection(this.firestore, 'accounts');
+      return collectionData(collectionRef, { idField: 'id' });
+    });
   }
 }
