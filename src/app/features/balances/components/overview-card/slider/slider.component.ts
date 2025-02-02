@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 
 @Component({
   selector: 'app-slider',
@@ -8,18 +8,19 @@ import { Component } from '@angular/core';
   styleUrl: './slider.component.scss',
 })
 export class SliderComponent {
-  currentIndex = 0;
-  totalSlides = 3;
+  @Input() totalSlides = 0;
+  @Input() currentIndex = 0;
+  @Input() changeSlide!: (index: number) => void;
 
   nextSlide() {
     if (this.currentIndex < this.totalSlides - 1) {
-      this.currentIndex++;
+      this.changeSlide(this.currentIndex + 1);
     }
   }
 
   prevSlide() {
     if (this.currentIndex > 0) {
-      this.currentIndex--;
+      this.changeSlide(this.currentIndex - 1);
     }
   }
 }

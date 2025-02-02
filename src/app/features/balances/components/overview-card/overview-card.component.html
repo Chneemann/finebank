@@ -6,22 +6,34 @@
     <div class="all-accounts">All Accounts</div>
   </div>
 
-  <div class="content">
-    <div class="account-type">
-      <span>Account type</span>
-      <p>Credit Card</p>
-      <span>**** **** **** 2598</span>
-    </div>
-    <div class="account-ammount">
-      <img src="assets/img/balances/mastercard.svg" alt="" />
-      <div class="account-ammount-details">
-        <p>{{ 25000 | currency : "USD" : "symbol" : "1.0-2" }}</p>
-        <img src="assets/img/balances/arrow-top-right.svg" alt="" />
+  <div *ngIf="allAccounts$ | async as accounts">
+    <div class="content" *ngIf="accounts.length > 0">
+      <div class="account-type">
+        <span>Account type</span>
+        <p>{{ accounts[currentIndex]?.type }}</p>
+        <span>{{ accounts[currentIndex]?.number }}</span>
+      </div>
+      <div class="account-ammount">
+        <img src="assets/img/balances/mastercard.svg" alt="" />
+        <div class="account-ammount-details">
+          <p>
+            {{
+              accounts[currentIndex]?.balance
+                | currency : "USD" : "symbol" : "1.0-2"
+            }}
+          </p>
+          <img src="assets/img/balances/arrow-top-right.svg" alt="" />
+        </div>
       </div>
     </div>
   </div>
 
   <div class="footer">
-    <app-slider />
+    <app-slider
+      [totalSlides]="totalAccounts"
+      [currentIndex]="currentIndex"
+      [changeSlide]="changeSlide.bind(this)"
+    >
+    </app-slider>
   </div>
 </div>
