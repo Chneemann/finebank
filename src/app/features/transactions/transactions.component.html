@@ -1,4 +1,33 @@
 <section class="transactions">
   <div class="headline">Recent Transaction</div>
-  <div class="content"></div>
+  <div class="content" *ngIf="transactionsData$ | async as transactions">
+    <table>
+      <thead>
+        <tr>
+          <th class="left">Datum</th>
+          <th class="center">Description</th>
+          <th class="center">Shop</th>
+          <th class="center">Transaction Type</th>
+          <th class="right">Amount</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let transaction of transactionsData$ | async">
+          <td class="left">{{ transaction.date | date : "MMM d, yyyy" }}</td>
+          <td class="center">{{ transaction.description }}</td>
+          <td class="center">{{ transaction.shop }}</td>
+          <td class="center">Type</td>
+          <td class="right">
+            {{ transaction.amount / 100 | currency : "USD" }}
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <div
+      class="no-transactions"
+      *ngIf="(transactionsData$ | async)?.length === 0"
+    >
+      No transactions available
+    </div>
+  </div>
 </section>
