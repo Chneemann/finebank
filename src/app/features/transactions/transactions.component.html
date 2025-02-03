@@ -1,6 +1,9 @@
 <section class="transactions">
   <div class="headline">Recent Transaction</div>
-  <div class="content" *ngIf="transactionsData$ | async as transactions">
+  <div
+    class="transactions-content"
+    *ngIf="transactionsData$ | async as transactions"
+  >
     <table>
       <thead>
         <tr>
