@@ -1,15 +1,16 @@
 @use "./../../../assets/styles/colors.scss" as *;
 
-.content {
-  display: flex;
-  gap: 24px;
-}
-
 .headline {
   font-size: 22px;
   font-weight: 400;
   color: #878787;
   margin-bottom: 12px;
+}
+
+.transactions-button {
+  display: flex;
+  justify-content: center;
+  margin-top: 24px;
 }
 
 .transactions-content {
@@ -41,6 +42,9 @@ table {
   }
 
   .left {
+    font-size: 16px;
+    font-weight: 500;
+    color: var(--color-black);
     text-align: left;
   }
 
