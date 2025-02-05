@@ -4,7 +4,12 @@
   <nav>
     <ul>
       <li>
-        <a routerLink="/transactions" routerLinkActive="active">All</a>
+        <a
+          routerLink="/transactions"
+          routerLinkActive="active"
+          [routerLinkActiveOptions]="{ exact: true }"
+          >All</a
+        >
       </li>
       <li>
         <a routerLink="/transactions/revenue" routerLinkActive="active">
