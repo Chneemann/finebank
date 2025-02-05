@@ -21,6 +21,39 @@
   box-shadow: 0px 20px 25px 0px #4c67641a;
 }
 
+nav ul {
+  display: flex;
+  justify-content: flex-start;
+  width: 250px;
+  margin: 18px 0;
+  list-style: none;
+  padding: 0;
+  gap: 24px;
+  li {
+    width: fit-content;
+    padding: 0 6px;
+
+    a {
+      display: flex;
+      align-items: center;
+      text-decoration: none;
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--color-black);
+      cursor: pointer;
+
+      &.active {
+        color: var(--color-primary);
+        cursor: auto;
+      }
+
+      &:hover:not(.active) {
+        color: var(--color-primary);
+      }
+    }
+  }
+}
+
 table {
   width: 100%;
   border-collapse: collapse;

@@ -1,5 +1,24 @@
 <section class="transactions">
   <div class="headline">Recent Transaction</div>
+
+  <nav>
+    <ul>
+      <li>
+        <a routerLink="/transactions" routerLinkActive="active">All</a>
+      </li>
+      <li>
+        <a routerLink="/transactions/revenue" routerLinkActive="active">
+          Revenue
+        </a>
+      </li>
+      <li>
+        <a routerLink="/transactions/expenses" routerLinkActive="active">
+          Expenses
+        </a>
+      </li>
+    </ul>
+  </nav>
+
   <div
     class="transactions-content"
     *ngIf="transactionsData$ | async as transactions"
@@ -18,7 +37,7 @@
         <tr *ngFor="let transaction of transactionsData$ | async">
           <td class="left">{{ transaction.description }}</td>
           <td class="center">{{ transaction.shop }}</td>
-          <td class="center">{{ transaction.date | date : "MMM d, yyyy" }}</td>
+          <td class="center">{{ transaction.date | date : "d MMM, yyyy" }}</td>
           <td class="center">Type</td>
           <td class="right">
             {{ transaction.amount / 100 | currency : "USD" }}
