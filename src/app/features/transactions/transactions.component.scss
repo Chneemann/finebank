@@ -29,6 +29,7 @@ nav ul {
   list-style: none;
   padding: 0;
   gap: 24px;
+
   li {
     width: fit-content;
     padding: 0 6px;
@@ -41,10 +42,21 @@ nav ul {
       font-weight: 700;
       color: var(--color-black);
       cursor: pointer;
+      position: relative;
 
       &.active {
         color: var(--color-primary);
         cursor: auto;
+      }
+
+      &.active::after {
+        content: "";
+        position: absolute;
+        bottom: -4px;
+        left: -6px;
+        width: calc(100% + 12px);
+        height: 2px;
+        background-color: var(--color-primary);
       }
 
       &:hover:not(.active) {
