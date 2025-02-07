@@ -1,11 +1,10 @@
 import { Component } from '@angular/core';
+import { RouterLink, RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-transactions-card',
-  imports: [],
+  imports: [RouterLink, RouterModule],
   templateUrl: './transactions-card.component.html',
-  styleUrl: './transactions-card.component.scss'
+  styleUrl: './transactions-card.component.scss',
 })
-export class TransactionsCardComponent {
-
-}
+export class TransactionsCardComponent {}

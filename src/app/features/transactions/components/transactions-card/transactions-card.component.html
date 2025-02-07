@@ -1,1 +1,24 @@
-<p>transactions-card works!</p>
+<section class="transactions-card">
+  <nav>
+    <ul>
+      <li>
+        <a
+          routerLink="/overview"
+          routerLinkActive="active"
+          [routerLinkActiveOptions]="{ exact: true }"
+          >All</a
+        >
+      </li>
+      <li>
+        <a routerLink="/overview/revenue" routerLinkActive="active">
+          Revenue
+        </a>
+      </li>
+      <li>
+        <a routerLink="/overview/expenses" routerLinkActive="active">
+          Expenses
+        </a>
+      </li>
+    </ul>
+  </nav>
+</section>
