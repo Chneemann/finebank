@@ -11,6 +11,7 @@ import { CommonModule } from '@angular/common';
 })
 export class TransactionsCardComponent implements OnInit {
   transactionsData$!: Observable<any[]>;
+  transactionFetchLimit: number = 5;
   selectedType: 'all' | 'revenue' | 'expense' = 'all';
 
   constructor(private transactionsService: TransactionsService) {}
@@ -21,14 +22,20 @@ export class TransactionsCardComponent implements OnInit {
 
   private loadLastTransactions() {
     this.transactionsData$ = combineLatest([
-      this.transactionsService.getLastRevenueTransactions(),
-      this.transactionsService.getLastExpensesTransactions(),
+      this.transactionsService.getLastTransactionsByType(
+        'revenue',
+        this.transactionFetchLimit
+      ),
+      this.transactionsService.getLastTransactionsByType(
+        'expense',
+        this.transactionFetchLimit
+      ),
     ]).pipe(map(([revenue, expenses]) => [...revenue, ...expenses]));
   }
 
   getFilteredTransactions(transactions: any[]): any[] {
     if (this.selectedType === 'all') {
-      return transactions.slice(0, 5);
+      return transactions.slice(0, this.transactionFetchLimit);
     }
     return transactions.filter((tx) => tx.type === this.selectedType);
   }

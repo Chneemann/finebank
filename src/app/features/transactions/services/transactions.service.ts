@@ -28,18 +28,10 @@ export class TransactionsService {
     });
   }
 
-  getLastRevenueTransactions(): Observable<any[]> {
+  getLastTransactionsByType(type: string, number: number): Observable<any[]> {
     return runInInjectionContext(this.injector, () => {
       const collectionRef = collection(this.firestore, 'transactions');
-      let q = query(collectionRef, where('type', '==', 'revenue'), limit(5));
-      return collectionData(q, { idField: 'id' });
-    });
-  }
-
-  getLastExpensesTransactions(): Observable<any[]> {
-    return runInInjectionContext(this.injector, () => {
-      const collectionRef = collection(this.firestore, 'transactions');
-      let q = query(collectionRef, where('type', '==', 'expense'), limit(5));
+      let q = query(collectionRef, where('type', '==', type), limit(number));
       return collectionData(q, { idField: 'id' });
     });
   }
