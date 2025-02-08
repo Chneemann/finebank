@@ -78,4 +78,10 @@ nav ul {
     font-weight: 400;
     color: #9f9f9f;
   }
+
+  .amount {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
 }

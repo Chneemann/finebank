@@ -1,6 +1,6 @@
-import { Component } from '@angular/core';
-import { RouterLink, RouterModule } from '@angular/router';
-import { Observable } from 'rxjs';
+import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute, RouterLink, RouterModule } from '@angular/router';
+import { map, Observable, switchMap } from 'rxjs';
 import { TransactionsService } from '../../services/transactions.service';
 import { CommonModule } from '@angular/common';
 
@@ -10,16 +10,30 @@ import { CommonModule } from '@angular/common';
   templateUrl: './transactions-card.component.html',
   styleUrl: './transactions-card.component.scss',
 })
-export class TransactionsCardComponent {
-  transactionsData$!: Observable<any>;
+export class TransactionsCardComponent implements OnInit {
+  transactionsData$!: Observable<any[]>;
 
-  constructor(private transactionsService: TransactionsService) {}
+  constructor(
+    private transactionsService: TransactionsService,
+    private route: ActivatedRoute
+  ) {}
 
   ngOnInit() {
-    this.loadLastTransactions();
+    this.loadFilteredTransactions();
   }
 
-  private loadLastTransactions() {
-    this.transactionsData$ = this.transactionsService.getLastTransactions();
+  private loadFilteredTransactions() {
+    this.transactionsData$ = this.route.url.pipe(
+      map((segments) => segments.map((s) => s.path).join('/')),
+      switchMap((path) => {
+        const type = path.includes('revenue')
+          ? 'revenue'
+          : path.includes('expenses')
+          ? 'expense'
+          : null;
+
+        return this.transactionsService.getLastTransactions(type);
+      })
+    );
   }
 }

@@ -36,6 +36,11 @@
       </div>
       <div class="right-content">
         <div class="amount">
+          @if (transaction.type === "revenue") {
+          <img src="assets/img/transactions/revenue.svg" alt="" />
+          } @else if (transaction.type === "expense") {
+          <img src="assets/img/transactions/expense.svg" alt="" />
+          }
           {{ transaction.amount / 100 | currency : "USD" }}
         </div>
         <div class="date">{{ transaction.date | date : "d MMM, yyyy" }}</div>
