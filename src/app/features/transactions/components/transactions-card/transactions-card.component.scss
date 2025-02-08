@@ -3,7 +3,6 @@
 nav ul {
   display: flex;
   justify-content: center;
-  margin-bottom: 18px;
   list-style: none;
   padding: 6px;
   gap: 24px;
@@ -41,5 +40,38 @@ nav ul {
         color: var(--color-primary);
       }
     }
+  }
+}
+
+.transactions-content {
+  .transaction {
+    display: flex;
+    justify-content: space-between;
+    padding: 18px 0;
+    border-bottom: 1px solid rgba($color: #000000, $alpha: 0.1);
+  }
+
+  .right-content,
+  .left-content {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .right-content {
+    align-items: end;
+  }
+
+  .item,
+  .amount {
+    font-size: 16px;
+    font-weight: 600;
+  }
+
+  .shop,
+  .date {
+    font-size: 12px;
+    font-weight: 400;
+    color: #9f9f9f;
   }
 }
