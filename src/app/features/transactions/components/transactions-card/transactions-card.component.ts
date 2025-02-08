@@ -1,39 +1,34 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, RouterLink, RouterModule } from '@angular/router';
-import { map, Observable, switchMap } from 'rxjs';
+import { Observable } from 'rxjs';
 import { TransactionsService } from '../../services/transactions.service';
 import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-transactions-card',
-  imports: [RouterLink, RouterModule, CommonModule],
+  imports: [CommonModule],
   templateUrl: './transactions-card.component.html',
   styleUrl: './transactions-card.component.scss',
 })
 export class TransactionsCardComponent implements OnInit {
   transactionsData$!: Observable<any[]>;
+  selectedType: 'all' | 'revenue' | 'expense' = 'all';
 
-  constructor(
-    private transactionsService: TransactionsService,
-    private route: ActivatedRoute
-  ) {}
+  constructor(private transactionsService: TransactionsService) {}
 
   ngOnInit() {
-    this.loadFilteredTransactions();
+    this.loadLastTransactions();
   }
 
-  private loadFilteredTransactions() {
-    this.transactionsData$ = this.route.url.pipe(
-      map((segments) => segments.map((s) => s.path).join('/')),
-      switchMap((path) => {
-        const type = path.includes('revenue')
-          ? 'revenue'
-          : path.includes('expenses')
-          ? 'expense'
-          : null;
+  private loadLastTransactions() {
+    this.transactionsData$ = this.transactionsService.getLastTransactions();
+  }
 
-        return this.transactionsService.getLastTransactions(type);
-      })
-    );
+  getFilteredTransactions(transactions: any[]): any[] {
+    if (this.selectedType === 'all') return transactions;
+    return transactions.filter((tx) => tx.type === this.selectedType);
+  }
+
+  setFilter(type: 'all' | 'revenue' | 'expense') {
+    this.selectedType = type;
   }
 }

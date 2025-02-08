@@ -2,20 +2,23 @@
   <nav>
     <ul>
       <li>
-        <a
-          routerLink="/overview"
-          routerLinkActive="active"
-          [routerLinkActiveOptions]="{ exact: true }"
-          >All</a
-        >
+        <a (click)="setFilter('all')" [class.active]="selectedType === 'all'">
+          All
+        </a>
       </li>
       <li>
-        <a routerLink="/overview/revenue" routerLinkActive="active">
+        <a
+          (click)="setFilter('revenue')"
+          [class.active]="selectedType === 'revenue'"
+        >
           Revenue
         </a>
       </li>
       <li>
-        <a routerLink="/overview/expenses" routerLinkActive="active">
+        <a
+          (click)="setFilter('expense')"
+          [class.active]="selectedType === 'expense'"
+        >
           Expenses
         </a>
       </li>
@@ -28,7 +31,7 @@
   >
     <div
       class="transaction"
-      *ngFor="let transaction of transactionsData$ | async"
+      *ngFor="let transaction of getFilteredTransactions(transactions)"
     >
       <div class="left-content">
         <div class="item">{{ transaction.item }}</div>
@@ -36,11 +39,16 @@
       </div>
       <div class="right-content">
         <div class="amount">
-          @if (transaction.type === "revenue") {
-          <img src="assets/img/transactions/revenue.svg" alt="" />
-          } @else if (transaction.type === "expense") {
-          <img src="assets/img/transactions/expense.svg" alt="" />
-          }
+          <img
+            *ngIf="transaction.type === 'revenue'"
+            src="assets/img/transactions/revenue.svg"
+            alt=""
+          />
+          <img
+            *ngIf="transaction.type === 'expense'"
+            src="assets/img/transactions/expense.svg"
+            alt=""
+          />
           {{ transaction.amount / 100 | currency : "USD" }}
         </div>
         <div class="date">{{ transaction.date | date : "d MMM, yyyy" }}</div>

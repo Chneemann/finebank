@@ -11,8 +11,6 @@ export const routes: Routes = [
     component: LayoutComponent,
     children: [
       { path: 'overview', component: OverviewComponent },
-      { path: 'overview/revenue', component: OverviewComponent },
-      { path: 'overview/expenses', component: OverviewComponent },
       { path: 'balances', component: BalancesComponent },
       { path: 'account-details/:id', component: AccountDetailsComponent },
       { path: 'transactions', component: TransactionsComponent },
