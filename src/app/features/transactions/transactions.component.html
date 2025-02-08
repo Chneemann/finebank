@@ -40,7 +40,7 @@
       </thead>
       <tbody>
         <tr *ngFor="let transaction of transactionsData$ | async">
-          <td class="left">{{ transaction.description }}</td>
+          <td class="left">{{ transaction.item }}</td>
           <td class="center">{{ transaction.shop }}</td>
           <td class="center">{{ transaction.date | date : "d MMM, yyyy" }}</td>
           <td class="center">Type</td>
