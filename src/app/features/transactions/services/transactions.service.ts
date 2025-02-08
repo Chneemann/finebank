@@ -9,7 +9,6 @@ import {
   collection,
   collectionData,
   limit,
-  orderBy,
   query,
   where,
 } from '@angular/fire/firestore';
@@ -29,18 +28,18 @@ export class TransactionsService {
     });
   }
 
-  getLastTransactions(type: string | null = null): Observable<any[]> {
+  getLastRevenueTransactions(): Observable<any[]> {
     return runInInjectionContext(this.injector, () => {
       const collectionRef = collection(this.firestore, 'transactions');
-      let q = query(collectionRef, orderBy('date', 'desc'), limit(5));
-      if (type) {
-        q = query(
-          collectionRef,
-          orderBy('date', 'desc'),
-          where('type', '==', type),
-          limit(5)
-        );
-      }
+      let q = query(collectionRef, where('type', '==', 'revenue'), limit(5));
+      return collectionData(q, { idField: 'id' });
+    });
+  }
+
+  getLastExpensesTransactions(): Observable<any[]> {
+    return runInInjectionContext(this.injector, () => {
+      const collectionRef = collection(this.firestore, 'transactions');
+      let q = query(collectionRef, where('type', '==', 'expense'), limit(5));
       return collectionData(q, { idField: 'id' });
     });
   }

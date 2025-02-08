@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Observable } from 'rxjs';
+import { combineLatest, map, Observable } from 'rxjs';
 import { TransactionsService } from '../../services/transactions.service';
 import { CommonModule } from '@angular/common';
 
@@ -20,11 +20,16 @@ export class TransactionsCardComponent implements OnInit {
   }
 
   private loadLastTransactions() {
-    this.transactionsData$ = this.transactionsService.getLastTransactions();
+    this.transactionsData$ = combineLatest([
+      this.transactionsService.getLastRevenueTransactions(),
+      this.transactionsService.getLastExpensesTransactions(),
+    ]).pipe(map(([revenue, expenses]) => [...revenue, ...expenses]));
   }
 
   getFilteredTransactions(transactions: any[]): any[] {
-    if (this.selectedType === 'all') return transactions;
+    if (this.selectedType === 'all') {
+      return transactions.slice(0, 5);
+    }
     return transactions.filter((tx) => tx.type === this.selectedType);
   }
 

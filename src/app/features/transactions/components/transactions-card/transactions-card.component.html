@@ -42,12 +42,12 @@
           <img
             *ngIf="transaction.type === 'revenue'"
             src="assets/img/transactions/revenue.svg"
-            alt=""
+            alt="revenue icon"
           />
           <img
             *ngIf="transaction.type === 'expense'"
             src="assets/img/transactions/expense.svg"
-            alt=""
+            alt="expense icon"
           />
           {{ transaction.amount / 100 | currency : "USD" }}
         </div>
