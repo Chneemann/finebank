@@ -22,15 +22,23 @@
     </ul>
   </nav>
 
-  <div class="transactions-content">
-    <div class="transaction">
+  <div
+    class="transactions-content"
+    *ngIf="transactionsData$ | async as transactions"
+  >
+    <div
+      class="transaction"
+      *ngFor="let transaction of transactionsData$ | async"
+    >
       <div class="left-content">
-        <div class="item">Polo Shirt</div>
-        <div class="shop">XL fashions</div>
+        <div class="item">{{ transaction.description }}</div>
+        <div class="shop">{{ transaction.shop }}</div>
       </div>
       <div class="right-content">
-        <div class="amount">$20.00</div>
-        <div class="date">17 May 2023</div>
+        <div class="amount">
+          {{ transaction.amount / 100 | currency : "USD" }}
+        </div>
+        <div class="date">{{ transaction.date | date : "d MMM, yyyy" }}</div>
       </div>
     </div>
   </div>

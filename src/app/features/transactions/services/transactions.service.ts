@@ -4,7 +4,14 @@ import {
   Injectable,
   runInInjectionContext,
 } from '@angular/core';
-import { Firestore, collection, collectionData } from '@angular/fire/firestore';
+import {
+  Firestore,
+  collection,
+  collectionData,
+  limit,
+  orderBy,
+  query,
+} from '@angular/fire/firestore';
 import { Observable } from 'rxjs';
 
 @Injectable({
@@ -18,6 +25,14 @@ export class TransactionsService {
     return runInInjectionContext(this.injector, () => {
       const collectionRef = collection(this.firestore, 'transactions');
       return collectionData(collectionRef, { idField: 'id' });
+    });
+  }
+
+  getLastTransactions(): Observable<any[]> {
+    return runInInjectionContext(this.injector, () => {
+      const collectionRef = collection(this.firestore, 'transactions');
+      const q = query(collectionRef, orderBy('date', 'desc'), limit(5));
+      return collectionData(q, { idField: 'id' });
     });
   }
 }
