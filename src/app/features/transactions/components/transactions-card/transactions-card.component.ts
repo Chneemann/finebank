@@ -2,15 +2,16 @@ import { Component, OnInit } from '@angular/core';
 import { combineLatest, map, Observable } from 'rxjs';
 import { TransactionsService } from '../../services/transactions.service';
 import { CommonModule } from '@angular/common';
+import { TransactionModel } from '../../../../core/models/transactions.model';
 
 @Component({
   selector: 'app-transactions-card',
   imports: [CommonModule],
   templateUrl: './transactions-card.component.html',
-  styleUrl: './transactions-card.component.scss',
+  styleUrls: ['./transactions-card.component.scss'],
 })
 export class TransactionsCardComponent implements OnInit {
-  transactionsData$!: Observable<any[]>;
+  transactionsData$!: Observable<TransactionModel[]>;
   transactionFetchLimit: number = 5;
   selectedType: 'all' | 'revenue' | 'expense' = 'all';
 
@@ -30,10 +31,28 @@ export class TransactionsCardComponent implements OnInit {
         'expense',
         this.transactionFetchLimit
       ),
-    ]).pipe(map(([revenue, expenses]) => [...revenue, ...expenses]));
+    ]).pipe(
+      map(([revenue, expenses]) => {
+        const transactions = [...revenue, ...expenses];
+        return transactions.map(
+          (tx) =>
+            new TransactionModel(
+              tx.accountId,
+              tx.item,
+              tx.shop,
+              tx.type,
+              tx.amount,
+              tx.date,
+              tx.id
+            )
+        );
+      })
+    );
   }
 
-  getFilteredTransactions(transactions: any[]): any[] {
+  getFilteredTransactions(
+    transactions: TransactionModel[]
+  ): TransactionModel[] {
     if (this.selectedType === 'all') {
       return transactions.slice(0, this.transactionFetchLimit);
     }

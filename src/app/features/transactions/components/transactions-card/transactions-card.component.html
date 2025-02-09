@@ -49,9 +49,9 @@
             src="assets/img/transactions/expense.svg"
             alt="expense icon"
           />
-          {{ transaction.amount / 100 | currency : "USD" }}
+          {{ transaction.formattedAmount }}
         </div>
-        <div class="date">{{ transaction.date | date : "d MMM, yyyy" }}</div>
+        <div class="date">{{ transaction.formattedDate }}</div>
       </div>
     </div>
   </div>
