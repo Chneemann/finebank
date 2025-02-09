@@ -1,12 +1,12 @@
 <div class="overview">
   <div class="header">
     <div class="total-ammount">
-      {{ 25000 | currency : "USD" : "symbol" : "1.0-2" }}
+      {{ currentBalance$ | async | currency : "USD" : "symbol" : "1.0-2" }}
     </div>
     <div class="all-accounts">All Accounts</div>
   </div>
 
-  <div *ngIf="allAccounts$ | async as accounts">
+  <div *ngIf="accountsData$ | async as accounts">
     <div class="content" *ngIf="accounts.length > 0">
       <div class="account-type">
         <span>Account type</span>
