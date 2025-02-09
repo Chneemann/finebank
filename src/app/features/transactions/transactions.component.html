@@ -42,25 +42,22 @@
         <tr *ngFor="let transaction of transactionsData$ | async">
           <td class="left">{{ transaction.item }}</td>
           <td class="center">{{ transaction.shop }}</td>
-          <td class="center">{{ transaction.date | date : "d MMM, yyyy" }}</td>
+          <td class="center">{{ transaction.formattedDate }}</td>
           <td class="center">Type</td>
           <td class="right">
-            {{ transaction.amount / 100 | currency : "USD" }}
+            {{ transaction.formattedAmount }}
           </td>
         </tr>
       </tbody>
     </table>
-    <div
-      class="no-transactions"
-      *ngIf="(transactionsData$ | async)?.length === 0"
-    >
+    <div class="no-transactions" *ngIf="transactions.length === 0">
       No transactions available
     </div>
 
     <div class="transactions-button">
       <app-button
         buttonText="Load More"
-        [disabled]="(transactionsData$ | async)?.length <= 8"
+        [disabled]="transactions.length <= 8"
       />
     </div>
   </div>

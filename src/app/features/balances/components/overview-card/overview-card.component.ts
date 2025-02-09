@@ -9,6 +9,7 @@ import { CommonModule } from '@angular/common';
 import { Observable, Subject, takeUntil, catchError, of, map } from 'rxjs';
 import { BalancesService } from '../../services/balances.service';
 import { TransactionsService } from '../../../transactions/services/transactions.service';
+import { TransactionModel } from '../../../../core/models/transactions.model';
 
 @Component({
   selector: 'app-overview-card-balances',
@@ -20,7 +21,7 @@ import { TransactionsService } from '../../../transactions/services/transactions
 export class OverviewCardBalancesComponent implements OnInit, OnDestroy {
   private destroy$ = new Subject<void>();
   accountsData$!: Observable<any[]>;
-  transactionsData$!: Observable<any[]>;
+  transactionsData$!: Observable<TransactionModel[]>;
 
   currentGlobalBalance$!: Observable<number>;
   currentIndividualBalance$!: Observable<number>;
@@ -59,7 +60,21 @@ export class OverviewCardBalancesComponent implements OnInit, OnDestroy {
       catchError((error) => {
         console.error(error);
         return of([]);
-      })
+      }),
+      map((transactions) =>
+        transactions.map(
+          (tx) =>
+            new TransactionModel(
+              tx.accountId,
+              tx.item,
+              tx.shop,
+              tx.type,
+              tx.amount,
+              tx.date,
+              tx.id
+            )
+        )
+      )
     );
 
     this.transactionsData$.pipe(takeUntil(this.destroy$)).subscribe(() => {
