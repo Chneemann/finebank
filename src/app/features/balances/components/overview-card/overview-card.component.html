@@ -1,7 +1,9 @@
 <div class="overview">
   <div class="header">
     <div class="total-ammount">
-      {{ currentBalance$ | async | currency : "USD" : "symbol" : "1.0-2" }}
+      {{
+        currentGlobalBalance$ | async | currency : "USD" : "symbol" : "1.0-2"
+      }}
     </div>
     <div class="all-accounts">All Accounts</div>
   </div>
@@ -18,7 +20,8 @@
         <div class="account-ammount-details">
           <p>
             {{
-              accounts[currentIndex]?.balance
+              currentIndividualBalance$
+                | async
                 | currency : "USD" : "symbol" : "1.0-2"
             }}
           </p>
@@ -33,7 +36,6 @@
       [totalSlides]="totalAccounts"
       [currentIndex]="currentIndex"
       [changeSlide]="changeSlide.bind(this)"
-    >
-    </app-slider>
+    ></app-slider>
   </div>
 </div>
