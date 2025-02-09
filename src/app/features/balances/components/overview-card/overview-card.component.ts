@@ -10,6 +10,7 @@ import { Observable, Subject, takeUntil, catchError, of, map } from 'rxjs';
 import { BalancesService } from '../../services/balances.service';
 import { TransactionsService } from '../../../transactions/services/transactions.service';
 import { TransactionModel } from '../../../../core/models/transactions.model';
+import { AccountModel } from '../../../../core/models/account.model';
 
 @Component({
   selector: 'app-overview-card-balances',
@@ -20,13 +21,13 @@ import { TransactionModel } from '../../../../core/models/transactions.model';
 })
 export class OverviewCardBalancesComponent implements OnInit, OnDestroy {
   private destroy$ = new Subject<void>();
-  accountsData$!: Observable<any[]>;
+  accountsData$!: Observable<AccountModel[]>;
   transactionsData$!: Observable<TransactionModel[]>;
 
   currentGlobalBalance$!: Observable<number>;
   currentIndividualBalance$!: Observable<number>;
 
-  accounts: any[] = [];
+  accounts: AccountModel[] = [];
   currentIndex = 0;
   totalAccounts = 0;
 
@@ -45,7 +46,12 @@ export class OverviewCardBalancesComponent implements OnInit, OnDestroy {
       catchError((error) => {
         console.error(error);
         return of([]);
-      })
+      }),
+      map((accounts) =>
+        accounts.map(
+          (tx) => new AccountModel(tx.id, tx.added, tx.name, tx.number, tx.type)
+        )
+      )
     );
 
     this.accountsData$.pipe(takeUntil(this.destroy$)).subscribe((accounts) => {
