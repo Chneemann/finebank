@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { combineLatest, map, Observable } from 'rxjs';
-import { TransactionsService } from '../../services/transactions.service';
+import { TransactionsService } from '../../../../core/services/transactions.service';
 import { CommonModule } from '@angular/common';
 import { TransactionModel } from '../../../../core/models/transactions.model';
 

@@ -7,8 +7,8 @@ import {
 import { SliderComponent } from './slider/slider.component';
 import { CommonModule } from '@angular/common';
 import { Observable, Subject, takeUntil, map, take } from 'rxjs';
-import { BalancesService } from '../../services/balances.service';
-import { TransactionsService } from '../../../transactions/services/transactions.service';
+import { BalancesService } from '../../../../core/services/balances.service';
+import { TransactionsService } from '../../../../core/services/transactions.service';
 import { TransactionModel } from '../../../../core/models/transactions.model';
 import { AccountModel } from '../../../../core/models/account.model';
 

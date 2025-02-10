@@ -6,8 +6,8 @@ import {
 } from '@angular/core';
 import { Firestore, collection, collectionData } from '@angular/fire/firestore';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { AccountModel } from '../../../core/models/account.model';
-import { TransactionModel } from '../../../core/models/transactions.model';
+import { AccountModel } from '../models/account.model';
+import { TransactionModel } from '../models/transactions.model';
 
 @Injectable({
   providedIn: 'root',

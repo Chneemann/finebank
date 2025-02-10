@@ -13,8 +13,8 @@ import { ButtonComponent } from '../../shared/components/layouts/button/button.c
 import { RouterLink } from '@angular/router';
 import { AccountModel } from '../../core/models/account.model';
 import { TransactionModel } from '../../core/models/transactions.model';
-import { BalancesService } from './services/balances.service';
-import { TransactionsService } from '../transactions/services/transactions.service';
+import { BalancesService } from '../../core/services/balances.service';
+import { TransactionsService } from '../../core/services/transactions.service';
 
 @Component({
   selector: 'app-balances',

@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { map, Observable } from 'rxjs';
-import { TransactionsService } from './services/transactions.service';
+import { TransactionsService } from '../../core/services/transactions.service';
 import { ButtonComponent } from '../../shared/components/layouts/button/button.component';
 import { RouterLink, RouterModule } from '@angular/router';
 import { TransactionModel } from '../../core/models/transactions.model';
