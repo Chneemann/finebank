@@ -6,7 +6,7 @@ import {
 } from '@angular/core';
 import { SliderComponent } from './slider/slider.component';
 import { CommonModule } from '@angular/common';
-import { Observable, Subject, takeUntil, catchError, of, map } from 'rxjs';
+import { Observable, Subject, takeUntil, map, take } from 'rxjs';
 import { BalancesService } from '../../services/balances.service';
 import { TransactionsService } from '../../../transactions/services/transactions.service';
 import { TransactionModel } from '../../../../core/models/transactions.model';
@@ -39,20 +39,20 @@ export class OverviewCardBalancesComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.loadAllAccounts();
     this.loadAllTransactions();
+    this.loadBalances();
   }
 
   private loadAllAccounts(): void {
-    this.accountsData$ = this.balancesService.getAllAccounts().pipe(
-      catchError((error) => {
-        console.error(error);
-        return of([]);
-      }),
-      map((accounts) =>
-        accounts.map(
-          (tx) => new AccountModel(tx.id, tx.added, tx.name, tx.number, tx.type)
+    this.accountsData$ = this.balancesService
+      .getAllAccounts()
+      .pipe(
+        map((accounts) =>
+          accounts.map(
+            (tx) =>
+              new AccountModel(tx.id, tx.added, tx.name, tx.number, tx.type)
+          )
         )
-      )
-    );
+      );
 
     this.accountsData$.pipe(takeUntil(this.destroy$)).subscribe((accounts) => {
       this.accounts = accounts;
@@ -62,49 +62,44 @@ export class OverviewCardBalancesComponent implements OnInit, OnDestroy {
   }
 
   private loadAllTransactions(): void {
-    this.transactionsData$ = this.transactionsService.getAllTransactions().pipe(
-      catchError((error) => {
-        console.error(error);
-        return of([]);
-      }),
-      map((transactions) =>
-        transactions.map(
-          (tx) =>
-            new TransactionModel(
-              tx.accountId,
-              tx.item,
-              tx.shop,
-              tx.type,
-              tx.amount,
-              tx.date,
-              tx.id
-            )
+    this.transactionsData$ = this.transactionsService
+      .getAllTransactions()
+      .pipe(
+        map((transactions) =>
+          transactions.map(
+            (tx) =>
+              new TransactionModel(
+                tx.accountId,
+                tx.item,
+                tx.shop,
+                tx.type,
+                tx.amount,
+                tx.date,
+                tx.id
+              )
+          )
         )
-      )
-    );
+      );
 
-    this.transactionsData$.pipe(takeUntil(this.destroy$)).subscribe(() => {
-      this.calculateCurrentGlobalBalance();
-    });
-  }
-
-  private calculateCurrentGlobalBalance(): void {
-    this.currentGlobalBalance$ = this.transactionsData$.pipe(
-      map((transactions) =>
-        this.balancesService.calculateGlobalBalance(transactions)
-      )
-    );
+    this.transactionsData$
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((transactions) => {
+        this.balancesService.calculateGlobalBalance(transactions);
+        this.calculateCurrentIndividualBalance();
+      });
   }
 
   private calculateCurrentIndividualBalance(): void {
-    this.currentIndividualBalance$ = this.transactionsData$.pipe(
-      map((transactions) =>
-        this.balancesService.calculateIndividualBalance(
-          transactions,
-          this.accounts[this.currentIndex]
-        )
-      )
-    );
+    this.transactionsData$.pipe(take(1)).subscribe((transactions) => {
+      const account = this.accounts[this.currentIndex];
+      this.balancesService.calculateIndividualBalance(transactions, account);
+    });
+  }
+
+  private loadBalances() {
+    this.currentGlobalBalance$ = this.balancesService.currentGlobalBalance$;
+    this.currentIndividualBalance$ =
+      this.balancesService.currentIndividualBalance$;
   }
 
   changeSlide(index: number): void {

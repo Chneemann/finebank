@@ -3,7 +3,7 @@
 
   <div class="balance">
     <!-- Existing account -->
-    @for(account of allAccounts$ | async; track account.id) {
+    @for(account of accountsData$ | async; track account.id) {
     <div class="account">
       <div class="existing-account">
         <div class="header">
@@ -25,11 +25,17 @@
 
         <div class="content">
           <div class="account-info">
-            <p>{{ account.number }}</p>
+            <p>{{ account.maskedNumber }}</p>
             <span>Account Number</span>
           </div>
           <div class="account-info">
-            <p>{{ account.balance | currency : "USD" : "symbol" : "1.2-2" }}</p>
+            <p>
+              {{
+                individualBalances$.get(account.id!)?.asObservable()
+                  | async
+                  | currency : "USD" : "symbol" : "1.2-2"
+              }}
+            </p>
             <span>Total Balance</span>
           </div>
         </div>

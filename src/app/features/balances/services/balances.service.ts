@@ -5,7 +5,9 @@ import {
   runInInjectionContext,
 } from '@angular/core';
 import { Firestore, collection, collectionData } from '@angular/fire/firestore';
-import { Observable } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
+import { AccountModel } from '../../../core/models/account.model';
+import { TransactionModel } from '../../../core/models/transactions.model';
 
 @Injectable({
   providedIn: 'root',
@@ -14,6 +16,13 @@ export class BalancesService {
   private readonly firestore = inject(Firestore);
   private readonly injector = inject(EnvironmentInjector);
 
+  private currentGlobalBalanceSubject = new BehaviorSubject<number>(0);
+  private currentIndividualBalanceSubject = new BehaviorSubject<number>(0);
+
+  currentGlobalBalance$ = this.currentGlobalBalanceSubject.asObservable();
+  currentIndividualBalance$ =
+    this.currentIndividualBalanceSubject.asObservable();
+
   getAllAccounts(): Observable<any[]> {
     return runInInjectionContext(this.injector, () => {
       const collectionRef = collection(this.firestore, 'accounts');
@@ -21,10 +30,16 @@ export class BalancesService {
     });
   }
 
-  // Calculation of the global balance
-  calculateGlobalBalance(transactions: any[]): number {
-    let balance = 0;
+  getAllTransactions(): Observable<any[]> {
+    return runInInjectionContext(this.injector, () => {
+      const collectionRef = collection(this.firestore, 'transactions');
+      return collectionData(collectionRef, { idField: 'id' });
+    });
+  }
 
+  // Global Balance Berechnung
+  calculateGlobalBalance(transactions: TransactionModel[]): void {
+    let balance = 0;
     transactions.forEach((transaction) => {
       if (transaction.type === 'revenue') {
         balance += transaction.amount / 100;
@@ -32,13 +47,15 @@ export class BalancesService {
         balance -= transaction.amount / 100;
       }
     });
-    return balance;
+    this.currentGlobalBalanceSubject.next(balance);
   }
 
-  // Calculation of the individual balance for an account
-  calculateIndividualBalance(transactions: any[], account: any): number {
+  // Individuellen Saldo für ein Konto berechnen
+  calculateIndividualBalance(
+    transactions: TransactionModel[],
+    account: AccountModel
+  ): void {
     let balance = 0;
-
     transactions.forEach((transaction) => {
       if (transaction.accountId === account.id) {
         if (transaction.type === 'revenue') {
@@ -48,7 +65,6 @@ export class BalancesService {
         }
       }
     });
-
-    return balance;
+    this.currentIndividualBalanceSubject.next(balance);
   }
 }
