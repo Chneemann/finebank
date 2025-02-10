@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { DetailsComponent } from './details/details.component';
 import { HistoryComponent } from './history/history.component';
-import { AccountDetailsService } from './services/account-details.service';
+import { AccountService } from '../../core/services/account.service';
 import { CommonModule } from '@angular/common';
 import { Observable } from 'rxjs';
 
@@ -19,7 +19,7 @@ export class AccountDetailsComponent {
   constructor(
     private router: Router,
     private route: ActivatedRoute,
-    private accountDetailsService: AccountDetailsService
+    private accountService: AccountService
   ) {}
 
   ngOnInit() {
@@ -30,14 +30,12 @@ export class AccountDetailsComponent {
     this.route.paramMap.subscribe((params) => {
       const accountId = params.get('id');
       if (accountId) {
-        this.accountDetailsService
-          .existAccountId(accountId)
-          .subscribe((exists) => {
-            this.accountExists = exists;
-            if (!exists) {
-              this.redirectToBalance();
-            }
-          });
+        this.accountService.existAccountId(accountId).subscribe((exists) => {
+          this.accountExists = exists;
+          if (!exists) {
+            this.redirectToBalance();
+          }
+        });
       } else {
         this.redirectToBalance();
       }

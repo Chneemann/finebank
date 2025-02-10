@@ -2,7 +2,7 @@ import { Component, Input } from '@angular/core';
 import { ButtonComponent } from '../../../shared/components/layouts/button/button.component';
 import { CommonModule } from '@angular/common';
 import { map, Observable, of, Subscription, switchMap } from 'rxjs';
-import { AccountDetailsService } from '../services/account-details.service';
+import { AccountService } from '../../../core/services/account.service';
 import { ActivatedRoute } from '@angular/router';
 
 @Component({
@@ -17,7 +17,7 @@ export class HistoryComponent {
 
   constructor(
     private route: ActivatedRoute,
-    private accountDetailsService: AccountDetailsService
+    private accountService: AccountService
   ) {}
 
   ngOnInit() {
@@ -29,9 +29,7 @@ export class HistoryComponent {
       map((params) => params.get('id')),
       switchMap((accountId) =>
         accountId
-          ? this.accountDetailsService
-              .getTransactionDataByAccountId(accountId)
-              .pipe()
+          ? this.accountService.getTransactionDataByAccountId(accountId).pipe()
           : of(null)
       )
     );

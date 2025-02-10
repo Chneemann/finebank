@@ -1,6 +1,6 @@
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { ButtonComponent } from '../../../shared/components/layouts/button/button.component';
-import { AccountDetailsService } from '../services/account-details.service';
+import { AccountService } from '../../../core/services/account.service';
 import { Observable, of } from 'rxjs';
 import { ActivatedRoute } from '@angular/router';
 import { map, switchMap } from 'rxjs/operators';
@@ -20,7 +20,7 @@ export class DetailsComponent implements OnInit {
 
   constructor(
     private route: ActivatedRoute,
-    private accountDetailsService: AccountDetailsService
+    private accountService: AccountService
   ) {}
 
   ngOnInit() {
@@ -32,7 +32,7 @@ export class DetailsComponent implements OnInit {
       map((params) => params.get('id')),
       switchMap((accountId) =>
         accountId
-          ? this.accountDetailsService.getAccountDataById(accountId).pipe()
+          ? this.accountService.getAccountDataById(accountId).pipe()
           : of(null)
       )
     );

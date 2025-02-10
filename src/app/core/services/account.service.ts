@@ -19,7 +19,7 @@ import { from, map, Observable } from 'rxjs';
 @Injectable({
   providedIn: 'root',
 })
-export class AccountDetailsService {
+export class AccountService {
   private readonly firestore = inject(Firestore);
   private readonly injector = inject(EnvironmentInjector);
 
