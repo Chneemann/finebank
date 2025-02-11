@@ -4,7 +4,9 @@ import { DetailsComponent } from './details/details.component';
 import { HistoryComponent } from './history/history.component';
 import { AccountService } from '../../core/services/account.service';
 import { CommonModule } from '@angular/common';
-import { Observable } from 'rxjs';
+import { catchError, filter, map, Observable, of, switchMap, tap } from 'rxjs';
+import { AccountModel } from '../../core/models/account.model';
+import { TransactionModel } from '../../core/models/transactions.model';
 
 @Component({
   selector: 'app-account-details',
@@ -13,8 +15,10 @@ import { Observable } from 'rxjs';
   styleUrl: './account-details.component.scss',
 })
 export class AccountDetailsComponent {
+  currentAccountData$!: Observable<AccountModel | null>;
+  currentTransactionsData$!: Observable<TransactionModel | null>;
+
   accountExists = false;
-  accountData$!: Observable<any>;
 
   constructor(
     private router: Router,
@@ -27,26 +31,57 @@ export class AccountDetailsComponent {
   }
 
   private checkAccountExistence() {
-    this.route.paramMap.subscribe((params) => {
-      const accountId = params.get('id');
-      if (accountId) {
-        this.accountService.existAccountId(accountId).subscribe((exists) => {
-          this.accountExists = exists;
-          if (!exists) {
-            this.redirectToBalance();
-          }
-        });
-      } else {
-        this.redirectToBalance();
-      }
-    });
+    this.route.paramMap
+      .pipe(
+        map((params) => params.get('id')),
+        switchMap((accountId) =>
+          accountId
+            ? this.accountService.existAccountId(accountId).pipe(
+                tap((exists) => {
+                  this.accountExists = exists;
+                  if (!exists) this.redirectToBalance();
+                }),
+                catchError((error) => {
+                  console.error('Error checking account existence', error);
+                  return of(false);
+                })
+              )
+            : of(false)
+        ),
+        filter((exists) => exists),
+        map(() => this.route.snapshot.paramMap.get('id')!)
+      )
+      .subscribe((accountId) => {
+        if (accountId) {
+          this.loadAccountData(accountId);
+          this.loadTransactionsData(accountId);
+        }
+      });
+  }
+
+  private loadAccountData(accountId: string) {
+    this.currentAccountData$ = this.accountService
+      .getAccountDataById(accountId)
+      .pipe(
+        catchError((error) => {
+          console.error('Error loading account data', error);
+          return of(null);
+        })
+      );
+  }
+
+  private loadTransactionsData(accountId: string) {
+    this.currentTransactionsData$ = this.accountService
+      .getTransactionDataByAccountId(accountId)
+      .pipe(
+        catchError((error) => {
+          console.error('Error loading transaction data', error);
+          return of(null);
+        })
+      );
   }
 
   private redirectToBalance() {
     this.router.navigate(['/balances']);
-  }
-
-  receiveAccountData(accountData$: Observable<any>) {
-    this.accountData$ = accountData$;
   }
 }

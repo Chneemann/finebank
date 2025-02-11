@@ -1,7 +1,7 @@
 <div class="history">
   <div
     class="history-content"
-    *ngIf="transactionsData$ | async as transactions"
+    *ngIf="currentTransactionsData$ | async as transactions"
   >
     <table>
       <thead>
@@ -14,11 +14,11 @@
         </tr>
       </thead>
       <tbody>
-        <tr *ngFor="let transaction of transactionsData$ | async">
+        <tr *ngFor="let transaction of currentTransactionsData$ | async">
           <td class="left">{{ transaction.date | date : "MMM d, yyyy" }}</td>
           <td class="center">{{ transaction.description }}</td>
           <td class="center">{{ transaction.shop }}</td>
-          <td class="center" *ngIf="accountData$ | async as account">
+          <td class="center" *ngIf="currentAccountData$ | async as account">
             {{ account.type }}
           </td>
           <td class="right">
@@ -29,7 +29,7 @@
     </table>
     <div
       class="no-transactions"
-      *ngIf="(transactionsData$ | async)?.length === 0"
+      *ngIf="(currentTransactionsData$ | async)?.length === 0"
     >
       No transactions available
     </div>
@@ -38,7 +38,7 @@
   <div class="history-button">
     <app-button
       buttonText="Load More"
-      [disabled]="(transactionsData$ | async)?.length <= 8"
+      [disabled]="(currentTransactionsData$ | async)?.length <= 8"
     />
   </div>
 </div>

@@ -2,16 +2,17 @@
 <section class="account-details">
   <div class="headline">Account Details</div>
   <div class="account-details-content">
-    <app-details
-      (accountDataEmitter)="receiveAccountData($event)"
-    ></app-details>
+    <app-details [currentAccountData$]="currentAccountData$"></app-details>
   </div>
 </section>
 
 <section class="transaction-history">
   <div class="headline">Transactions History</div>
   <div class="transaction-history-content">
-    <app-history [accountData$]="accountData$"></app-history>
+    <app-history
+      [currentAccountData$]="currentAccountData$"
+      [currentTransactionsData$]="currentTransactionsData$"
+    ></app-history>
   </div>
 </section>
 }

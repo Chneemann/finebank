@@ -1,5 +1,5 @@
 <section class="details">
-  <div class="details-content" *ngIf="accountData$ | async as account">
+  <div class="details-content" *ngIf="currentAccountData$ | async as account">
     <div class="details-item">
       <label>Bank Name</label>
       <span>{{ account.name }}</span>

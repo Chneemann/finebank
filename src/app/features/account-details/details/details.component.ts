@@ -1,9 +1,6 @@
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { ButtonComponent } from '../../../shared/components/layouts/button/button.component';
-import { AccountService } from '../../../core/services/account.service';
 import { Observable, of } from 'rxjs';
-import { ActivatedRoute } from '@angular/router';
-import { map, switchMap } from 'rxjs/operators';
 import { CommonModule } from '@angular/common';
 
 @Component({
@@ -13,29 +10,8 @@ import { CommonModule } from '@angular/common';
   templateUrl: './details.component.html',
   styleUrls: ['./details.component.scss'],
 })
-export class DetailsComponent implements OnInit {
-  @Output() accountDataEmitter = new EventEmitter<Observable<any>>();
+export class DetailsComponent {
+  @Input() currentAccountData$!: Observable<any>;
 
-  accountData$!: Observable<any>;
-
-  constructor(
-    private route: ActivatedRoute,
-    private accountService: AccountService
-  ) {}
-
-  ngOnInit() {
-    this.loadAccountData();
-  }
-
-  private loadAccountData() {
-    this.accountData$ = this.route.paramMap.pipe(
-      map((params) => params.get('id')),
-      switchMap((accountId) =>
-        accountId
-          ? this.accountService.getAccountDataById(accountId).pipe()
-          : of(null)
-      )
-    );
-    this.accountDataEmitter.emit(this.accountData$);
-  }
+  constructor() {}
 }
