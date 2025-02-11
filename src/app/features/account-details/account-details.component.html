@@ -2,7 +2,10 @@
 <section class="account-details">
   <div class="headline">Account Details</div>
   <div class="account-details-content">
-    <app-details [currentAccountData$]="currentAccountData$"></app-details>
+    <app-details
+      [currentBalance$]="currentBalance$"
+      [currentAccountData$]="currentAccountData$"
+    ></app-details>
   </div>
 </section>
 

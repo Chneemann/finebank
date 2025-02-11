@@ -12,17 +12,19 @@
 
     <div class="details-item">
       <label>Balance</label>
-      <span>{{ account.balance | currency : "USD" : "symbol" : "1.2-2" }}</span>
+      <span>{{
+        currentBalance$ | async | currency : "USD" : "symbol" : "1.2-2"
+      }}</span>
     </div>
 
     <div class="details-item">
       <label>Account Number</label>
-      <span>{{ account.number }}</span>
+      <span>{{ account.maskedNumber }}</span>
     </div>
 
     <div class="details-item">
       <label>Added Date</label>
-      <span>{{ account.added | date : "MMM d, yyyy - h:mm a" }}</span>
+      <span>{{ account.formattedAddedDate }}</span>
     </div>
 
     <div class="details-item placeholder"></div>

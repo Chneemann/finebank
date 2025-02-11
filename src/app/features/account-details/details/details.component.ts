@@ -1,7 +1,8 @@
 import { Component, Input } from '@angular/core';
 import { ButtonComponent } from '../../../shared/components/layouts/button/button.component';
-import { Observable, of } from 'rxjs';
+import { Observable } from 'rxjs';
 import { CommonModule } from '@angular/common';
+import { AccountModel } from '../../../core/models/account.model';
 
 @Component({
   selector: 'app-details',
@@ -11,7 +12,8 @@ import { CommonModule } from '@angular/common';
   styleUrls: ['./details.component.scss'],
 })
 export class DetailsComponent {
-  @Input() currentAccountData$!: Observable<any>;
+  @Input() currentBalance$!: Observable<number>;
+  @Input() currentAccountData$!: Observable<AccountModel>;
 
   constructor() {}
 }

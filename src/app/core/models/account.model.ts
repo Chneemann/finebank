@@ -28,6 +28,8 @@ export class AccountModel implements Account {
       day: 'numeric',
       month: 'short',
       year: 'numeric',
+      hour: 'numeric',
+      minute: 'numeric',
     });
   }
 
