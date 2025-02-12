@@ -11,10 +11,11 @@ import { BalancesService } from '../../../../core/services/balances.service';
 import { TransactionsService } from '../../../../core/services/transactions.service';
 import { TransactionModel } from '../../../../core/models/transactions.model';
 import { AccountModel } from '../../../../core/models/account.model';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-overview-card-balances',
-  imports: [CommonModule, SliderComponent],
+  imports: [CommonModule, RouterLink, SliderComponent],
   templateUrl: './overview-card.component.html',
   styleUrl: './overview-card.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,

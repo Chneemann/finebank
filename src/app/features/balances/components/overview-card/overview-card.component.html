@@ -25,7 +25,12 @@
                 | currency : "USD" : "symbol" : "1.2-2"
             }}
           </p>
-          <img src="assets/img/balances/arrow-top-right.svg" alt="" />
+          <div
+            class="button"
+            [routerLink]="['/account-details', accounts[currentIndex].id]"
+          >
+            <img src="assets/img/balances/arrow-top-right.svg" alt="" />
+          </div>
         </div>
       </div>
     </div>
