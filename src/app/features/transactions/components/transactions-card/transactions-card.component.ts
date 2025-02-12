@@ -53,10 +53,17 @@ export class TransactionsCardComponent implements OnInit {
   getFilteredTransactions(
     transactions: TransactionModel[]
   ): TransactionModel[] {
-    if (this.selectedType === 'all') {
-      return transactions.slice(0, this.transactionFetchLimit);
+    let filteredTransactions = transactions;
+
+    if (this.selectedType !== 'all') {
+      filteredTransactions = filteredTransactions.filter(
+        (tx) => tx.type === this.selectedType
+      );
     }
-    return transactions.filter((tx) => tx.type === this.selectedType);
+
+    return filteredTransactions
+      .slice(0, this.transactionFetchLimit)
+      .sort((a, b) => b.date - a.date);
   }
 
   setFilter(type: 'all' | 'revenue' | 'expense') {

@@ -28,6 +28,14 @@ export class TransactionsService {
     });
   }
 
+  getAllTransactionsByType(type: string): Observable<any[]> {
+    return runInInjectionContext(this.injector, () => {
+      const collectionRef = collection(this.firestore, 'transactions');
+      let q = query(collectionRef, where('type', '==', type));
+      return collectionData(q, { idField: 'id' });
+    });
+  }
+
   getLastTransactionsByType(type: string, number: number): Observable<any[]> {
     return runInInjectionContext(this.injector, () => {
       const collectionRef = collection(this.firestore, 'transactions');

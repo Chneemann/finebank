@@ -4,20 +4,23 @@
   <nav>
     <ul>
       <li>
-        <a
-          routerLink="/transactions"
-          routerLinkActive="active"
-          [routerLinkActiveOptions]="{ exact: true }"
-          >All</a
-        >
+        <a (click)="setFilter('all')" [class.active]="selectedType === 'all'">
+          All
+        </a>
       </li>
       <li>
-        <a routerLink="/transactions/revenue" routerLinkActive="active">
+        <a
+          (click)="setFilter('revenue')"
+          [class.active]="selectedType === 'revenue'"
+        >
           Revenue
         </a>
       </li>
       <li>
-        <a routerLink="/transactions/expenses" routerLinkActive="active">
+        <a
+          (click)="setFilter('expense')"
+          [class.active]="selectedType === 'expense'"
+        >
           Expenses
         </a>
       </li>
@@ -39,7 +42,7 @@
         </tr>
       </thead>
       <tbody>
-        <tr *ngFor="let transaction of transactionsData$ | async">
+        <tr *ngFor="let transaction of getFilteredTransactions(transactions)">
           <td class="left">{{ transaction.item }}</td>
           <td class="center">{{ transaction.shop }}</td>
           <td class="center">{{ transaction.formattedDate }}</td>

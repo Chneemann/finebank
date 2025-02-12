@@ -94,6 +94,11 @@ export class AccountDetailsComponent {
             this.updateBalance(transactions, accountId);
           }
         }),
+        map((transactions: TransactionModel[]) =>
+          transactions.sort(
+            (a: TransactionModel, b: TransactionModel) => b.date - a.date
+          )
+        ),
         catchError((error) => {
           console.error('Error loading transaction data', error);
           return of([]);
