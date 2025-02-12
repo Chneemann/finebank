@@ -14,8 +14,6 @@ export const routes: Routes = [
       { path: 'balances', component: BalancesComponent },
       { path: 'account-details/:id', component: AccountDetailsComponent },
       { path: 'transactions', component: TransactionsComponent },
-      { path: 'transactions/revenue', component: TransactionsComponent },
-      { path: 'transactions/expenses', component: TransactionsComponent },
       { path: 'bills', component: OverviewComponent },
       { path: 'expenses', component: OverviewComponent },
       { path: 'goals', component: OverviewComponent },
