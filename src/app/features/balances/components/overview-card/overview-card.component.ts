@@ -93,7 +93,8 @@ export class OverviewCardBalancesComponent implements OnInit, OnDestroy {
   private calculateCurrentIndividualBalance(): void {
     this.transactionsData$.pipe(take(1)).subscribe((transactions) => {
       const account = this.accounts[this.currentIndex];
-      this.balancesService.calculateIndividualBalance(transactions, account);
+      account?.id &&
+        this.balancesService.calculateIndividualBalance(transactions, account);
     });
   }
 
