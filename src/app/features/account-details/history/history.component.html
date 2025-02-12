@@ -22,17 +22,19 @@
             {{ account.type }}
           </td>
           <td class="right">
-            <img
-              *ngIf="transaction.type === 'revenue'"
-              src="assets/img/transactions/revenue.svg"
-              alt="revenue icon"
-            />
-            <img
-              *ngIf="transaction.type === 'expense'"
-              src="assets/img/transactions/expense.svg"
-              alt="expense icon"
-            />
-            {{ transaction.amount / 100 | currency : "USD" }}
+            <div class="amount">
+              <img
+                *ngIf="transaction.type === 'revenue'"
+                src="assets/img/transactions/revenue.svg"
+                alt="revenue icon"
+              />
+              <img
+                *ngIf="transaction.type === 'expense'"
+                src="assets/img/transactions/expense.svg"
+                alt="expense icon"
+              />
+              {{ transaction.amount / 100 | currency : "USD" }}
+            </div>
           </td>
         </tr>
       </tbody>
