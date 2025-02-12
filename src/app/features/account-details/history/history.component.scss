@@ -47,9 +47,12 @@ table {
   }
 
   .right {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 6px;
     font-size: 16px;
     font-weight: 500;
     color: var(--color-black);
-    text-align: right;
   }
 }

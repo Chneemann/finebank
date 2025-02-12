@@ -45,6 +45,16 @@
           <td class="center">{{ transaction.formattedDate }}</td>
           <td class="center">Type</td>
           <td class="right">
+            <img
+              *ngIf="transaction.type === 'revenue'"
+              src="assets/img/transactions/revenue.svg"
+              alt="revenue icon"
+            />
+            <img
+              *ngIf="transaction.type === 'expense'"
+              src="assets/img/transactions/expense.svg"
+              alt="expense icon"
+            />
             {{ transaction.formattedAmount }}
           </td>
         </tr>
