@@ -4,6 +4,7 @@ import { OverviewComponent } from './features/overview/overview.component';
 import { BalancesComponent } from './features/balances/balances.component';
 import { TransactionsComponent } from './features/transactions/transactions.component';
 import { AccountDetailsComponent } from './features/account-details/account-details.component';
+import { GoalsComponent } from './features/goals/goals.component';
 
 export const routes: Routes = [
   {
@@ -16,7 +17,7 @@ export const routes: Routes = [
       { path: 'transactions', component: TransactionsComponent },
       { path: 'bills', component: OverviewComponent },
       { path: 'expenses', component: OverviewComponent },
-      { path: 'goals', component: OverviewComponent },
+      { path: 'goals', component: GoalsComponent },
       { path: 'settings', component: OverviewComponent },
       { path: '', redirectTo: 'overview', pathMatch: 'full' },
     ],
