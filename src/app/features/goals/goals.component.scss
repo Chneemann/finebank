@@ -2,7 +2,7 @@
 
 .goals {
   display: flex;
-  gap: 24px;
+  flex-direction: column;
 }
 
 .headline {
@@ -10,4 +10,44 @@
   font-weight: 400;
   color: #878787;
   margin-bottom: 12px;
+}
+
+.goal-overview {
+  display: flex;
+  gap: 24px;
+  margin-bottom: 24px;
+}
+
+.saving-goals {
+  width: 352px;
+  height: 288px;
+  padding: 24px;
+  border-radius: 8px;
+  background-color: var(--color-white);
+  box-shadow: 0px 20px 25px 0px #4c67641a;
+}
+
+.saving-summary {
+  width: 728px;
+  height: 288px;
+  padding: 24px;
+  border-radius: 8px;
+  background-color: var(--color-white);
+  box-shadow: 0px 20px 25px 0px #4c67641a;
+}
+
+.expense-goals {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 24px;
+
+  .expense-category {
+    flex: 1 1 calc(33.333% - 24px);
+    max-width: calc(33.333% - 24px);
+    height: 120px;
+    padding: 24px;
+    border-radius: 8px;
+    background-color: var(--color-white);
+    box-shadow: 0px 20px 25px 0px #4c67641a;
+  }
 }
