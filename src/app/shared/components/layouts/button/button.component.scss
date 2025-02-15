@@ -37,7 +37,7 @@ button {
     box-shadow: none;
   }
 
-  // Größen-Styles
+  // Size styles
   &.large {
     width: 208px;
     height: 48px;
@@ -54,8 +54,8 @@ button {
     }
 
     img {
-      width: 16px;
-      height: 16px;
+      width: 14px;
+      height: 14px;
       filter: drop-shadow(1px 1px 1px var(--color-black));
     }
   }

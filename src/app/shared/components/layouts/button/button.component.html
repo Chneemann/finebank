@@ -1,6 +1,10 @@
 <button [disabled]="disabled" [ngClass]="buttonSize">
   <p>{{ buttonText }}</p>
-  @if (buttonIcon && buttonSize == "small") {
+  @if (buttonSize == "small") {
+  <!-- Icon -->
+  @if (buttonIcon == "chevron-right") {
   <img src="assets/img/button/chevron-right.svg" alt=">" />
-  }
+  } @else if (buttonIcon == "edit") {
+  <img src="assets/img/button/edit.svg" alt="edit" />
+  } }
 </button>
