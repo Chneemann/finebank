@@ -11,5 +11,12 @@ export class ButtonComponent {
   @Input() buttonText: string = '';
   @Input() buttonSize: string = 'large';
   @Input() buttonIcon: string = '';
+  @Input() buttonFilled: boolean = true;
   @Input() disabled: boolean = false;
+
+  getButtonClasses(): string[] {
+    let classes = [this.buttonSize];
+    classes.push(this.buttonFilled ? 'filled' : 'outlined');
+    return classes;
+  }
 }

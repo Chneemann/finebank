@@ -1,4 +1,4 @@
-<button [disabled]="disabled" [ngClass]="buttonSize">
+<button [disabled]="disabled" [ngClass]="getButtonClasses()">
   <p>{{ buttonText }}</p>
   @if (buttonSize == "small") {
   <!-- Icon -->
