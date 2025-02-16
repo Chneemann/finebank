@@ -2,8 +2,37 @@
   <div class="headline">Goals</div>
 
   <div class="goal-overview">
-    <div class="saving-goals">
+    <div class="saving-goal">
       <div class="header"><p>Saving Goal</p></div>
+      <div class="content">
+        <div class="left">
+          <div class="target">
+            <img src="assets/img/goals/award.svg" alt="award" />
+            <div class="description">
+              <p>Target Achieved</p>
+              <span>$12,500</span>
+            </div>
+          </div>
+          <div class="target">
+            <img src="assets/img/goals/goal.svg" alt="goal" />
+            <div class="description">
+              <p>This month Target</p>
+              <span>$20,000</span>
+            </div>
+          </div>
+        </div>
+        <div class="right">
+          <p>Target vs Achievement</p>
+        </div>
+      </div>
+      <div class="button">
+        <app-button
+          buttonText="Adjust Goal"
+          buttonSize="small"
+          buttonIcon="edit"
+          [buttonFilled]="false"
+        />
+      </div>
     </div>
 
     <div class="saving-summary">
