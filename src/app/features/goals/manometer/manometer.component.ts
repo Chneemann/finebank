@@ -1,16 +1,15 @@
-import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 
 @Component({
   selector: 'app-manometer',
   standalone: true,
-  imports: [CommonModule],
+  imports: [],
   templateUrl: './manometer.component.html',
   styleUrl: './manometer.component.scss',
 })
 export class ManometerComponent {
-  maxValue: number = 20000;
-  currentValue: number = 12500;
+  @Input() maxValue = 0;
+  @Input() currentValue = 0;
 
   // Calculate the percentage based on the current value
   getPercentage(): number {

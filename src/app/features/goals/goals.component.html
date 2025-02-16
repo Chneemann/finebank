@@ -10,19 +10,26 @@
             <img src="assets/img/goals/award.svg" alt="award" />
             <div class="description">
               <p>Target Achieved</p>
-              <span>$12,500</span>
+              <span>{{
+                targetAchieved | currency : "USD" : "symbol" : "1.0-0"
+              }}</span>
             </div>
           </div>
           <div class="target">
             <img src="assets/img/goals/goal.svg" alt="goal" />
             <div class="description">
               <p>This month Target</p>
-              <span>$20,000</span>
+              <span>{{
+                thisMonthTarget | currency : "USD" : "symbol" : "1.0-0"
+              }}</span>
             </div>
           </div>
         </div>
         <div class="right">
-          <app-manometer></app-manometer>
+          <app-manometer
+            [maxValue]="thisMonthTarget"
+            [currentValue]="targetAchieved"
+          ></app-manometer>
           <p>Target vs Achievement</p>
         </div>
       </div>
