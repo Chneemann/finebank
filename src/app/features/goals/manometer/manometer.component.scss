@@ -39,8 +39,9 @@
 
 .gauge-label-right {
   position: absolute;
+  min-width: 27px;
   top: 105%;
-  right: 5%;
+  right: 0%;
   font-size: 12px;
   font-weight: 400;
   color: #878787;

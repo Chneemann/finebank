@@ -4,19 +4,9 @@ import { DetailsComponent } from './details/details.component';
 import { HistoryComponent } from './history/history.component';
 import { AccountService } from '../../core/services/account.service';
 import { CommonModule } from '@angular/common';
-import {
-  BehaviorSubject,
-  catchError,
-  filter,
-  map,
-  Observable,
-  of,
-  switchMap,
-  tap,
-} from 'rxjs';
+import { catchError, filter, map, Observable, of, switchMap, tap } from 'rxjs';
 import { AccountModel } from '../../core/models/account.model';
 import { TransactionModel } from '../../core/models/transactions.model';
-import { BalancesService } from '../../core/services/balances.service';
 
 @Component({
   selector: 'app-account-details',
@@ -27,15 +17,13 @@ import { BalancesService } from '../../core/services/balances.service';
 export class AccountDetailsComponent {
   currentAccountData$!: Observable<AccountModel>;
   currentTransactionsData$!: Observable<TransactionModel[]>;
-  currentBalance$: BehaviorSubject<number> = new BehaviorSubject<number>(0);
 
   accountExists = false;
 
   constructor(
     private router: Router,
     private route: ActivatedRoute,
-    private accountService: AccountService,
-    private balancesService: BalancesService
+    private accountService: AccountService
   ) {}
 
   ngOnInit() {
@@ -89,11 +77,6 @@ export class AccountDetailsComponent {
     this.currentTransactionsData$ = this.accountService
       .getTransactionDataByAccountId(accountId)
       .pipe(
-        tap((transactions) => {
-          if (transactions && transactions.length > 0) {
-            this.updateBalance(transactions, accountId);
-          }
-        }),
         map((transactions: TransactionModel[]) =>
           transactions.sort(
             (a: TransactionModel, b: TransactionModel) => b.date - a.date
@@ -104,16 +87,6 @@ export class AccountDetailsComponent {
           return of([]);
         })
       );
-  }
-
-  private updateBalance(transactions: TransactionModel[], accountId: string) {
-    this.balancesService.calculateIndividualBalance(transactions, {
-      id: accountId,
-    } as AccountModel);
-
-    this.balancesService.currentIndividualBalance$.subscribe((balance) => {
-      this.currentBalance$.next(balance);
-    });
   }
 
   private redirectToBalance() {

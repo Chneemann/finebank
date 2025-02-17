@@ -28,16 +28,15 @@ export class BalancesComponent {
   accountsData$!: Observable<AccountModel[]>;
   transactionsData$!: Observable<TransactionModel[]>;
 
-  individualBalances$ = new Map<string, BehaviorSubject<number>>();
+  globalBalance$!: Observable<number>;
+  accountsBalances$!: Observable<{ accountId: string; balance: number }[]>;
 
-  constructor(
-    private balancesService: BalancesService,
-    private transactionsService: TransactionsService
-  ) {}
+  constructor(private balancesService: BalancesService) {}
 
   ngOnInit(): void {
     this.loadAllAccounts();
-    this.loadAllTransactions();
+    this.globalBalance$ = this.balancesService.globalBalance$;
+    this.accountsBalances$ = this.balancesService.accountsBalances$;
   }
 
   private loadAllAccounts(): void {
@@ -51,55 +50,6 @@ export class BalancesComponent {
           )
         )
       );
-  }
-
-  private loadAllTransactions(): void {
-    this.transactionsData$ = this.transactionsService
-      .getAllTransactions()
-      .pipe(
-        map((transactions) =>
-          transactions.map(
-            (tx) =>
-              new TransactionModel(
-                tx.accountId,
-                tx.item,
-                tx.shop,
-                tx.type,
-                tx.amount,
-                tx.date,
-                tx.id
-              )
-          )
-        )
-      );
-
-    combineLatest([this.accountsData$, this.transactionsData$])
-      .pipe(takeUntil(this.destroy$))
-      .subscribe(([accounts, transactions]) => {
-        this.balancesService.calculateGlobalBalance(transactions);
-        this.updateIndividualBalances(accounts, transactions);
-      });
-  }
-
-  private updateIndividualBalances(
-    accounts: AccountModel[],
-    transactions: TransactionModel[]
-  ): void {
-    accounts.forEach((account) => {
-      if (!this.individualBalances$.has(account.id!)) {
-        this.individualBalances$.set(
-          account.id!,
-          new BehaviorSubject<number>(0)
-        );
-      }
-
-      this.balancesService.calculateIndividualBalance(transactions, account);
-      this.balancesService.currentIndividualBalance$
-        .pipe(take(1))
-        .subscribe((balance) => {
-          this.individualBalances$.get(account.id!)!.next(balance);
-        });
-    });
   }
 
   ngOnDestroy(): void {

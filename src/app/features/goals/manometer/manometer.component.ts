@@ -9,10 +9,13 @@ import { Component, Input } from '@angular/core';
 })
 export class ManometerComponent {
   @Input() maxValue = 0;
-  @Input() currentValue = 0;
+  @Input() currentValue: number | null = null;
 
   // Calculate the percentage based on the current value
   getPercentage(): number {
+    if (this.currentValue === null || this.maxValue === 0) {
+      return 0;
+    }
     return Math.round((this.currentValue / this.maxValue) * 100);
   }
 
@@ -25,6 +28,9 @@ export class ManometerComponent {
 
   // Calculate the Dashoffset to show the progress
   calculateDashOffset(): number {
+    if (this.currentValue === null || this.maxValue === 0) {
+      return 0;
+    }
     const percentage = this.currentValue / this.maxValue;
     const totalCircumference = 2 * Math.PI * 80;
     const halfCircumference = totalCircumference * 0.5;

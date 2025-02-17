@@ -29,13 +29,19 @@
             <span>Account Number</span>
           </div>
           <div class="account-info">
-            <p>
-              {{
-                individualBalances$.get(account.id!)?.asObservable()
-                  | async
-                  | currency : "USD" : "symbol" : "1.2-2"
-              }}
-            </p>
+            <div *ngIf="accountsBalances$ | async as accountsBalances">
+              <div *ngFor="let accountBalance of accountsBalances">
+                @if (accountBalance.accountId == account.id) {
+                <p>
+                  {{
+                    accountBalance.balance / 100
+                      | currency : "USD" : "symbol" : "1.2-2"
+                  }}
+                </p>
+                }
+              </div>
+            </div>
+
             <span>Total Balance</span>
           </div>
         </div>
@@ -45,7 +51,7 @@
           <app-button
             buttonText="Details"
             buttonSize="small"
-            [buttonIcon="chevron-right"
+            buttonIcon="chevron-right"
             [routerLink]="['/account-details', account.id]"
           />
         </div>

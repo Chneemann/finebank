@@ -12,9 +12,9 @@
 
     <div class="details-item">
       <label>Balance</label>
-      <span>{{
-        currentBalance$ | async | currency : "USD" : "symbol" : "1.2-2"
-      }}</span>
+      <span *ngIf="currentBalance$ | async as balance">
+        {{ balance / 100 | currency : "USD" : "symbol" : "1.2-2" }}
+      </span>
     </div>
 
     <div class="details-item">

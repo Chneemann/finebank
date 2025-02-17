@@ -1,9 +1,7 @@
 <div class="overview">
   <div class="header">
     <div class="total-ammount">
-      {{
-        currentGlobalBalance$ | async | currency : "USD" : "symbol" : "1.2-2"
-      }}
+      {{ globalBalance$ | async | currency : "USD" : "symbol" : "1.2-2" }}
     </div>
     <div class="all-accounts">All Accounts</div>
   </div>
@@ -18,12 +16,8 @@
       <div class="account-ammount">
         <img src="assets/img/balances/mastercard.svg" alt="" />
         <div class="account-ammount-details">
-          <p>
-            {{
-              currentIndividualBalance$
-                | async
-                | currency : "USD" : "symbol" : "1.2-2"
-            }}
+          <p *ngIf="currentBalance$ | async as balance">
+            {{ balance / 100 | currency : "USD" : "symbol" : "1.2-2" }}
           </p>
           <div
             class="button"

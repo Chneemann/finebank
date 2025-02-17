@@ -10,9 +10,7 @@
             <img src="assets/img/goals/award.svg" alt="award" />
             <div class="description">
               <p>Target Achieved</p>
-              <span>{{
-                targetAchieved | currency : "USD" : "symbol" : "1.0-0"
-              }}</span>
+              <span>{{ globalBalance$ | async | currency : "USD" }}</span>
             </div>
           </div>
           <div class="target">
@@ -28,7 +26,7 @@
         <div class="right">
           <app-manometer
             [maxValue]="thisMonthTarget"
-            [currentValue]="targetAchieved"
+            [currentValue]="globalBalance$ | async"
           ></app-manometer>
           <p>Target vs Achievement</p>
         </div>

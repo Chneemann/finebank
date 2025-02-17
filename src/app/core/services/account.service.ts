@@ -25,7 +25,7 @@ export class AccountService {
 
   getAccountDataById(accountId: string): Observable<any> {
     return runInInjectionContext(this.injector, () =>
-      docData(doc(this.firestore, `accounts/${accountId}`))
+      docData(doc(this.firestore, `accounts/${accountId}`), { idField: 'id' })
     );
   }
 
