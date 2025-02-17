@@ -16,6 +16,9 @@ export class ManometerComponent {
     if (this.currentValue === null || this.maxValue === 0) {
       return 0;
     }
+    if (this.currentValue >= this.maxValue) {
+      return 100;
+    }
     return Math.round((this.currentValue / this.maxValue) * 100);
   }
 
@@ -28,9 +31,14 @@ export class ManometerComponent {
 
   // Calculate the Dashoffset to show the progress
   calculateDashOffset(): number {
-    if (this.currentValue === null || this.maxValue === 0) {
+    if (
+      this.currentValue === null ||
+      this.maxValue === 0 ||
+      this.currentValue >= this.maxValue
+    ) {
       return 0;
     }
+
     const percentage = this.currentValue / this.maxValue;
     const totalCircumference = 2 * Math.PI * 80;
     const halfCircumference = totalCircumference * 0.5;
