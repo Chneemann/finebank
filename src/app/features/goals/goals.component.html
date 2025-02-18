@@ -1,4 +1,5 @@
 <section class="goals">
+  <!-- Goals -->
   <div class="headline">Goals</div>
 
   <div class="goal-overview">
@@ -46,14 +47,19 @@
     </div>
   </div>
 
+  <!-- Expenses Goals -->
   <div class="headline">Expenses Goals by Category</div>
 
   <div class="expense-goals">
-    <div class="goal">
-      <img src="assets/img/goals/housing.svg" alt="" />
+    @for (goal of allGoals$ | async; track goal.goal) {
+    <div class="goal" *ngIf="goal.amount > 0">
+      <img
+        [src]="'assets/img/goals/' + goal.goal.toLowerCase() + '.svg'"
+        alt=""
+      />
       <div class="container">
-        <div class="category">Housing</div>
-        <div class="amount">$250.00</div>
+        <div class="category">{{ goal.goal }}</div>
+        <div class="amount">${{ goal.amount / 100 | number : "1.2-2" }}</div>
       </div>
       <app-button
         buttonText="Adjust"
@@ -62,8 +68,9 @@
         [buttonFilled]="false"
       />
     </div>
+    }
 
-    <div class="goal center">
+    <div class="goal center" *ngIf="(allGoals$ | async)?.length !== 8">
       <app-button buttonText="Add Goal" />
     </div>
   </div>
