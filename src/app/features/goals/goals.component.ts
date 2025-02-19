@@ -36,7 +36,7 @@ export class GoalsComponent {
   }
 
   setGoalOverlay(): void {
-    this.overlayService.setEmbeddedOverlay('goal-overlay');
+    this.overlayService.setEmbeddedOverlay('goals-overlay');
   }
 
   ngOnDestroy(): void {

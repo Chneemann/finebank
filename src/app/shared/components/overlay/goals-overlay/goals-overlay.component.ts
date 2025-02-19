@@ -1,11 +1,17 @@
 import { Component } from '@angular/core';
+import { OverlayService } from '../../../../core/services/overlay.service';
+import { ButtonComponent } from '../../layouts/button/button.component';
 
 @Component({
   selector: 'app-goals-overlay',
-  imports: [],
+  imports: [ButtonComponent],
   templateUrl: './goals-overlay.component.html',
-  styleUrl: './goals-overlay.component.scss'
+  styleUrl: './goals-overlay.component.scss',
 })
 export class GoalsOverlayComponent {
+  constructor(private overlayService: OverlayService) {}
 
+  closeOverlay() {
+    this.overlayService.setEmbeddedOverlay(null);
+  }
 }

@@ -4,7 +4,7 @@ import { GoalsOverlayComponent } from './goals-overlay/goals-overlay.component';
 
 @Component({
   selector: 'app-overlay',
-  imports: [ButtonComponent, GoalsOverlayComponent],
+  imports: [GoalsOverlayComponent],
   templateUrl: './overlay.component.html',
   styleUrl: './overlay.component.scss',
 })
