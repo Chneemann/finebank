@@ -11,6 +11,10 @@ import { ButtonComponent } from '../../layouts/button/button.component';
 export class GoalsOverlayComponent {
   constructor(private overlayService: OverlayService) {}
 
+  saveOverlay() {
+    this.closeOverlay();
+  }
+
   closeOverlay() {
     this.overlayService.setEmbeddedOverlay(null);
   }
