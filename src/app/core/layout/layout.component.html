@@ -14,7 +14,7 @@
     <!-- Main content under the header -->
     <main class="content">
       <router-outlet></router-outlet>
-      <app-overlay embedded="goals-overlay"></app-overlay>
+      <app-overlay [embedded]="(embeddedOverlay$ | async) ?? ''"></app-overlay>
     </main>
   </div>
 </div>

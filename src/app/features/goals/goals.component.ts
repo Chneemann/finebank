@@ -5,6 +5,7 @@ import { CommonModule } from '@angular/common';
 import { Observable, Subject } from 'rxjs';
 import { BalancesService } from '../../core/services/balances.service';
 import { GoalsService } from '../../core/services/goals.service';
+import { OverlayService } from '../../core/services/overlay.service';
 
 @Component({
   selector: 'app-goals',
@@ -24,13 +25,18 @@ export class GoalsComponent {
 
   constructor(
     private balancesService: BalancesService,
-    private goalsService: GoalsService
+    private goalsService: GoalsService,
+    private overlayService: OverlayService
   ) {}
 
   ngOnInit(): void {
     this.allGoals$ = this.goalsService.allGoals$;
     this.globalBalance$ = this.balancesService.globalBalance$;
     this.accountsBalances$ = this.balancesService.accountsBalances$;
+  }
+
+  setGoalOverlay(): void {
+    this.overlayService.setEmbeddedOverlay('goal-overlay');
   }
 
   ngOnDestroy(): void {
