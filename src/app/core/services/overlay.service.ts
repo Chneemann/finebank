@@ -5,10 +5,10 @@ import { BehaviorSubject } from 'rxjs';
   providedIn: 'root',
 })
 export class OverlayService {
-  private embeddedOverlaySubject = new BehaviorSubject<string>('');
+  private embeddedOverlaySubject = new BehaviorSubject<string | null>(null);
   embeddedOverlay$ = this.embeddedOverlaySubject.asObservable();
 
-  setEmbeddedOverlay(value: string) {
+  setEmbeddedOverlay(value: string | null) {
     this.embeddedOverlaySubject.next(value);
   }
 }
