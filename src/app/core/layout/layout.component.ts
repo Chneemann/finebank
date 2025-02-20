@@ -20,7 +20,7 @@ import { CommonModule } from '@angular/common';
   styleUrl: './layout.component.scss',
 })
 export class LayoutComponent {
-  embeddedOverlay$!: Observable<string | null>;
+  embeddedOverlay$!: Observable<any>;
 
   constructor(private overlayService: OverlayService, private router: Router) {}
 
@@ -32,7 +32,7 @@ export class LayoutComponent {
   private setupOverlayResetOnNavigation(): void {
     this.router.events.subscribe((event) => {
       if (event instanceof NavigationEnd) {
-        this.overlayService.setEmbeddedOverlay(null);
+        this.overlayService.resetEmbeddedOverlay();
       }
     });
   }

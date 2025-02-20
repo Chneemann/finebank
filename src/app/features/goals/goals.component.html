@@ -38,7 +38,7 @@
           buttonSize="small"
           buttonIcon="edit"
           [buttonFilled]="false"
-          (click)="setGoalOverlay()"
+          (click)="setGoalOverlay('TODO', 'Global')"
         />
       </div>
     </div>
@@ -52,8 +52,8 @@
   <div class="headline">Expenses Goals by Category</div>
 
   <div class="expense-goals">
-    @for (goal of allGoals$ | async; track goal.goal) {
-    <div class="goal" *ngIf="goal.amount > 0">
+    @for (goal of allGoals$ | async; track goal) {
+    <div class="goal" *ngIf="goal.id !== '' && goal.goal !== 'Global'">
       <img
         [src]="'assets/img/goals/' + goal.goal.toLowerCase() + '.svg'"
         alt=""
@@ -67,7 +67,7 @@
         buttonSize="small"
         buttonIcon="edit"
         [buttonFilled]="false"
-        (click)="setGoalOverlay()"
+        (click)="setGoalOverlay(goal.id, goal.goal)"
       />
     </div>
     }

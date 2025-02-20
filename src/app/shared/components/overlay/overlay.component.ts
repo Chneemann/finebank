@@ -1,5 +1,4 @@
 import { Component, Input } from '@angular/core';
-import { ButtonComponent } from '../layouts/button/button.component';
 import { GoalsOverlayComponent } from './goals-overlay/goals-overlay.component';
 
 @Component({
@@ -9,5 +8,13 @@ import { GoalsOverlayComponent } from './goals-overlay/goals-overlay.component';
   styleUrl: './overlay.component.scss',
 })
 export class OverlayComponent {
-  @Input() embedded = '';
+  @Input() overlayData: {
+    embedded: string | null;
+    docId: string | null;
+    collection: string | null;
+  } = {
+    embedded: null,
+    docId: null,
+    collection: null,
+  };
 }

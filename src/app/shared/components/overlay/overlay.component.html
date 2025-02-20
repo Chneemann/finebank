@@ -1,8 +1,8 @@
-@if (embedded) {
+@if (overlayData.embedded) {
 <div class="overlay">
   <div class="dialog">
-    @if (embedded == "goals-overlay") {
-    <app-goals-overlay></app-goals-overlay>
+    @if (overlayData.embedded == "goals-overlay") {
+    <app-goals-overlay [overlayData]="overlayData"></app-goals-overlay>
     }
   </div>
 </div>

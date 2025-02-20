@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { OverlayService } from '../../../../core/services/overlay.service';
 import { ButtonComponent } from '../../layouts/button/button.component';
 
@@ -9,6 +9,16 @@ import { ButtonComponent } from '../../layouts/button/button.component';
   styleUrl: './goals-overlay.component.scss',
 })
 export class GoalsOverlayComponent {
+  @Input() overlayData: {
+    embedded: string | null;
+    docId: string | null;
+    collection: string | null;
+  } = {
+    embedded: null,
+    docId: null,
+    collection: null,
+  };
+
   constructor(private overlayService: OverlayService) {}
 
   saveOverlay() {
@@ -16,6 +26,6 @@ export class GoalsOverlayComponent {
   }
 
   closeOverlay() {
-    this.overlayService.setEmbeddedOverlay(null);
+    this.overlayService.resetEmbeddedOverlay();
   }
 }

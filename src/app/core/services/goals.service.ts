@@ -23,7 +23,7 @@ export class GoalsService {
   private readonly injector = inject(EnvironmentInjector);
 
   private allGoalsSubject = new BehaviorSubject<
-    { goal: string; amount: number }[]
+    { id: string; goal: string; amount: number }[]
   >([]);
   allGoals$ = this.allGoalsSubject.asObservable();
 
@@ -42,12 +42,21 @@ export class GoalsService {
           return;
         }
 
-        const doc = documents[0] as { goal: string[]; amount: number[] };
+        const doc = documents[0] as {
+          id: string;
+          goal: string[];
+          amount: number[];
+        };
 
-        const formattedGoals = doc.goal.map((goal, index) => ({
-          goal,
-          amount: doc.amount[index] ?? 0,
-        }));
+        // Ensure goal and amount are arrays before mapping
+        const formattedGoals =
+          Array.isArray(doc.goal) && Array.isArray(doc.amount)
+            ? doc.goal.map((goal, index) => ({
+                id: `${doc.id}`, // Create a unique id for each goal entry
+                goal: goal ?? 'Unknown', // Default to "Unknown" if missing
+                amount: doc.amount[index] ?? 0, // Default to 0 if missing
+              }))
+            : [];
 
         this.allGoalsSubject.next(formattedGoals);
       });
