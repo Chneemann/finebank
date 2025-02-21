@@ -19,7 +19,9 @@ export class GoalsComponent {
   thisMonthTarget: number = 10000;
 
   private destroy$ = new Subject<void>();
-  allGoals$!: Observable<{ id: string; goal: string; amount: number }[]>;
+  allGoals$!: Observable<
+    { id: string; goal: string; amount: number; index: number }[]
+  >;
   globalBalance$!: Observable<number>;
   accountsBalances$!: Observable<{ accountId: string; balance: number }[]>;
 
@@ -35,7 +37,7 @@ export class GoalsComponent {
     this.accountsBalances$ = this.balancesService.accountsBalances$;
   }
 
-  setGoalOverlay(docId: string, collection: string): void {
+  setGoalOverlay(docId: string, collection: number): void {
     this.overlayService.setEmbeddedOverlay({
       embedded: 'goals-overlay',
       docId: docId,

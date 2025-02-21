@@ -38,7 +38,7 @@
           buttonSize="small"
           buttonIcon="edit"
           [buttonFilled]="false"
-          (click)="setGoalOverlay('TODO', 'Global')"
+          (click)="setGoalOverlay('TODO', 0)"
         />
       </div>
     </div>
@@ -67,13 +67,9 @@
         buttonSize="small"
         buttonIcon="edit"
         [buttonFilled]="false"
-        (click)="setGoalOverlay(goal.id, goal.goal)"
+        (click)="setGoalOverlay(goal.id, goal.index)"
       />
     </div>
     }
-
-    <div class="goal center" *ngIf="(allGoals$ | async)?.length !== 8">
-      <app-button buttonText="Add Goal" />
-    </div>
   </div>
 </section>

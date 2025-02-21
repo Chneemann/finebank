@@ -8,8 +8,6 @@ import {
   Firestore,
   collection,
   collectionData,
-  doc,
-  docData,
   query,
   where,
 } from '@angular/fire/firestore';
@@ -23,7 +21,7 @@ export class GoalsService {
   private readonly injector = inject(EnvironmentInjector);
 
   private allGoalsSubject = new BehaviorSubject<
-    { id: string; goal: string; amount: number }[]
+    { id: string; goal: string; amount: number; index: number }[]
   >([]);
   allGoals$ = this.allGoalsSubject.asObservable();
 
@@ -48,13 +46,13 @@ export class GoalsService {
           amount: number[];
         };
 
-        // Ensure goal and amount are arrays before mapping
         const formattedGoals =
           Array.isArray(doc.goal) && Array.isArray(doc.amount)
             ? doc.goal.map((goal, index) => ({
-                id: `${doc.id}`, // Create a unique id for each goal entry
-                goal: goal ?? 'Unknown', // Default to "Unknown" if missing
-                amount: doc.amount[index] ?? 0, // Default to 0 if missing
+                id: `${doc.id}-${index}`,
+                goal: goal ?? 'Unknown',
+                amount: doc.amount[index] ?? 0,
+                index: index,
               }))
             : [];
 
