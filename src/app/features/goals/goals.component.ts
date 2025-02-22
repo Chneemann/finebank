@@ -6,11 +6,17 @@ import { map, Observable, Subject } from 'rxjs';
 import { BalancesService } from '../../core/services/balances.service';
 import { GoalsService } from '../../core/services/goals.service';
 import { OverlayService } from '../../core/services/overlay.service';
+import { MontlyDiagramComponent } from './montly-diagram/montly-diagram/montly-diagram.component';
 
 @Component({
   selector: 'app-goals',
   standalone: true,
-  imports: [CommonModule, ButtonComponent, ManometerComponent],
+  imports: [
+    CommonModule,
+    ButtonComponent,
+    ManometerComponent,
+    MontlyDiagramComponent,
+  ],
   templateUrl: './goals.component.html',
   styleUrl: './goals.component.scss',
 })
