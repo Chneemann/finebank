@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { ButtonComponent } from '../../shared/components/layouts/button/button.component';
 import { ManometerComponent } from './manometer/manometer.component';
 import { CommonModule } from '@angular/common';
-import { Observable, Subject } from 'rxjs';
+import { map, Observable, Subject } from 'rxjs';
 import { BalancesService } from '../../core/services/balances.service';
 import { GoalsService } from '../../core/services/goals.service';
 import { OverlayService } from '../../core/services/overlay.service';
@@ -16,7 +16,8 @@ import { OverlayService } from '../../core/services/overlay.service';
 })
 export class GoalsComponent {
   targetAchieved: number = 0;
-  thisMonthTarget: number = 10000;
+  savingsTargetId: string = '';
+  savingsTargetAmount: number = 0;
 
   private destroy$ = new Subject<void>();
   allGoals$!: Observable<
@@ -35,6 +36,7 @@ export class GoalsComponent {
     this.allGoals$ = this.goalsService.allGoals$;
     this.globalBalance$ = this.balancesService.globalBalance$;
     this.accountsBalances$ = this.balancesService.accountsBalances$;
+    this.setSavingsTargetData();
   }
 
   setGoalOverlay(docId: string, collection: number): void {
@@ -43,6 +45,21 @@ export class GoalsComponent {
       docId: docId,
       collection: collection,
     });
+  }
+
+  setSavingsTargetData() {
+    this.allGoals$
+      .pipe(
+        map((goals) =>
+          goals.length > 0
+            ? { id: goals[0].id, amount: goals[0].amount }
+            : { id: '', amount: 0 }
+        )
+      )
+      .subscribe(({ id, amount }) => {
+        this.savingsTargetId = id;
+        this.savingsTargetAmount = amount / 100;
+      });
   }
 
   ngOnDestroy(): void {

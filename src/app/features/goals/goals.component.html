@@ -17,16 +17,16 @@
           <div class="target">
             <img src="assets/img/goals/goal.svg" alt="goal" />
             <div class="description">
-              <p>This month Target</p>
+              <p>Savings Target</p>
               <span>{{
-                thisMonthTarget | currency : "USD" : "symbol" : "1.0-0"
+                savingsTargetAmount | currency : "USD" : "symbol" : "1.0-0"
               }}</span>
             </div>
           </div>
         </div>
         <div class="right">
           <app-manometer
-            [maxValue]="thisMonthTarget"
+            [maxValue]="savingsTargetAmount"
             [currentValue]="globalBalance$ | async"
           ></app-manometer>
           <p>Target vs Achievement</p>
@@ -38,7 +38,7 @@
           buttonSize="small"
           buttonIcon="edit"
           [buttonFilled]="false"
-          (click)="setGoalOverlay('TODO', 0)"
+          (click)="setGoalOverlay(savingsTargetId, 0)"
         />
       </div>
     </div>
