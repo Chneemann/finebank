@@ -1,5 +1,18 @@
 <div class="goals-overlay">
-  <p>goals-overlay works!</p>
-  {{ overlayData.collection }}
+  <div class="target" *ngIf="currentGoal as goalItem">
+    <p>Target Amount</p>
+    <div class="input-wrapper">
+      <span class="currency-symbol">$</span>
+      <input
+        type="number"
+        (input)="onInput($event)"
+        [(ngModel)]="goalItem.amount"
+        [value]="goalItem.amount"
+        (focus)="onFocus(goalItem)"
+        (blur)="onBlur(goalItem)"
+        min="0"
+      />
+    </div>
+  </div>
+  <app-button buttonText="Save" (click)="saveOverlay()"></app-button>
 </div>
-<app-button buttonText="Save" (click)="saveOverlay()"></app-button>

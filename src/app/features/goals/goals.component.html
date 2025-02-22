@@ -52,7 +52,7 @@
   <div class="headline">Expenses Goals by Category</div>
 
   <div class="expense-goals">
-    @for (goal of allGoals$ | async; track goal) {
+    @for (goal of allGoals$ | async; track goal.index) {
     <div class="goal" *ngIf="goal.id !== '' && goal.goal !== 'Global'">
       <img
         [src]="'assets/img/goals/' + goal.goal.toLowerCase() + '.svg'"

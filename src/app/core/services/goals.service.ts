@@ -8,7 +8,10 @@ import {
   Firestore,
   collection,
   collectionData,
+  doc,
+  getDoc,
   query,
+  updateDoc,
   where,
 } from '@angular/fire/firestore';
 import { BehaviorSubject } from 'rxjs';
@@ -49,7 +52,7 @@ export class GoalsService {
         const formattedGoals =
           Array.isArray(doc.goal) && Array.isArray(doc.amount)
             ? doc.goal.map((goal, index) => ({
-                id: `${doc.id}-${index}`,
+                id: doc.id,
                 goal: goal ?? 'Unknown',
                 amount: doc.amount[index] ?? 0,
                 index: index,
@@ -58,6 +61,25 @@ export class GoalsService {
 
         this.allGoalsSubject.next(formattedGoals);
       });
+    });
+  }
+
+  async updateGoalAmount(
+    docId: string,
+    index: number,
+    newAmount: number
+  ): Promise<void> {
+    await runInInjectionContext(this.injector, async () => {
+      const docRef = doc(this.firestore, 'goals', docId);
+      const docSnap = await getDoc(docRef);
+
+      if (docSnap.exists()) {
+        const data = docSnap.data() as { amount?: number[] };
+        const amounts = data?.amount ?? [];
+        amounts[index] = newAmount;
+
+        await updateDoc(docRef, { amount: amounts });
+      }
     });
   }
 }
