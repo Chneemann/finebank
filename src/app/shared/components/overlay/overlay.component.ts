@@ -1,5 +1,6 @@
 import { Component, Input } from '@angular/core';
 import { GoalsOverlayComponent } from './goals-overlay/goals-overlay.component';
+import { OverlayService } from '../../../core/services/overlay.service';
 
 @Component({
   selector: 'app-overlay',
@@ -17,4 +18,10 @@ export class OverlayComponent {
     docId: null,
     collection: null,
   };
+
+  constructor(private overlayService: OverlayService) {}
+
+  closeOverlay() {
+    this.overlayService.resetEmbeddedOverlay();
+  }
 }

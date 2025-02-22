@@ -1,6 +1,7 @@
 @if (overlayData.embedded) {
 <div class="overlay">
   <div class="dialog">
+    <img src="assets/img/close.svg" alt="close" (click)="closeOverlay()" />
     @if (overlayData.embedded == "goals-overlay") {
     <app-goals-overlay [overlayData]="overlayData"></app-goals-overlay>
     }
