@@ -1,1 +1,16 @@
-<p>montly-diagram works!</p>
+<div class="diagram">
+  <ngx-charts-bar-vertical
+    *ngIf="hasData"
+    [view]="[680, 200]"
+    [results]="saleData"
+    [legend]="false"
+    [showGridLines]="false"
+    [showXAxisLabel]="false"
+    [showYAxisLabel]="false"
+    [xAxis]="true"
+    [yAxis]="true"
+    [gradient]="false"
+    [customColors]="customColors"
+  >
+  </ngx-charts-bar-vertical>
+</div>

@@ -5,11 +5,13 @@ import { provideFirestore, getFirestore } from '@angular/fire/firestore';
 import { routes } from './app.routes';
 import { firebaseConfig } from '../environments/config';
 import { getAuth, provideAuth } from '@angular/fire/auth';
+import { provideNoopAnimations } from '@angular/platform-browser/animations';
 
 export const appConfig: ApplicationConfig = {
   providers: [
     provideZoneChangeDetection({ eventCoalescing: true }),
     provideRouter(routes),
+    provideNoopAnimations(),
 
     // Firebase
     provideFirebaseApp(() => initializeApp(firebaseConfig)),

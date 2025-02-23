@@ -37,6 +37,8 @@ export class TransactionsComponent {
               tx.type,
               tx.amount,
               tx.date,
+              tx.month,
+              tx.year,
               tx.id
             )
         );

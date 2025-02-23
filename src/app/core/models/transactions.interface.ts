@@ -6,4 +6,6 @@ export interface Transactions {
   type: string;
   amount: number;
   date: number;
+  month: number;
+  year: number;
 }

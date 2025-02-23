@@ -11,7 +11,13 @@ import {
   query,
   where,
 } from '@angular/fire/firestore';
-import { BehaviorSubject, Observable, switchMap, combineLatest } from 'rxjs';
+import {
+  BehaviorSubject,
+  Observable,
+  switchMap,
+  combineLatest,
+  map,
+} from 'rxjs';
 import { TransactionModel } from '../models/transactions.model';
 
 @Injectable({
@@ -29,9 +35,13 @@ export class BalancesService {
   globalBalance$ = this.globalBalanceSubject.asObservable();
   accountsBalances$ = this.accountsBalancesSubject.asObservable();
 
+  userId = 'lsui7823kmbndks9037hjdsd'; // TODO: Placeholder
+
   constructor() {
-    this.loadBalances('lsui7823kmbndks9037hjdsd'); // TODO: Placeholder
+    this.loadBalances(this.userId);
   }
+
+  // Balances
 
   private loadBalances(currentUserId: string): void {
     this.getUserAccountIds(currentUserId).subscribe((accountIds) => {
@@ -97,5 +107,41 @@ export class BalancesService {
       }
       return balance;
     }, 0);
+  }
+
+  // Specific month and year balance
+
+  getBalanceForMonthAndYear(month: number, year: number): Observable<number> {
+    return this.getUserAccountIds(this.userId).pipe(
+      switchMap((accountIds) =>
+        combineLatest(
+          accountIds.map((accountId) =>
+            this.getTransactionsForMonthAndYear(accountId, month, year).pipe(
+              map((transactions) => this.calculateAccountBalance(transactions))
+            )
+          )
+        )
+      ),
+      map((balances) => balances.reduce((total, balance) => total + balance, 0))
+    );
+  }
+
+  private getTransactionsForMonthAndYear(
+    accountId: string,
+    month: number,
+    year: number
+  ): Observable<any[]> {
+    return runInInjectionContext(this.injector, () => {
+      const collectionRef = collection(this.firestore, 'transactions');
+
+      const q = query(
+        collectionRef,
+        where('accountId', '==', accountId),
+        where('year', '==', year),
+        where('month', '==', month)
+      );
+
+      return collectionData(q, { idField: 'id' });
+    });
   }
 }

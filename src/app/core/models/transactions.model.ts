@@ -8,6 +8,8 @@ export class TransactionModel implements Transactions {
   type: string;
   amount: number;
   date: number;
+  month: number;
+  year: number;
 
   constructor(
     accountId: string,
@@ -16,6 +18,8 @@ export class TransactionModel implements Transactions {
     type: string,
     amount: number,
     date: number,
+    month: number,
+    year: number,
     id?: string
   ) {
     this.accountId = accountId;
@@ -24,6 +28,8 @@ export class TransactionModel implements Transactions {
     this.type = type;
     this.amount = amount;
     this.date = date;
+    this.month = month;
+    this.year = year;
     this.id = id;
   }
 
