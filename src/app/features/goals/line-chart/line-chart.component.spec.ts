@@ -1,17 +1,17 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { ManometerComponent } from './manometer.component';
+import { LineChartComponent } from './line-chart.component';
 
-describe('ManometerComponent', () => {
-  let component: ManometerComponent;
-  let fixture: ComponentFixture<ManometerComponent>;
+describe('LineChartComponent', () => {
+  let component: LineChartComponent;
+  let fixture: ComponentFixture<LineChartComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [ManometerComponent],
+      imports: [LineChartComponent],
     }).compileComponents();
 
-    fixture = TestBed.createComponent(ManometerComponent);
+    fixture = TestBed.createComponent(LineChartComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

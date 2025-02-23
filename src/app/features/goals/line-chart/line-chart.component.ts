@@ -1,16 +1,16 @@
 import { Component, OnInit } from '@angular/core';
 import { NgxChartsModule, ScaleType } from '@swimlane/ngx-charts';
-import { BalancesService } from '../../../../core/services/balances.service';
+import { BalancesService } from '../../../core/services/balances.service';
 import { CommonModule } from '@angular/common';
 
 @Component({
-  selector: 'app-montly-diagram',
+  selector: 'app-line-chart',
   standalone: true,
   imports: [CommonModule, NgxChartsModule],
-  templateUrl: './montly-diagram.component.html',
-  styleUrl: './montly-diagram.component.scss',
+  templateUrl: './line-chart.component.html',
+  styleUrl: './line-chart.component.scss',
 })
-export class MontlyDiagramComponent implements OnInit {
+export class LineChartComponent implements OnInit {
   constructor(private balancesService: BalancesService) {}
 
   private loadedMonths = 0;
