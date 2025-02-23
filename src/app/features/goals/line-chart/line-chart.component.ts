@@ -8,6 +8,7 @@ import {
 import { NgxChartsModule } from '@swimlane/ngx-charts';
 import { BalancesService } from '../../../core/services/balances.service';
 import { CommonModule } from '@angular/common';
+import { AccountService } from '../../../core/services/account.service';
 
 @Component({
   selector: 'app-line-chart',
@@ -17,8 +18,9 @@ import { CommonModule } from '@angular/common';
   styleUrl: './line-chart.component.scss',
 })
 export class LineChartComponent implements OnInit, OnChanges {
-  @Input() selectedYear = 2024;
+  @Input() selectedYear = 0;
   private loadedMonths = 0;
+  private accountCount = 0;
 
   saleData = [
     { name: 'Jan', value: 0 },
@@ -35,10 +37,14 @@ export class LineChartComponent implements OnInit, OnChanges {
     { name: 'Dec', value: 0 },
   ];
 
-  constructor(private balancesService: BalancesService) {}
+  constructor(
+    private balancesService: BalancesService,
+    private accountService: AccountService
+  ) {}
 
   ngOnInit() {
     this.loadYearlyBalances();
+    this.getAccountCount();
   }
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -52,6 +58,12 @@ export class LineChartComponent implements OnInit, OnChanges {
     }
   }
 
+  getAccountCount() {
+    this.accountService.getTotalAccountsCount().subscribe((count: number) => {
+      this.accountCount = count;
+    });
+  }
+
   loadYearlyBalances(): void {
     for (let month = 1; month <= 12; month++) {
       this.balancesService
@@ -60,7 +72,8 @@ export class LineChartComponent implements OnInit, OnChanges {
           this.saleData[month - 1].value = balance / 100;
           this.loadedMonths++;
 
-          if (this.loadedMonths >= 12) {
+          if (month >= 12) {
+            this.loadedMonths = 12;
             this.saleData = [...this.saleData];
           }
         });
@@ -77,6 +90,6 @@ export class LineChartComponent implements OnInit, OnChanges {
   };
 
   get hasData(): boolean {
-    return this.loadedMonths >= 12;
+    return this.loadedMonths === 12;
   }
 }

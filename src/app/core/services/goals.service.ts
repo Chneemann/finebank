@@ -24,7 +24,13 @@ export class GoalsService {
   private readonly injector = inject(EnvironmentInjector);
 
   private allGoalsSubject = new BehaviorSubject<
-    { id: string; goal: string; amount: number; index: number }[]
+    {
+      id: string;
+      selectedYear: number;
+      goal: string;
+      amount: number;
+      index: number;
+    }[]
   >([]);
   allGoals$ = this.allGoalsSubject.asObservable();
 
@@ -47,17 +53,18 @@ export class GoalsService {
           id: string;
           goal: string[];
           amount: number[];
+          selectedYear?: number; // ✅ sicherstellen, dass selectedYear optional ist
         };
 
-        const formattedGoals =
-          Array.isArray(doc.goal) && Array.isArray(doc.amount)
-            ? doc.goal.map((goal, index) => ({
-                id: doc.id,
-                goal: goal ?? 'Unknown',
-                amount: doc.amount[index] ?? 0,
-                index: index,
-              }))
-            : [];
+        const selectedYear = doc.selectedYear ?? new Date().getFullYear(); // ✅ Fallback: aktuelles Jahr, wenn selectedYear fehlt
+
+        const formattedGoals = doc.goal.map((goal, index) => ({
+          id: doc.id,
+          selectedYear: selectedYear,
+          goal: goal ?? 'Unknown',
+          amount: doc.amount[index] ?? 0,
+          index: index,
+        }));
 
         this.allGoalsSubject.next(formattedGoals);
       });

@@ -31,7 +31,13 @@ export class GoalsComponent {
 
   private destroy$ = new Subject<void>();
   allGoals$!: Observable<
-    { id: string; goal: string; amount: number; index: number }[]
+    {
+      id: string;
+      selectedYear: number;
+      goal: string;
+      amount: number;
+      index: number;
+    }[]
   >;
   globalBalance$!: Observable<number>;
   accountsBalances$!: Observable<{ accountId: string; balance: number }[]>;
@@ -47,14 +53,7 @@ export class GoalsComponent {
     this.globalBalance$ = this.balancesService.globalBalance$;
     this.accountsBalances$ = this.balancesService.accountsBalances$;
     this.setSavingsTargetData();
-  }
-
-  setGoalOverlay(docId: string, collection: number): void {
-    this.overlayService.setEmbeddedOverlay({
-      embedded: 'goals-overlay',
-      docId: docId,
-      collection: collection,
-    });
+    this.getSelectedYear();
   }
 
   setSavingsTargetData() {
@@ -70,6 +69,22 @@ export class GoalsComponent {
         this.savingsTargetId = id;
         this.savingsTargetAmount = amount / 100;
       });
+  }
+
+  getSelectedYear() {
+    this.goalsService.allGoals$.subscribe((goals) => {
+      if (goals.length > 0) {
+        this.selectedYear = goals[0].selectedYear;
+      }
+    });
+  }
+
+  setGoalOverlay(docId: string, collection: number): void {
+    this.overlayService.setEmbeddedOverlay({
+      embedded: 'goals-overlay',
+      docId: docId,
+      collection: collection,
+    });
   }
 
   ngOnDestroy(): void {

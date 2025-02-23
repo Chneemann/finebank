@@ -4,7 +4,9 @@
 
   <div class="goal-overview">
     <div class="saving-goal">
-      <div class="header"><p>Saving Goal</p></div>
+      <div class="header">
+        <p>Saving Goal</p>
+      </div>
       <div class="content">
         <div class="left">
           <div class="target">
@@ -49,8 +51,8 @@
         <div class="select-container">
           <select
             [(ngModel)]="selectedYear"
-            id="selectedYear"
-            name="selectedYear"
+            id="selectedYearSummary"
+            name="selectedYearSummary"
           >
             <option *ngFor="let year of years" [value]="year">
               {{ year }}
