@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { NgxChartsModule, ScaleType } from '@swimlane/ngx-charts';
+import { NgxChartsModule } from '@swimlane/ngx-charts';
 import { BalancesService } from '../../../core/services/balances.service';
 import { CommonModule } from '@angular/common';
 
@@ -11,8 +11,6 @@ import { CommonModule } from '@angular/common';
   styleUrl: './line-chart.component.scss',
 })
 export class LineChartComponent implements OnInit {
-  constructor(private balancesService: BalancesService) {}
-
   private loadedMonths = 0;
 
   saleData = [
@@ -29,6 +27,8 @@ export class LineChartComponent implements OnInit {
     { name: 'Nov', value: 0 },
     { name: 'Dec', value: 0 },
   ];
+
+  constructor(private balancesService: BalancesService) {}
 
   ngOnInit() {
     this.loadYearlyBalances(2024);
@@ -47,6 +47,11 @@ export class LineChartComponent implements OnInit {
           }
         });
     }
+  }
+
+  reloadData() {
+    this.loadedMonths = 0;
+    this.loadYearlyBalances(2024);
   }
 
   customColors = () => {

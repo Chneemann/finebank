@@ -13,4 +13,8 @@
     [customColors]="customColors"
   >
   </ngx-charts-bar-vertical>
+
+  <div class="loading-spinner" *ngIf="!hasData">
+    <img src="assets/img/sync.svg" alt="sync" (click)="reloadData()" />
+  </div>
 </div>

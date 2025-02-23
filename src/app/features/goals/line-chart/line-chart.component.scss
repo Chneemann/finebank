@@ -1,3 +1,27 @@
 .line-chart {
   margin-top: 10px;
 }
+
+.loading-spinner {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 680px;
+  height: 200px;
+
+  img {
+    height: 100px;
+    width: 100px;
+    cursor: pointer;
+    animation: spin 2s linear infinite;
+  }
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
