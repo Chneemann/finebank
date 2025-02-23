@@ -44,9 +44,26 @@
     </div>
 
     <div class="saving-summary">
-      <div class="header"><p>Saving Summary</p></div>
-
-      <app-line-chart></app-line-chart>
+      <div class="header">
+        <p>Saving Summary</p>
+        <div class="select-container">
+          <select
+            [(ngModel)]="selectedYear"
+            id="selectedYear"
+            name="selectedYear"
+          >
+            <option *ngFor="let year of years" [value]="year">
+              {{ year }}
+            </option>
+          </select>
+          <img
+            class="down-arrow-icon"
+            src="assets/img/arrow-down.svg"
+            alt="arrow-down"
+          />
+        </div>
+      </div>
+      <app-line-chart [selectedYear]="selectedYear"></app-line-chart>
     </div>
   </div>
 

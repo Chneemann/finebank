@@ -7,12 +7,14 @@ import { BalancesService } from '../../core/services/balances.service';
 import { GoalsService } from '../../core/services/goals.service';
 import { OverlayService } from '../../core/services/overlay.service';
 import { LineChartComponent } from './line-chart/line-chart.component';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-goals',
   standalone: true,
   imports: [
     CommonModule,
+    FormsModule,
     ButtonComponent,
     ManometerComponent,
     LineChartComponent,
@@ -24,6 +26,8 @@ export class GoalsComponent {
   targetAchieved: number = 0;
   savingsTargetId: string = '';
   savingsTargetAmount: number = 0;
+  selectedYear: number = new Date().getFullYear();
+  years: number[] = [2024, 2025];
 
   private destroy$ = new Subject<void>();
   allGoals$!: Observable<

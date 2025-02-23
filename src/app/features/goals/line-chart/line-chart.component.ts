@@ -1,4 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import {
+  Component,
+  Input,
+  OnChanges,
+  OnInit,
+  SimpleChanges,
+} from '@angular/core';
 import { NgxChartsModule } from '@swimlane/ngx-charts';
 import { BalancesService } from '../../../core/services/balances.service';
 import { CommonModule } from '@angular/common';
@@ -10,7 +16,8 @@ import { CommonModule } from '@angular/common';
   templateUrl: './line-chart.component.html',
   styleUrl: './line-chart.component.scss',
 })
-export class LineChartComponent implements OnInit {
+export class LineChartComponent implements OnInit, OnChanges {
+  @Input() selectedYear = 2024;
   private loadedMonths = 0;
 
   saleData = [
@@ -31,18 +38,29 @@ export class LineChartComponent implements OnInit {
   constructor(private balancesService: BalancesService) {}
 
   ngOnInit() {
-    this.loadYearlyBalances(2024);
+    this.loadYearlyBalances();
   }
 
-  loadYearlyBalances(year: number): void {
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['selectedYear']) {
+      const previousYear = changes['selectedYear'].previousValue;
+      const currentYear = changes['selectedYear'].currentValue;
+
+      if (previousYear !== currentYear) {
+        this.reloadData();
+      }
+    }
+  }
+
+  loadYearlyBalances(): void {
     for (let month = 1; month <= 12; month++) {
       this.balancesService
-        .getBalanceForMonthAndYear(month, year)
+        .getBalanceForMonthAndYear(month, +this.selectedYear)
         .subscribe((balance) => {
           this.saleData[month - 1].value = balance / 100;
           this.loadedMonths++;
 
-          if (this.loadedMonths === 12) {
+          if (this.loadedMonths >= 12) {
             this.saleData = [...this.saleData];
           }
         });
@@ -51,7 +69,7 @@ export class LineChartComponent implements OnInit {
 
   reloadData() {
     this.loadedMonths = 0;
-    this.loadYearlyBalances(2024);
+    this.loadYearlyBalances();
   }
 
   customColors = () => {
@@ -59,6 +77,6 @@ export class LineChartComponent implements OnInit {
   };
 
   get hasData(): boolean {
-    return this.loadedMonths === 12;
+    return this.loadedMonths >= 12;
   }
 }
