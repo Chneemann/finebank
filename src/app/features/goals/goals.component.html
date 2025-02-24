@@ -89,7 +89,7 @@
         buttonSize="small"
         buttonIcon="edit"
         [buttonFilled]="false"
-        (click)="setGoalOverlay(goal.id, goal.index)"
+        (click)="setGoalOverlay(goal.id ?? '', goal.index)"
       />
     </div>
     }

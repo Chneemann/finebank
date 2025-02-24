@@ -20,7 +20,6 @@ import { AccountService } from '../../../core/services/account.service';
 export class LineChartComponent implements OnInit, OnChanges {
   @Input() selectedYear = 0;
   private loadedMonths = 0;
-  private accountCount = 0;
 
   saleData = [
     { name: 'Jan', value: 0 },
@@ -37,14 +36,10 @@ export class LineChartComponent implements OnInit, OnChanges {
     { name: 'Dec', value: 0 },
   ];
 
-  constructor(
-    private balancesService: BalancesService,
-    private accountService: AccountService
-  ) {}
+  constructor(private balancesService: BalancesService) {}
 
   ngOnInit() {
     this.loadYearlyBalances();
-    this.getAccountCount();
   }
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -56,12 +51,6 @@ export class LineChartComponent implements OnInit, OnChanges {
         this.reloadData();
       }
     }
-  }
-
-  getAccountCount() {
-    this.accountService.getTotalAccountsCount().subscribe((count: number) => {
-      this.accountCount = count;
-    });
   }
 
   loadYearlyBalances(): void {

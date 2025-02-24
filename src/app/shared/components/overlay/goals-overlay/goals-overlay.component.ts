@@ -5,6 +5,7 @@ import { BehaviorSubject, map, Observable, Subject, take } from 'rxjs';
 import { GoalsService } from '../../../../core/services/goals.service';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { GoalModel } from '../../../../core/models/goal.model';
 
 @Component({
   selector: 'app-goals-overlay',
@@ -24,9 +25,7 @@ export class GoalsOverlayComponent {
   };
 
   private destroy$ = new Subject<void>();
-  allGoals$!: Observable<
-    { id: string; goal: string; amount: number; index: number }[]
-  >;
+  allGoals$!: Observable<GoalModel[]>;
   currentGoal?: { id: string; goal: string; amount: number; index: number };
   originalAmount!: number;
 
@@ -51,8 +50,8 @@ export class GoalsOverlayComponent {
         (goal) => goal.id === docId && goal.index === index
       );
 
-      if (goal) {
-        this.currentGoal = { ...goal, amount: goal.amount / 100 };
+      if (goal && goal.id) {
+        this.currentGoal = { ...goal, id: goal.id, amount: goal.amount / 100 };
         this.originalAmount = this.currentGoal.amount;
       }
     });

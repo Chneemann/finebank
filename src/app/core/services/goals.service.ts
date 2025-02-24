@@ -16,6 +16,7 @@ import {
   where,
 } from '@angular/fire/firestore';
 import { BehaviorSubject } from 'rxjs';
+import { GoalModel } from '../models/goal.model';
 
 @Injectable({
   providedIn: 'root',
@@ -24,27 +25,19 @@ export class GoalsService {
   private readonly firestore = inject(Firestore);
   private readonly injector = inject(EnvironmentInjector);
 
-  private allGoalsSubject = new BehaviorSubject<
-    {
-      id: string;
-      selectedYear: number;
-      goal: string;
-      amount: number;
-      index: number;
-    }[]
-  >([]);
+  private allGoalsSubject = new BehaviorSubject<GoalModel[]>([]);
   allGoals$ = this.allGoalsSubject.asObservable();
 
   private userId = 'lsui7823kmbndks9037hjdsd'; // TODO: Placeholder
 
   constructor() {
-    this.loadGoals(this.userId);
+    this.loadGoals();
   }
 
-  private loadGoals(currentUserId: string): void {
+  private loadGoals(): void {
     runInInjectionContext(this.injector, () => {
       const collectionRef = collection(this.firestore, 'goals');
-      const q = query(collectionRef, where('userId', '==', currentUserId));
+      const q = query(collectionRef, where('userId', '==', this.userId));
 
       collectionData(q, { idField: 'id' }).subscribe((documents) => {
         if (!documents.length) {
@@ -56,16 +49,16 @@ export class GoalsService {
           id: string;
           goal: string[];
           amount: number[];
-          selectedYear?: number; // ✅ sicherstellen, dass selectedYear optional ist
+          selectedYear: number;
+          userId: string;
         };
-
-        const selectedYear = doc.selectedYear ?? new Date().getFullYear(); // ✅ Fallback: aktuelles Jahr, wenn selectedYear fehlt
 
         const formattedGoals = doc.goal.map((goal, index) => ({
           id: doc.id,
-          selectedYear: selectedYear,
+          selectedYear: doc.selectedYear,
           goal: goal ?? 'Unknown',
           amount: doc.amount[index] ?? 0,
+          userId: this.userId,
           index: index,
         }));
 
