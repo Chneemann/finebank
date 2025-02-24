@@ -86,9 +86,12 @@ export class GoalsService {
       if (docSnap.exists()) {
         const data = docSnap.data() as { amount?: number[] };
         const amounts = data?.amount ?? [];
+
         amounts[index] = newAmount;
 
-        await updateDoc(docRef, { amount: amounts });
+        await runInInjectionContext(this.injector, () =>
+          updateDoc(docRef, { amount: amounts })
+        );
       }
     });
   }
