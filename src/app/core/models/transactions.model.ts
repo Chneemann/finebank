@@ -7,6 +7,7 @@ export class TransactionModel implements Transactions {
   shop: string;
   type: string;
   amount: number;
+  category: string;
   date: number;
   month: number;
   year: number;
@@ -17,6 +18,7 @@ export class TransactionModel implements Transactions {
     shop: string,
     type: string,
     amount: number,
+    category: string,
     date: number,
     month: number,
     year: number,
@@ -27,6 +29,7 @@ export class TransactionModel implements Transactions {
     this.shop = shop;
     this.type = type;
     this.amount = amount;
+    this.category = category;
     this.date = date;
     this.month = month;
     this.year = year;

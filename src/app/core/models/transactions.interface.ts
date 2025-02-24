@@ -5,6 +5,7 @@ export interface Transactions {
   shop: string;
   type: string;
   amount: number;
+  category: string;
   date: number;
   month: number;
   year: number;
