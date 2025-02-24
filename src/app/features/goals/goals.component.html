@@ -51,6 +51,7 @@
         <div class="select-container">
           <select
             [(ngModel)]="selectedYear"
+            (change)="setSelectedYear()"
             id="selectedYearSummary"
             name="selectedYearSummary"
           >

@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Injector, runInInjectionContext } from '@angular/core';
 import { ButtonComponent } from '../../shared/components/layouts/button/button.component';
 import { ManometerComponent } from './manometer/manometer.component';
 import { CommonModule } from '@angular/common';
@@ -43,6 +43,7 @@ export class GoalsComponent {
   accountsBalances$!: Observable<{ accountId: string; balance: number }[]>;
 
   constructor(
+    private injector: Injector,
     private balancesService: BalancesService,
     private goalsService: GoalsService,
     private overlayService: OverlayService
@@ -77,6 +78,12 @@ export class GoalsComponent {
         this.selectedYear = goals[0].selectedYear;
       }
     });
+  }
+
+  setSelectedYear(): void {
+    this.goalsService
+      .updateSelectedYear(this.selectedYear)
+      .catch((err) => console.error('Error updating year:', err));
   }
 
   setGoalOverlay(docId: string, collection: number): void {

@@ -10,6 +10,7 @@ import {
   collectionData,
   doc,
   getDoc,
+  getDocs,
   query,
   updateDoc,
   where,
@@ -34,8 +35,10 @@ export class GoalsService {
   >([]);
   allGoals$ = this.allGoalsSubject.asObservable();
 
+  private userId = 'lsui7823kmbndks9037hjdsd'; // TODO: Placeholder
+
   constructor() {
-    this.loadGoals('lsui7823kmbndks9037hjdsd'); // TODO: Placeholder
+    this.loadGoals(this.userId);
   }
 
   private loadGoals(currentUserId: string): void {
@@ -87,6 +90,22 @@ export class GoalsService {
 
         await updateDoc(docRef, { amount: amounts });
       }
+    });
+  }
+
+  async updateSelectedYear(year: number): Promise<void> {
+    await runInInjectionContext(this.injector, async () => {
+      const collectionRef = collection(this.firestore, 'goals');
+      const q = query(collectionRef, where('userId', '==', this.userId));
+      const querySnapshot = await getDocs(q);
+
+      await Promise.all(
+        querySnapshot.docs.map((doc) =>
+          runInInjectionContext(this.injector, () =>
+            updateDoc(doc.ref, { selectedYear: year })
+          )
+        )
+      );
     });
   }
 }
