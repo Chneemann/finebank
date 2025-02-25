@@ -28,6 +28,7 @@ export class GoalsOverlayComponent {
   allGoals$!: Observable<GoalModel[]>;
   currentGoal?: { id: string; goal: string; amount: number; index: number };
   originalAmount!: number;
+  errorMessage: string = '';
 
   constructor(
     private overlayService: OverlayService,
@@ -67,16 +68,38 @@ export class GoalsOverlayComponent {
 
   onInput(event: Event): void {
     const input = event.target as HTMLInputElement;
-    input.value = input.value.replace(/[^0-9]/g, '');
+    let value = input.value.replace(/[^0-9]/g, '');
+
+    const numericValue = parseFloat(value);
+
+    if (isNaN(numericValue)) {
+      return;
+    }
+
+    if (this.currentGoal) {
+      if (numericValue > 99999 && this.currentGoal.index === 0) {
+        this.errorMessage = 'Error: Amount exceeds 99,999';
+      } else if (numericValue > 9999 && this.currentGoal.index >= 1) {
+        this.errorMessage = 'Error: Amount exceeds 9,999';
+      } else {
+        this.errorMessage = '';
+        this.currentGoal.amount = numericValue;
+      }
+    }
+
+    input.value = value;
   }
 
   onBlur(goalItem: { amount: number }): void {
-    if (goalItem.amount == null) {
+    if (
+      goalItem.amount == null ||
+      (this.currentGoal &&
+        ((this.currentGoal.index >= 1 && goalItem.amount > 9999) ||
+          (this.currentGoal.index === 0 && goalItem.amount > 99999)))
+    ) {
       goalItem.amount = this.originalAmount;
     } else {
-      let value = goalItem.amount / 100;
-      value = parseFloat(value.toFixed(2));
-      goalItem.amount = value * 100;
+      goalItem.amount = Math.floor((goalItem.amount / 100) * 100);
     }
   }
 
@@ -85,7 +108,7 @@ export class GoalsOverlayComponent {
   }
 
   saveOverlay() {
-    if (this.currentGoal) {
+    if (this.currentGoal && this.errorMessage === '') {
       this.goalsService
         .updateGoalAmount(
           this.currentGoal.id,
@@ -93,8 +116,8 @@ export class GoalsOverlayComponent {
           Math.round(this.currentGoal.amount * 100)
         )
         .catch((error) => console.error('Error during saving:', error));
+      this.closeOverlay();
     }
-    this.closeOverlay();
   }
 
   closeOverlay() {

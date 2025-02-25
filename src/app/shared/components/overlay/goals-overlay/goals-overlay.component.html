@@ -13,6 +13,11 @@
         min="0"
       />
     </div>
+    <div class="error-message">{{ errorMessage }}</div>
   </div>
-  <app-button buttonText="Save" (click)="saveOverlay()"></app-button>
+  <app-button
+    buttonText="Save"
+    (click)="saveOverlay()"
+    [disabled]="errorMessage != ''"
+  ></app-button>
 </div>
