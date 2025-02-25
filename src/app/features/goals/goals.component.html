@@ -75,24 +75,43 @@
 
   <div class="expense-goals">
     <!-- Goal -->
-    @for (goal of allGoals$ | async; track goal.index) {
-    <div class="goal">
-      <img
-        [src]="'assets/img/goals/' + goal.goal.toLowerCase() + '.svg'"
-        alt=""
-      />
-      <div class="container">
-        <div class="category">{{ goal.goal }}</div>
-        <div class="amount">${{ goal.amount / 100 | number : "1.2-2" }}</div>
+    <ng-container *ngIf="allGoals$ | async as allGoals; else loading">
+      @for (goal of allGoals; track goal.index) {
+      <div class="goal">
+        <img
+          [src]="'assets/img/goals/' + goal.goal.toLowerCase() + '.svg'"
+          alt=""
+        />
+        <div class="container">
+          <div class="category">{{ goal.goal }}</div>
+          <div class="amount">${{ goal.amount / 100 | number : "1.2-2" }}</div>
+        </div>
+        <app-button
+          buttonText="Adjust"
+          buttonSize="small"
+          buttonIcon="edit"
+          [buttonFilled]="false"
+          (click)="setGoalOverlay(goal.id ?? '', goal.index)"
+        />
       </div>
-      <app-button
-        buttonText="Adjust"
-        buttonSize="small"
-        buttonIcon="edit"
-        [buttonFilled]="false"
-        (click)="setGoalOverlay(goal.id ?? '', goal.index)"
-      />
-    </div>
-    }
+      }
+    </ng-container>
+
+    <!-- Loading Goal -->
+    <ng-template #loading>
+      <div *ngFor="let _ of [1, 2, 3, 4, 5, 6]" class="goal skeleton">
+        <img src="assets/img/sync.svg" alt="sync" />
+        <div class="container">
+          <div class="category placeholder"></div>
+          <div class="amount placeholder"></div>
+        </div>
+        <app-button
+          buttonText="Loading..."
+          buttonSize="small"
+          [buttonFilled]="false"
+          [disabled]="true"
+        />
+      </div>
+    </ng-template>
   </div>
 </section>
