@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { ButtonComponent } from '../../shared/components/layouts/button/button.component';
 import { ManometerComponent } from './manometer/manometer.component';
 import { CommonModule } from '@angular/common';
-import { map, Observable, Subject, takeUntil } from 'rxjs';
+import { delay, map, Observable, Subject, takeUntil } from 'rxjs';
 import { BalancesService } from '../../core/services/balances.service';
 import { GoalsService } from '../../core/services/goals.service';
 import { OverlayService } from '../../core/services/overlay.service';
@@ -31,9 +31,10 @@ export class GoalsComponent {
   years: number[] = [2024, 2025];
 
   private destroy$ = new Subject<void>();
-  allGoals$!: Observable<GoalModel[]>;
-  globalBalance$!: Observable<number>;
-  accountsBalances$!: Observable<{ accountId: string; balance: number }[]>;
+  allGoals$: Observable<GoalModel[]> = new Observable();
+  globalBalance$: Observable<number> = new Observable();
+  accountsBalances$: Observable<{ accountId: string; balance: number }[]> =
+    new Observable();
 
   constructor(
     private balancesService: BalancesService,
@@ -42,30 +43,34 @@ export class GoalsComponent {
   ) {}
 
   ngOnInit(): void {
-    this.allGoals$ = this.goalsService.allGoals$.pipe(takeUntil(this.destroy$));
-    this.globalBalance$ = this.balancesService.globalBalance$.pipe(
-      takeUntil(this.destroy$)
-    );
-    this.accountsBalances$ = this.balancesService.accountsBalances$.pipe(
-      takeUntil(this.destroy$)
-    );
+    this.initializeObservables();
     this.setSavingsTargetData();
     this.getSelectedYear();
   }
 
+  initializeObservables(): void {
+    this.allGoals$ = this.goalsService.allGoals$.pipe(
+      map((goals) =>
+        goals.filter((goal) => goal.id !== '' && goal.goal !== 'Global')
+      ),
+      takeUntil(this.destroy$)
+    );
+
+    this.globalBalance$ = this.balancesService.globalBalance$.pipe(
+      takeUntil(this.destroy$)
+    );
+
+    this.accountsBalances$ = this.balancesService.accountsBalances$.pipe(
+      takeUntil(this.destroy$)
+    );
+  }
+
   setSavingsTargetData() {
-    this.allGoals$
-      .pipe(
-        map((goals) =>
-          goals.length > 0
-            ? { id: goals[0].id ?? '', amount: goals[0].amount } // Standardwert für id
-            : { id: '', amount: 0 }
-        )
-      )
-      .subscribe(({ id, amount }) => {
-        this.savingsTargetId = id; // id wird hier nie undefined sein
-        this.savingsTargetAmount = amount / 100;
-      });
+    this.allGoals$.pipe(takeUntil(this.destroy$)).subscribe((goals) => {
+      const { id = '', amount = 0 } = goals.length > 0 ? goals[0] : {};
+      this.savingsTargetId = id;
+      this.savingsTargetAmount = amount / 100;
+    });
   }
 
   getSelectedYear() {

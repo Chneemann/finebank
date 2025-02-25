@@ -55,9 +55,9 @@
             id="selectedYearSummary"
             name="selectedYearSummary"
           >
-            <option *ngFor="let year of years" [value]="year">
-              {{ year }}
-            </option>
+            @for (year of years; track year) {
+            <option [value]="year">{{ year }}</option>
+            }
           </select>
           <img
             class="down-arrow-icon"
@@ -74,8 +74,9 @@
   <div class="headline">Expenses Goals by Category</div>
 
   <div class="expense-goals">
+    <!-- Goal -->
     @for (goal of allGoals$ | async; track goal.index) {
-    <div class="goal" *ngIf="goal.id !== '' && goal.goal !== 'Global'">
+    <div class="goal">
       <img
         [src]="'assets/img/goals/' + goal.goal.toLowerCase() + '.svg'"
         alt=""
