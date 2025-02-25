@@ -76,7 +76,7 @@
   <div class="expense-goals">
     <!-- Goal -->
     <ng-container *ngIf="allGoals$ | async as allGoals; else loading">
-      @for (goal of allGoals; track goal.index) {
+      @for (goal of filterGoals(allGoals); track goal.index) {
       <div class="goal">
         <img
           [src]="'assets/img/goals/' + goal.goal.toLowerCase() + '.svg'"

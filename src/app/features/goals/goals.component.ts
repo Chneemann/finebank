@@ -49,12 +49,7 @@ export class GoalsComponent {
   }
 
   initializeObservables(): void {
-    this.allGoals$ = this.goalsService.allGoals$.pipe(
-      map((goals) =>
-        goals.filter((goal) => goal.id !== '' && goal.goal !== 'Global')
-      ),
-      takeUntil(this.destroy$)
-    );
+    this.allGoals$ = this.goalsService.allGoals$.pipe(takeUntil(this.destroy$));
 
     this.globalBalance$ = this.balancesService.globalBalance$.pipe(
       takeUntil(this.destroy$)
@@ -79,6 +74,10 @@ export class GoalsComponent {
         this.selectedYear = goals[0].selectedYear;
       }
     });
+  }
+
+  filterGoals(goals: GoalModel[]): GoalModel[] {
+    return goals.filter((goal) => goal.id !== '' && goal.goal !== 'Global');
   }
 
   setSelectedYear(): void {
