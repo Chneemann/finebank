@@ -10,6 +10,7 @@ import { Component, Input } from '@angular/core';
 export class ManometerComponent {
   @Input() maxValue = 0;
   @Input() currentValue: number | null = null;
+  @Input() showManometer: boolean = false;
 
   // Calculate the percentage based on the current value
   getPercentage(): number {

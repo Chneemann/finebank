@@ -2,7 +2,14 @@ import { Component } from '@angular/core';
 import { ButtonComponent } from '../../shared/components/layouts/button/button.component';
 import { ManometerComponent } from './manometer/manometer.component';
 import { CommonModule } from '@angular/common';
-import { delay, map, Observable, Subject, takeUntil } from 'rxjs';
+import {
+  combineLatest,
+  delay,
+  map,
+  Observable,
+  Subject,
+  takeUntil,
+} from 'rxjs';
 import { BalancesService } from '../../core/services/balances.service';
 import { GoalsService } from '../../core/services/goals.service';
 import { OverlayService } from '../../core/services/overlay.service';
@@ -31,6 +38,7 @@ export class GoalsComponent {
   years: number[] = [2024, 2025];
 
   private destroy$ = new Subject<void>();
+  allDataLoaded$: Observable<boolean> = new Observable();
   allGoals$: Observable<GoalModel[]> = new Observable();
   globalBalance$: Observable<number> = new Observable();
   accountsBalances$: Observable<{ accountId: string; balance: number }[]> =
@@ -50,13 +58,23 @@ export class GoalsComponent {
 
   initializeObservables(): void {
     this.allGoals$ = this.goalsService.allGoals$.pipe(takeUntil(this.destroy$));
-
     this.globalBalance$ = this.balancesService.globalBalance$.pipe(
       takeUntil(this.destroy$)
     );
-
     this.accountsBalances$ = this.balancesService.accountsBalances$.pipe(
       takeUntil(this.destroy$)
+    );
+
+    this.allDataLoaded$ = this.checkAllDataLoaded([
+      this.allGoals$,
+      this.globalBalance$,
+      this.accountsBalances$,
+    ]);
+  }
+
+  checkAllDataLoaded(observables: Observable<any>[]): Observable<boolean> {
+    return combineLatest(observables).pipe(
+      map((values) => values.every((value) => !!value))
     );
   }
 

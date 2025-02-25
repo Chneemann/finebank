@@ -1,3 +1,4 @@
+@if (showManometer) {
 <div class="gauge-container">
   <svg
     viewBox="0 0 200 100"
@@ -35,3 +36,10 @@
   <div class="gauge-label-left">$0</div>
   <div class="gauge-label-right">${{ getMaxValueAbbreviated() }}</div>
 </div>
+} @else {
+<div class="gauge-container">
+  <div class="loading-spinner">
+    <img src="assets/img/sync.svg" alt="sync" />
+  </div>
+</div>
+}

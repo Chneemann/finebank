@@ -13,14 +13,16 @@
             <img src="assets/img/goals/award.svg" alt="award" />
             <div class="description">
               <p>Target Achieved</p>
-              <span>{{ globalBalance$ | async | currency : "USD" }}</span>
+              <span *ngIf="globalBalance$ | async as globalBalance">{{
+                globalBalance$ | async | currency : "USD"
+              }}</span>
             </div>
           </div>
           <div class="target">
             <img src="assets/img/goals/goal.svg" alt="goal" />
             <div class="description">
               <p>Savings Target</p>
-              <span>{{
+              <span *ngIf="savingsTargetAmount != 0">{{
                 savingsTargetAmount | currency : "USD" : "symbol" : "1.0-0"
               }}</span>
             </div>
@@ -30,6 +32,7 @@
           <app-manometer
             [maxValue]="savingsTargetAmount"
             [currentValue]="globalBalance$ | async"
+            [showManometer]="(allDataLoaded$ | async) ? true : false"
           ></app-manometer>
           <p>Target vs Achievement</p>
         </div>
