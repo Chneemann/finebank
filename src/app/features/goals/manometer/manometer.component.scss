@@ -1,12 +1,19 @@
 @use "./../../../../assets/styles/colors.scss" as *;
 
+.manometer p {
+  font-size: 12px;
+  font-weight: 400;
+  text-align: center;
+}
+
 .gauge-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  position: relative;
   width: 150px;
   height: 75px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  position: relative;
   margin-bottom: 32px;
 }
 

@@ -9,24 +9,10 @@
       </div>
       <div class="content">
         <div class="left">
-          <div class="target">
-            <img src="assets/img/goals/award.svg" alt="award" />
-            <div class="description">
-              <p>Target Achieved</p>
-              <span *ngIf="globalBalance$ | async as globalBalance">{{
-                globalBalance$ | async | currency : "USD"
-              }}</span>
-            </div>
-          </div>
-          <div class="target">
-            <img src="assets/img/goals/goal.svg" alt="goal" />
-            <div class="description">
-              <p>Savings Target</p>
-              <span *ngIf="savingsTargetAmount != 0">{{
-                savingsTargetAmount | currency : "USD" : "symbol" : "1.0-0"
-              }}</span>
-            </div>
-          </div>
+          <app-savings-target
+            (savingsTargetIdChange)="onSavingsTargetIdChange($event)"
+            (savingsTargetAmountChange)="onSavingsTargetAmountChange($event)"
+          ></app-savings-target>
         </div>
         <div class="right">
           <app-manometer
@@ -34,7 +20,6 @@
             [currentValue]="globalBalance$ | async"
             [showManometer]="(allDataLoaded$ | async) ? true : false"
           ></app-manometer>
-          <p>Target vs Achievement</p>
         </div>
       </div>
       <div class="button">

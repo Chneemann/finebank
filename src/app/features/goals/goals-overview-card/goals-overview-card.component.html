@@ -1,1 +1,17 @@
-<p>goals-overview-card works!</p>
+<div class="goal-overview-card">
+  <div class="content">
+    <div class="left">
+      <app-savings-target
+        (savingsTargetIdChange)="onSavingsTargetIdChange($event)"
+        (savingsTargetAmountChange)="onSavingsTargetAmountChange($event)"
+      ></app-savings-target>
+    </div>
+    <div class="right">
+      <app-manometer
+        [maxValue]="savingsTargetAmount"
+        [currentValue]="globalBalance$ | async"
+        [showManometer]="(allDataLoaded$ | async) ? true : false"
+      ></app-manometer>
+    </div>
+  </div>
+</div>

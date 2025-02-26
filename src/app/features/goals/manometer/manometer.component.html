@@ -1,45 +1,48 @@
-@if (showManometer) {
-<div class="gauge-container">
-  <svg
-    viewBox="0 0 200 100"
-    xmlns="http://www.w3.org/2000/svg"
-    class="gauge-svg"
-  >
-    <!-- Background sheet -->
-    <circle
-      cx="100"
-      cy="100"
-      r="80"
-      fill="none"
-      stroke="#e0e0e0"
-      stroke-width="20"
-      stroke-linecap="round"
-    />
+<div class="manometer">
+  @if (showManometer) {
+  <div class="gauge-container">
+    <svg
+      viewBox="0 0 200 100"
+      xmlns="http://www.w3.org/2000/svg"
+      class="gauge-svg"
+    >
+      <!-- Background sheet -->
+      <circle
+        cx="100"
+        cy="100"
+        r="80"
+        fill="none"
+        stroke="#e0e0e0"
+        stroke-width="20"
+        stroke-linecap="round"
+      />
 
-    <!-- Filled arc, mirrored -->
-    <circle
-      cx="100"
-      cy="100"
-      r="80"
-      fill="none"
-      stroke="teal"
-      stroke-width="20"
-      [attr.stroke-dasharray]="dashArray"
-      [attr.stroke-dashoffset]="calculateDashOffset()"
-      stroke-linecap="round"
-      transform="rotate(180 100 100)"
-    />
-  </svg>
+      <!-- Filled arc, mirrored -->
+      <circle
+        cx="100"
+        cy="100"
+        r="80"
+        fill="none"
+        stroke="teal"
+        stroke-width="20"
+        [attr.stroke-dasharray]="dashArray"
+        [attr.stroke-dashoffset]="calculateDashOffset()"
+        stroke-linecap="round"
+        transform="rotate(180 100 100)"
+      />
+    </svg>
 
-  <div class="gauge-label">{{ getPercentage() }}%</div>
+    <div class="gauge-label">{{ getPercentage() }}%</div>
 
-  <div class="gauge-label-left">$0</div>
-  <div class="gauge-label-right">${{ getMaxValueAbbreviated() }}</div>
-</div>
-} @else {
-<div class="gauge-container">
-  <div class="loading-spinner">
-    <img src="assets/img/sync.svg" alt="sync" />
+    <div class="gauge-label-left">$0</div>
+    <div class="gauge-label-right">${{ getMaxValueAbbreviated() }}</div>
   </div>
+  } @else {
+  <div class="gauge-container">
+    <div class="loading-spinner">
+      <img src="assets/img/sync.svg" alt="sync" />
+    </div>
+  </div>
+  }
+  <p>Target vs Achievement</p>
 </div>
-}

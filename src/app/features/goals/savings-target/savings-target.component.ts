@@ -1,42 +1,24 @@
-import { Component } from '@angular/core';
-import { ButtonComponent } from '../../shared/components/layouts/button/button.component';
-import { ManometerComponent } from './manometer/manometer.component';
 import { CommonModule } from '@angular/common';
-import {
-  combineLatest,
-  delay,
-  map,
-  Observable,
-  Subject,
-  takeUntil,
-} from 'rxjs';
-import { BalancesService } from '../../core/services/balances.service';
-import { GoalsService } from '../../core/services/goals.service';
-import { OverlayService } from '../../core/services/overlay.service';
-import { LineChartComponent } from './line-chart/line-chart.component';
-import { FormsModule } from '@angular/forms';
-import { GoalModel } from '../../core/models/goal.model';
-import { SavingsTargetComponent } from './savings-target/savings-target.component';
+import { Component, EventEmitter, Output } from '@angular/core';
+import { combineLatest, map, Observable, Subject, takeUntil } from 'rxjs';
+import { GoalModel } from '../../../core/models/goal.model';
+import { BalancesService } from '../../../core/services/balances.service';
+import { GoalsService } from '../../../core/services/goals.service';
+import { OverlayService } from '../../../core/services/overlay.service';
 
 @Component({
-  selector: 'app-goals',
-  standalone: true,
-  imports: [
-    CommonModule,
-    FormsModule,
-    ButtonComponent,
-    ManometerComponent,
-    LineChartComponent,
-    SavingsTargetComponent,
-  ],
-  templateUrl: './goals.component.html',
-  styleUrl: './goals.component.scss',
+  selector: 'app-savings-target',
+  imports: [CommonModule],
+  templateUrl: './savings-target.component.html',
+  styleUrl: './savings-target.component.scss',
 })
-export class GoalsComponent {
+export class SavingsTargetComponent {
+  @Output() savingsTargetAmountChange = new EventEmitter<number>();
+  @Output() savingsTargetIdChange = new EventEmitter<string>();
+
   targetAchieved: number = 0;
   savingsTargetId: string = '';
   savingsTargetAmount: number = 0;
-
   selectedYear: number = new Date().getFullYear();
   years: number[] = [2024, 2025];
 
@@ -44,6 +26,8 @@ export class GoalsComponent {
   allDataLoaded$: Observable<boolean> = new Observable();
   allGoals$: Observable<GoalModel[]> = new Observable();
   globalBalance$: Observable<number> = new Observable();
+  accountsBalances$: Observable<{ accountId: string; balance: number }[]> =
+    new Observable();
 
   constructor(
     private balancesService: BalancesService,
@@ -53,15 +37,8 @@ export class GoalsComponent {
 
   ngOnInit(): void {
     this.initializeObservables();
+    this.setSavingsTargetData();
     this.getSelectedYear();
-  }
-
-  onSavingsTargetIdChange(id: string): void {
-    this.savingsTargetId = id;
-  }
-
-  onSavingsTargetAmountChange(amount: number): void {
-    this.savingsTargetAmount = amount;
   }
 
   initializeObservables(): void {
@@ -69,10 +46,14 @@ export class GoalsComponent {
     this.globalBalance$ = this.balancesService.globalBalance$.pipe(
       takeUntil(this.destroy$)
     );
+    this.accountsBalances$ = this.balancesService.accountsBalances$.pipe(
+      takeUntil(this.destroy$)
+    );
 
     this.allDataLoaded$ = this.checkAllDataLoaded([
       this.allGoals$,
       this.globalBalance$,
+      this.accountsBalances$,
     ]);
   }
 
@@ -80,6 +61,17 @@ export class GoalsComponent {
     return combineLatest(observables).pipe(
       map((values) => values.every((value) => !!value))
     );
+  }
+
+  setSavingsTargetData() {
+    this.allGoals$.pipe(takeUntil(this.destroy$)).subscribe((goals) => {
+      const { id = '', amount = 0 } = goals.length > 0 ? goals[0] : {};
+      this.savingsTargetId = id;
+      this.savingsTargetAmount = amount / 100;
+
+      this.savingsTargetIdChange.emit(this.savingsTargetId);
+      this.savingsTargetAmountChange.emit(this.savingsTargetAmount);
+    });
   }
 
   getSelectedYear() {

@@ -46,54 +46,9 @@
     height: 170px;
     gap: 6px;
 
-    .left {
-      display: flex;
-      flex-direction: column;
-      align-items: flex-start;
-      justify-content: space-between;
-      gap: 24px;
-      width: 50%;
-
-      .description {
-        display: flex;
-        flex-direction: column;
-        gap: 6px;
-      }
-
-      .target {
-        display: flex;
-        gap: 6px;
-
-        p {
-          font-size: 12px;
-          font-weight: 400;
-          color: #878787;
-        }
-
-        span {
-          height: 19.5px;
-          font-size: 16px;
-          font-weight: 700;
-        }
-
-        img {
-          width: 24px;
-          height: 40px;
-        }
-      }
-    }
-
+    .left,
     .right {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: space-between;
       width: 50%;
-
-      p {
-        font-size: 12px;
-        font-weight: 400;
-      }
     }
   }
 
