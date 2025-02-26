@@ -97,3 +97,31 @@ nav ul {
     }
   }
 }
+
+@media screen and (max-width: 1440px) {
+  .logo {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    font-size: 16px;
+  }
+
+  nav ul li,
+  .footer .logout {
+    display: flex;
+    justify-content: center;
+
+    a {
+      width: 100%;
+
+      img {
+        width: 100%;
+        margin: 0;
+      }
+    }
+
+    span {
+      display: none;
+    }
+  }
+}
