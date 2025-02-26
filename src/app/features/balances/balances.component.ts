@@ -42,14 +42,7 @@ export class BalancesComponent {
   private loadAllAccounts(): void {
     this.accountsData$ = this.balancesService
       .getAllAccounts()
-      .pipe(
-        map((accounts) =>
-          accounts.map(
-            (tx) =>
-              new AccountModel(tx.id, tx.added, tx.name, tx.number, tx.type)
-          )
-        )
-      );
+      .pipe(map((accounts) => accounts.map((tx) => new AccountModel(tx))));
   }
 
   ngOnDestroy(): void {

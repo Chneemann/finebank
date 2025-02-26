@@ -63,9 +63,7 @@ export class AccountDetailsComponent {
     this.currentAccountData$ = this.accountService
       .getAccountDataById(accountId)
       .pipe(
-        map(
-          (tx) => new AccountModel(tx.id, tx.added, tx.name, tx.number, tx.type)
-        ),
+        map((tx) => new AccountModel(tx)),
         catchError((error) => {
           console.error('Error loading account data', error);
           return of({} as AccountModel);

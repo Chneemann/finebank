@@ -12,28 +12,28 @@ export class TransactionModel implements Transactions {
   month: number;
   year: number;
 
-  constructor(
-    accountId: string,
-    item: string,
-    shop: string,
-    type: string,
-    amount: number,
-    category: string,
-    date: number,
-    month: number,
-    year: number,
-    id?: string
-  ) {
-    this.accountId = accountId;
-    this.item = item;
-    this.shop = shop;
-    this.type = type;
-    this.amount = amount;
-    this.category = category;
-    this.date = date;
-    this.month = month;
-    this.year = year;
-    this.id = id;
+  constructor(data: {
+    accountId: string;
+    item: string;
+    shop: string;
+    type: string;
+    amount: number;
+    category: string;
+    date: number;
+    month: number;
+    year: number;
+    id: string;
+  }) {
+    this.accountId = data.accountId;
+    this.item = data.item;
+    this.shop = data.shop;
+    this.type = data.type;
+    this.amount = data.amount;
+    this.category = data.category;
+    this.date = data.date;
+    this.month = data.month;
+    this.year = data.year;
+    this.id = data.id;
   }
 
   // Getter for the formatted date

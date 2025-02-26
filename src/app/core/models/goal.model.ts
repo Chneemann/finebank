@@ -8,19 +8,19 @@ export class GoalModel implements Goal {
   userId: string;
   index: number;
 
-  constructor(
-    amount: number,
-    goal: string,
-    selectedYear: number,
-    userId: string,
-    index: number,
-    id?: string
-  ) {
-    this.amount = amount;
-    this.goal = goal;
-    this.selectedYear = selectedYear;
-    this.userId = userId;
-    this.index = index;
-    this.id = id;
+  constructor(data: {
+    amount: number;
+    goal: string;
+    selectedYear: number;
+    userId: string;
+    index: number;
+    id?: string;
+  }) {
+    this.amount = data.amount;
+    this.goal = data.goal;
+    this.selectedYear = data.selectedYear;
+    this.userId = data.userId;
+    this.index = data.index;
+    this.id = data.id;
   }
 }

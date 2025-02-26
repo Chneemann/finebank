@@ -28,20 +28,7 @@ export class TransactionsComponent {
     ]).pipe(
       map(([revenue, expenses]) => {
         const transactions = [...revenue, ...expenses];
-        return transactions.map(
-          (tx) =>
-            new TransactionModel(
-              tx.accountId,
-              tx.item,
-              tx.shop,
-              tx.type,
-              tx.amount,
-              tx.date,
-              tx.month,
-              tx.year,
-              tx.id
-            )
-        );
+        return transactions.map((tx) => new TransactionModel(tx));
       })
     );
   }
