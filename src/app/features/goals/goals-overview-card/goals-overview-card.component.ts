@@ -7,10 +7,16 @@ import { GoalsService } from '../../../core/services/goals.service';
 import { BalancesService } from '../../../core/services/balances.service';
 import { OverlayService } from '../../../core/services/overlay.service';
 import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-goals-overview-card',
-  imports: [CommonModule, SavingsTargetComponent, ManometerComponent],
+  imports: [
+    CommonModule,
+    FormsModule,
+    SavingsTargetComponent,
+    ManometerComponent,
+  ],
   templateUrl: './goals-overview-card.component.html',
   styleUrl: './goals-overview-card.component.scss',
 })

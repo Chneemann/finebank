@@ -1,4 +1,11 @@
 <div class="goal-overview-card">
+  <div class="header">
+    <div class="saving-goal">
+      {{ savingsTargetAmount | currency : "USD" : "symbol" : "1.0-0" }}
+    </div>
+    <div class="selected-year">2024</div>
+  </div>
+
   <div class="content">
     <div class="left">
       <app-savings-target
