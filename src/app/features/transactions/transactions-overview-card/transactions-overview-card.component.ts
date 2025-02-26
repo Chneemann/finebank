@@ -1,16 +1,16 @@
 import { Component, OnInit } from '@angular/core';
 import { combineLatest, map, Observable } from 'rxjs';
-import { TransactionsService } from '../../../../core/services/transactions.service';
+import { TransactionsService } from '../../../core/services/transactions.service';
 import { CommonModule } from '@angular/common';
-import { TransactionModel } from '../../../../core/models/transactions.model';
+import { TransactionModel } from '../../../core/models/transactions.model';
 
 @Component({
-  selector: 'app-transactions-card',
+  selector: 'app-transactions-overview-card',
   imports: [CommonModule],
-  templateUrl: './transactions-card.component.html',
-  styleUrls: ['./transactions-card.component.scss'],
+  templateUrl: './transactions-overview-card.component.html',
+  styleUrls: ['./transactions-overview-card.component.scss'],
 })
-export class TransactionsCardComponent implements OnInit {
+export class TransactionsOverviewCardComponent implements OnInit {
   transactionsData$!: Observable<TransactionModel[]>;
   transactionFetchLimit: number = 5;
   selectedType: 'all' | 'revenue' | 'expense' = 'all';

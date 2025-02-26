@@ -1,10 +1,10 @@
 import { Component } from '@angular/core';
-import { OverviewCardBalancesComponent } from '../balances/components/overview-card/overview-card.component';
-import { TransactionsCardComponent } from '../transactions/components/transactions-card/transactions-card.component';
+import { BalanceOverviewCardComponent } from '../balances/balance-overview-card/balance-overview-card.component';
+import { TransactionsOverviewCardComponent } from '../transactions/transactions-overview-card/transactions-overview-card.component';
 
 @Component({
   selector: 'app-overview',
-  imports: [OverviewCardBalancesComponent, TransactionsCardComponent],
+  imports: [BalanceOverviewCardComponent, TransactionsOverviewCardComponent],
   templateUrl: './overview.component.html',
   styleUrl: './overview.component.scss',
 })

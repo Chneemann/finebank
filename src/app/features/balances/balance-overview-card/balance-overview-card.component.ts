@@ -7,19 +7,19 @@ import {
 import { SliderComponent } from './slider/slider.component';
 import { CommonModule } from '@angular/common';
 import { Observable, Subject, takeUntil, map, combineLatest } from 'rxjs';
-import { BalancesService } from '../../../../core/services/balances.service';
-import { TransactionModel } from '../../../../core/models/transactions.model';
-import { AccountModel } from '../../../../core/models/account.model';
+import { BalancesService } from '../../../core/services/balances.service';
+import { TransactionModel } from '../../../core/models/transactions.model';
+import { AccountModel } from '../../../core/models/account.model';
 import { RouterLink } from '@angular/router';
 
 @Component({
-  selector: 'app-overview-card-balances',
+  selector: 'app-balance-overview-card',
   imports: [CommonModule, RouterLink, SliderComponent],
-  templateUrl: './overview-card.component.html',
-  styleUrl: './overview-card.component.scss',
+  templateUrl: './balance-overview-card.component.html',
+  styleUrl: './balance-overview-card.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class OverviewCardBalancesComponent implements OnInit, OnDestroy {
+export class BalanceOverviewCardComponent implements OnInit, OnDestroy {
   private destroy$ = new Subject<void>();
   accountsData$!: Observable<AccountModel[]>;
   transactionsData$!: Observable<TransactionModel[]>;
