@@ -3,7 +3,9 @@
     <div class="saving-goal">
       {{ savingsTargetAmount | currency : "USD" : "symbol" : "1.0-0" }}
     </div>
-    <div class="selected-year">2024</div>
+    <div class="edit-saving-goal" (click)="setGoalOverlay(savingsTargetId, 0)">
+      <img src="assets/img/edit.svg" alt="edit" />
+    </div>
   </div>
 
   <div class="content">

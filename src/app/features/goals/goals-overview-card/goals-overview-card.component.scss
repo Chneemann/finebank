@@ -24,13 +24,22 @@
     color: var(--color-black);
   }
 
-  .selected-year {
+  .edit-saving-goal {
     display: flex;
+    justify-content: center;
     align-items: center;
     height: 32px;
-    font-size: 14px;
-    font-weight: 500;
-    color: #525256;
+    width: 32px;
+    border-radius: 6px;
+    background-color: #d2d2d240;
+    cursor: pointer;
+
+    &:hover {
+      img {
+        filter: brightness(0) saturate(100%) invert(66%) sepia(8%)
+          saturate(2879%) hue-rotate(125deg) brightness(77%) contrast(97%);
+      }
+    }
   }
 }
 

@@ -1,13 +1,18 @@
-import { Component } from '@angular/core';
+import {
+  AfterViewChecked,
+  ChangeDetectorRef,
+  Component,
+  OnInit,
+} from '@angular/core';
 import { SavingsTargetComponent } from '../savings-target/savings-target.component';
 import { ManometerComponent } from '../manometer/manometer.component';
 import { combineLatest, map, Observable, Subject, takeUntil } from 'rxjs';
 import { GoalModel } from '../../../core/models/goal.model';
 import { GoalsService } from '../../../core/services/goals.service';
 import { BalancesService } from '../../../core/services/balances.service';
-import { OverlayService } from '../../../core/services/overlay.service';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { OverlayService } from '../../../core/services/overlay.service';
 
 @Component({
   selector: 'app-goals-overview-card',
@@ -20,13 +25,10 @@ import { FormsModule } from '@angular/forms';
   templateUrl: './goals-overview-card.component.html',
   styleUrl: './goals-overview-card.component.scss',
 })
-export class GoalsOverviewCardComponent {
+export class GoalsOverviewCardComponent implements OnInit, AfterViewChecked {
   targetAchieved: number = 0;
   savingsTargetId: string = '';
   savingsTargetAmount: number = 0;
-
-  selectedYear: number = new Date().getFullYear();
-  years: number[] = [2024, 2025];
 
   private destroy$ = new Subject<void>();
   allDataLoaded$: Observable<boolean> = new Observable();
@@ -36,20 +38,26 @@ export class GoalsOverviewCardComponent {
   constructor(
     private balancesService: BalancesService,
     private goalsService: GoalsService,
-    private overlayService: OverlayService
+    private overlayService: OverlayService,
+    private cdRef: ChangeDetectorRef
   ) {}
 
   ngOnInit(): void {
     this.initializeObservables();
-    this.getSelectedYear();
+  }
+
+  ngAfterViewChecked(): void {
+    this.cdRef.detectChanges();
   }
 
   onSavingsTargetIdChange(id: string): void {
     this.savingsTargetId = id;
+    this.cdRef.detectChanges();
   }
 
   onSavingsTargetAmountChange(amount: number): void {
     this.savingsTargetAmount = amount;
+    this.cdRef.detectChanges();
   }
 
   initializeObservables(): void {
@@ -68,24 +76,6 @@ export class GoalsOverviewCardComponent {
     return combineLatest(observables).pipe(
       map((values) => values.every((value) => !!value))
     );
-  }
-
-  getSelectedYear() {
-    this.goalsService.allGoals$.subscribe((goals) => {
-      if (goals.length > 0) {
-        this.selectedYear = goals[0].selectedYear;
-      }
-    });
-  }
-
-  filterGoals(goals: GoalModel[]): GoalModel[] {
-    return goals.filter((goal) => goal.id !== '' && goal.goal !== 'Global');
-  }
-
-  setSelectedYear(): void {
-    this.goalsService
-      .updateSelectedYear(this.selectedYear)
-      .catch((err) => console.error('Error updating year:', err));
   }
 
   setGoalOverlay(docId: string, collection: number): void {
