@@ -5,11 +5,14 @@ import { BalancesComponent } from './features/balances/balances.component';
 import { TransactionsComponent } from './features/transactions/transactions.component';
 import { AccountDetailsComponent } from './features/account-details/account-details.component';
 import { GoalsComponent } from './features/goals/goals.component';
+import { AuthGuard } from './core/guards/auth.guard';
 
 export const routes: Routes = [
+  // { path: 'login', component: LoginComponent },
   {
     path: '',
     component: LayoutComponent,
+    canActivate: [AuthGuard],
     children: [
       { path: 'overview', component: OverviewComponent },
       { path: 'balances', component: BalancesComponent },
@@ -22,5 +25,5 @@ export const routes: Routes = [
       { path: '', redirectTo: 'overview', pathMatch: 'full' },
     ],
   },
-  { path: '**', redirectTo: '' },
+  { path: '**', redirectTo: 'login' },
 ];

@@ -35,7 +35,7 @@ export class BalancesService {
   globalBalance$ = this.globalBalanceSubject.asObservable();
   accountsBalances$ = this.accountsBalancesSubject.asObservable();
 
-  userId = 'lsui7823kmbndks9037hjdsd'; // TODO: Placeholder
+  userId = 'tr7rEUaccEQeSQ3VlNcFADcYp1i21'; // TODO: Placeholder
 
   constructor() {
     this.loadBalances(this.userId);

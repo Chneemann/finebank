@@ -28,7 +28,7 @@ export class GoalsService {
   private allGoalsSubject = new BehaviorSubject<GoalModel[]>([]);
   allGoals$ = this.allGoalsSubject.asObservable();
 
-  private userId = 'lsui7823kmbndks9037hjdsd'; // TODO: Placeholder
+  private userId = 'tr7rEUaccEQeSQ3VlNcFADcYp1i21'; // TODO: Placeholder
 
   constructor() {
     this.loadGoals();

@@ -26,7 +26,7 @@ export class TransactionsComponent {
 
   ngOnInit() {
     this.loadAllTransactions();
-    this.accountsData$ = this.accountService.getAccountsByUserId();
+    this.accountsData$ = this.accountService.getAllUserAccounts();
   }
 
   private loadAllTransactions() {
