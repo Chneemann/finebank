@@ -1,9 +1,12 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
-import { combineLatest, map, Observable } from 'rxjs';
+import { catchError, combineLatest, map, Observable, of } from 'rxjs';
 import { TransactionsService } from '../../core/services/transactions.service';
 import { ButtonComponent } from '../../shared/components/layouts/button/button.component';
 import { TransactionModel } from '../../core/models/transactions.model';
+import { AccountModel } from '../../core/models/account.model';
+import { AccountService } from '../../core/services/account.service';
+import { BalancesService } from '../../core/services/balances.service';
 
 @Component({
   selector: 'app-transactions',
@@ -12,13 +15,18 @@ import { TransactionModel } from '../../core/models/transactions.model';
   styleUrl: './transactions.component.scss',
 })
 export class TransactionsComponent {
+  accountsData$!: Observable<AccountModel[]>;
   transactionsData$!: Observable<TransactionModel[]>;
   selectedType: 'all' | 'revenue' | 'expense' = 'all';
 
-  constructor(private transactionsService: TransactionsService) {}
+  constructor(
+    private transactionsService: TransactionsService,
+    private accountService: AccountService
+  ) {}
 
   ngOnInit() {
     this.loadAllTransactions();
+    this.accountsData$ = this.accountService.getAccountsByUserId();
   }
 
   private loadAllTransactions() {

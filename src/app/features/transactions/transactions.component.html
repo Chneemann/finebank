@@ -34,10 +34,10 @@
     <table>
       <thead>
         <tr>
-          <th class="left">Items</th>
-          <th class="center">Shop Name</th>
+          <th class="left">Item</th>
+          <th class="center">Shop</th>
           <th class="center">Date</th>
-          <th class="center">Transaction Type</th>
+          <th class="center">Payment Method</th>
           <th class="right">Amount</th>
         </tr>
       </thead>
@@ -46,7 +46,11 @@
           <td class="left">{{ transaction.item }}</td>
           <td class="center">{{ transaction.shop }}</td>
           <td class="center">{{ transaction.formattedDate }}</td>
-          <td class="center">Type</td>
+          @for(account of accountsData$ | async; track account.id) {
+          <!-- Payment method -->
+          @if (account.id == transaction.accountId) {
+          <td class="center">{{ account.type }}</td>
+          } }
           <td class="right">
             <div class="amount">
               <img

@@ -1,6 +1,7 @@
 .layout {
   display: flex;
   height: 100vh;
+  height: 100dvh;
 }
 
 .main-container {
@@ -9,13 +10,11 @@
   flex-grow: 1;
 }
 
-.header {
-  height: 88px;
-}
-
 .content {
   padding: 24px;
   background-color: var(--color-background);
   overflow-y: auto;
   position: relative;
+  height: 100vh;
+  height: 100dvh;
 }

@@ -7,18 +7,12 @@ export class AccountModel implements Account {
   number: string;
   type: string;
 
-  constructor(data: {
-    id: string | undefined;
-    added: number;
-    name: string;
-    number: string;
-    type: string;
-  }) {
+  constructor(data: Partial<Account> = {}) {
     this.id = data.id;
-    this.added = data.added;
-    this.name = data.name;
-    this.number = data.number;
-    this.type = data.type;
+    this.added = data.added ?? 0;
+    this.name = data.name ?? '';
+    this.number = data.number ?? '';
+    this.type = data.type ?? '';
   }
 
   // Getter for the formatted date

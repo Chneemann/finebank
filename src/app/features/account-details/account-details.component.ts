@@ -7,6 +7,7 @@ import { CommonModule } from '@angular/common';
 import { catchError, filter, map, Observable, of, switchMap, tap } from 'rxjs';
 import { AccountModel } from '../../core/models/account.model';
 import { TransactionModel } from '../../core/models/transactions.model';
+import { TransactionsService } from '../../core/services/transactions.service';
 
 @Component({
   selector: 'app-account-details',
@@ -23,7 +24,8 @@ export class AccountDetailsComponent {
   constructor(
     private router: Router,
     private route: ActivatedRoute,
-    private accountService: AccountService
+    private accountService: AccountService,
+    private transactionsService: TransactionsService
   ) {}
 
   ngOnInit() {
@@ -36,7 +38,7 @@ export class AccountDetailsComponent {
         map((params) => params.get('id')),
         switchMap((accountId) =>
           accountId
-            ? this.accountService.existAccountId(accountId).pipe(
+            ? this.accountService.accountExists(accountId).pipe(
                 tap((exists) => {
                   this.accountExists = exists;
                   if (!exists) this.redirectToBalance();
@@ -61,7 +63,7 @@ export class AccountDetailsComponent {
 
   private loadAccountData(accountId: string) {
     this.currentAccountData$ = this.accountService
-      .getAccountDataById(accountId)
+      .getAccountById(accountId)
       .pipe(
         map((tx) => new AccountModel(tx)),
         catchError((error) => {
@@ -72,7 +74,7 @@ export class AccountDetailsComponent {
   }
 
   private loadTransactionsData(accountId: string) {
-    this.currentTransactionsData$ = this.accountService
+    this.currentTransactionsData$ = this.transactionsService
       .getTransactionDataByAccountId(accountId)
       .pipe(
         map((transactions: TransactionModel[]) =>

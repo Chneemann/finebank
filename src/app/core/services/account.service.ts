@@ -15,6 +15,7 @@ import {
   where,
 } from '@angular/fire/firestore';
 import { from, map, Observable } from 'rxjs';
+import { AccountModel } from '../models/account.model';
 
 @Injectable({
   providedIn: 'root',
@@ -25,13 +26,24 @@ export class AccountService {
 
   private userId = 'lsui7823kmbndks9037hjdsd';
 
-  getAccountDataById(accountId: string): Observable<any> {
+  getAccountById(accountId: string): Observable<any> {
     return runInInjectionContext(this.injector, () =>
       docData(doc(this.firestore, `accounts/${accountId}`), { idField: 'id' })
     );
   }
 
-  getTotalAccountsCount(): Observable<number> {
+  getAccountsByUserId(): Observable<AccountModel[]> {
+    return runInInjectionContext(this.injector, () => {
+      const transactionsRef = collection(this.firestore, 'accounts');
+      const q = query(transactionsRef, where('userId', '==', this.userId));
+
+      return collectionData(q, { idField: 'id' }).pipe(
+        map((accounts) => accounts.map((acc) => new AccountModel(acc)))
+      );
+    });
+  }
+
+  countUserAccounts(): Observable<number> {
     return runInInjectionContext(this.injector, () => {
       const accountsRef = collection(this.firestore, 'accounts');
       const q = query(accountsRef, where('userId', '==', this.userId));
@@ -40,16 +52,7 @@ export class AccountService {
     });
   }
 
-  getTransactionDataByAccountId(accountId: string): Observable<any> {
-    return runInInjectionContext(this.injector, () => {
-      const transactionsRef = collection(this.firestore, 'transactions');
-      const q = query(transactionsRef, where('accountId', '==', accountId));
-
-      return collectionData(q, { idField: 'id' });
-    });
-  }
-
-  existAccountId(accountId: string): Observable<boolean> {
+  accountExists(accountId: string): Observable<boolean> {
     return runInInjectionContext(this.injector, () => {
       const docRef = doc(this.firestore, `accounts/${accountId}`);
 
