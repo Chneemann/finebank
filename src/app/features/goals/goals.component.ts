@@ -95,9 +95,9 @@ export class GoalsComponent {
   }
 
   setSelectedYear(): void {
-    this.goalsService
-      .updateSelectedYear(this.selectedYear)
-      .catch((err) => console.error('Error updating year:', err));
+    this.goalsService.updateUserGoalSelectedYear(this.selectedYear).subscribe({
+      error: (err) => console.error('Error updating year:', err),
+    });
   }
 
   setGoalOverlay(docId: string, collection: number): void {

@@ -1,6 +1,6 @@
-import { Transactions } from './transactions.interface';
+import { Transaction } from './transactions.interface';
 
-export class TransactionModel implements Transactions {
+export class TransactionModel implements Transaction {
   id?: string;
   accountId: string;
   item: string;
@@ -12,28 +12,17 @@ export class TransactionModel implements Transactions {
   month: number;
   year: number;
 
-  constructor(data: {
-    accountId: string;
-    item: string;
-    shop: string;
-    type: string;
-    amount: number;
-    category: string;
-    date: number;
-    month: number;
-    year: number;
-    id: string;
-  }) {
-    this.accountId = data.accountId;
-    this.item = data.item;
-    this.shop = data.shop;
-    this.type = data.type;
-    this.amount = data.amount;
-    this.category = data.category;
-    this.date = data.date;
-    this.month = data.month;
-    this.year = data.year;
+  constructor(data: Partial<Transaction> = {}) {
     this.id = data.id;
+    this.accountId = data.accountId ?? '';
+    this.item = data.item ?? '';
+    this.shop = data.shop ?? '';
+    this.type = data.type ?? '';
+    this.amount = data.amount ?? 0;
+    this.category = data.category ?? '';
+    this.date = data.date ?? 0;
+    this.month = data.month ?? 0;
+    this.year = data.year ?? 0;
   }
 
   // Getter for the formatted date

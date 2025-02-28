@@ -110,12 +110,13 @@ export class GoalsOverlayComponent {
   saveOverlay() {
     if (this.currentGoal && this.errorMessage === '') {
       this.goalsService
-        .updateGoalAmount(
-          this.currentGoal.id,
+        .updateUserGoalAmount(
           this.currentGoal.index,
           Math.round(this.currentGoal.amount * 100)
         )
-        .catch((error) => console.error('Error during saving:', error));
+        .subscribe({
+          error: (err) => console.error('Error during saving:', err),
+        });
       this.closeOverlay();
     }
   }
