@@ -11,6 +11,7 @@ import { BalancesService } from '../../../core/services/balances.service';
 import { TransactionModel } from '../../../core/models/transactions.model';
 import { AccountModel } from '../../../core/models/account.model';
 import { RouterLink } from '@angular/router';
+import { AccountService } from '../../../core/services/account.service';
 
 @Component({
   selector: 'app-balance-overview-card',
@@ -32,18 +33,21 @@ export class BalanceOverviewCardComponent implements OnInit, OnDestroy {
   currentIndex = 0;
   totalAccounts = 0;
 
-  constructor(private balancesService: BalancesService) {}
+  constructor(
+    private balancesService: BalancesService,
+    private accountService: AccountService
+  ) {}
 
   ngOnInit(): void {
-    this.loadAllAccounts();
+    this.loadAllUserAccounts();
     this.globalBalance$ = this.balancesService.globalBalance$;
     this.accountsBalances$ = this.balancesService.accountsBalances$;
     this.currentBalance$ = this.getCurrentBalance();
   }
 
-  private loadAllAccounts(): void {
-    this.accountsData$ = this.balancesService
-      .getAllAccounts()
+  private loadAllUserAccounts(): void {
+    this.accountsData$ = this.accountService
+      .getAllUserAccounts()
       .pipe(map((accounts) => accounts.map((tx) => new AccountModel(tx))));
 
     this.accountsData$.pipe(takeUntil(this.destroy$)).subscribe((accounts) => {

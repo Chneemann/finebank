@@ -15,6 +15,7 @@ import { AccountModel } from '../../core/models/account.model';
 import { TransactionModel } from '../../core/models/transactions.model';
 import { BalancesService } from '../../core/services/balances.service';
 import { TransactionsService } from '../../core/services/transactions.service';
+import { AccountService } from '../../core/services/account.service';
 
 @Component({
   selector: 'app-balances',
@@ -31,17 +32,20 @@ export class BalancesComponent {
   globalBalance$!: Observable<number>;
   accountsBalances$!: Observable<{ accountId: string; balance: number }[]>;
 
-  constructor(private balancesService: BalancesService) {}
+  constructor(
+    private balancesService: BalancesService,
+    private accountService: AccountService
+  ) {}
 
   ngOnInit(): void {
-    this.loadAllAccounts();
+    this.loadAllUserAccounts();
     this.globalBalance$ = this.balancesService.globalBalance$;
     this.accountsBalances$ = this.balancesService.accountsBalances$;
   }
 
-  private loadAllAccounts(): void {
-    this.accountsData$ = this.balancesService
-      .getAllAccounts()
+  private loadAllUserAccounts(): void {
+    this.accountsData$ = this.accountService
+      .getAllUserAccounts()
       .pipe(map((accounts) => accounts.map((tx) => new AccountModel(tx))));
   }
 
