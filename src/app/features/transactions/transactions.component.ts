@@ -1,12 +1,11 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
-import { catchError, combineLatest, map, Observable, of } from 'rxjs';
+import { combineLatest, map, Observable } from 'rxjs';
 import { TransactionsService } from '../../core/services/transactions.service';
 import { ButtonComponent } from '../../shared/components/layouts/button/button.component';
 import { TransactionModel } from '../../core/models/transactions.model';
 import { AccountModel } from '../../core/models/account.model';
 import { AccountService } from '../../core/services/account.service';
-import { BalancesService } from '../../core/services/balances.service';
 
 @Component({
   selector: 'app-transactions',

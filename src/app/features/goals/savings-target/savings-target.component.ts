@@ -5,6 +5,7 @@ import { GoalModel } from '../../../core/models/goal.model';
 import { BalancesService } from '../../../core/services/balances.service';
 import { GoalsService } from '../../../core/services/goals.service';
 import { OverlayService } from '../../../core/services/overlay.service';
+import { AccountModel } from '../../../core/models/account.model';
 
 @Component({
   selector: 'app-savings-target',
@@ -57,9 +58,23 @@ export class SavingsTargetComponent {
     ]);
   }
 
-  checkAllDataLoaded(observables: Observable<any>[]): Observable<boolean> {
+  checkAllDataLoaded(
+    observables: [
+      Observable<GoalModel[]>,
+      Observable<number>,
+      Observable<{ accountId: string; balance: number }[]>
+    ]
+  ): Observable<boolean> {
     return combineLatest(observables).pipe(
-      map((values) => values.every((value) => !!value))
+      map(([allGoals, globalBalance, accountsBalances]) => {
+        return (
+          Array.isArray(allGoals) &&
+          allGoals.length > 0 &&
+          typeof globalBalance === 'number' &&
+          Array.isArray(accountsBalances) &&
+          accountsBalances.length > 0
+        );
+      })
     );
   }
 

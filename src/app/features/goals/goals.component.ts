@@ -2,14 +2,7 @@ import { Component } from '@angular/core';
 import { ButtonComponent } from '../../shared/components/layouts/button/button.component';
 import { ManometerComponent } from './manometer/manometer.component';
 import { CommonModule } from '@angular/common';
-import {
-  combineLatest,
-  delay,
-  map,
-  Observable,
-  Subject,
-  takeUntil,
-} from 'rxjs';
+import { combineLatest, map, Observable, Subject, takeUntil } from 'rxjs';
 import { BalancesService } from '../../core/services/balances.service';
 import { GoalsService } from '../../core/services/goals.service';
 import { OverlayService } from '../../core/services/overlay.service';
@@ -76,9 +69,17 @@ export class GoalsComponent {
     ]);
   }
 
-  checkAllDataLoaded(observables: Observable<any>[]): Observable<boolean> {
+  checkAllDataLoaded(
+    observables: [Observable<GoalModel[]>, Observable<number>]
+  ): Observable<boolean> {
     return combineLatest(observables).pipe(
-      map((values) => values.every((value) => !!value))
+      map(([allGoals, globalBalance]) => {
+        return (
+          Array.isArray(allGoals) &&
+          allGoals.length > 0 &&
+          typeof globalBalance === 'number'
+        );
+      })
     );
   }
 

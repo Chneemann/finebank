@@ -72,7 +72,9 @@ export class GoalsOverviewCardComponent implements OnInit, AfterViewChecked {
     ]);
   }
 
-  checkAllDataLoaded(observables: Observable<any>[]): Observable<boolean> {
+  checkAllDataLoaded(
+    observables: [Observable<GoalModel[]>, Observable<number>]
+  ): Observable<boolean> {
     return combineLatest(observables).pipe(
       map((values) => values.every((value) => !!value))
     );

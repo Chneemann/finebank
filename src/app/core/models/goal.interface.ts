@@ -6,3 +6,11 @@ export interface Goal {
   userId: string;
   index: number;
 }
+
+export interface DocumentGoal {
+  id?: string;
+  goal: string[];
+  amount: number[];
+  selectedYear: number;
+  userId: string;
+}

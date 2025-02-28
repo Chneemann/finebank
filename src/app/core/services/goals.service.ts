@@ -26,6 +26,7 @@ import {
 } from 'rxjs';
 import { GoalModel } from '../models/goal.model';
 import { AuthService } from './auth.service';
+import { DocumentGoal } from '../models/goal.interface';
 
 @Injectable({
   providedIn: 'root',
@@ -72,13 +73,15 @@ export class GoalsService {
         const q = query(collectionRef, where('userId', '==', userId));
 
         return collectionData(q, { idField: 'id' }).pipe(
-          tap((documents) => this.processFetchedGoals(documents, userId))
+          tap((documents) =>
+            this.processFetchedGoals(documents as DocumentGoal[], userId)
+          )
         );
       });
     }).subscribe();
   }
 
-  private processFetchedGoals(documents: any[], userId: string): void {
+  private processFetchedGoals(documents: DocumentGoal[], userId: string): void {
     if (!documents.length) {
       this.allGoalsSubject.next([]);
       return;
