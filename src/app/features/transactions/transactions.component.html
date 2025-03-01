@@ -1,4 +1,4 @@
-<section class="transactions">
+<section class="transactions" *ngIf="transactionsData$ | async as transactions">
   <div class="headline">
     Recent Transaction
     <div
@@ -12,10 +12,10 @@
         alt="arrow-down"
       />
     </div>
-
     <app-month-year-picker
       [selectedMonth]="selectedMonth"
       [selectedYear]="selectedYear"
+      [allTransactions]="transactions"
       (mouseleave)="toggleMonthYearPicker()"
     ></app-month-year-picker>
   </div>
@@ -46,10 +46,7 @@
     </ul>
   </nav>
 
-  <div
-    class="transactions-content"
-    *ngIf="transactionsData$ | async as transactions"
-  >
+  <div class="transactions-content">
     <table>
       <thead>
         <tr>
@@ -88,14 +85,17 @@
         </tr>
       </tbody>
     </table>
-    <div class="no-transactions" *ngIf="transactions.length === 0">
+    <div
+      class="no-transactions"
+      *ngIf="getFilteredTransactions(transactions).length === 0"
+    >
       No transactions available
     </div>
 
     <div class="transactions-button">
       <app-button
         buttonText="Load More"
-        [disabled]="transactions.length <= 8"
+        [disabled]="getFilteredTransactions(transactions).length <= 8"
       />
     </div>
   </div>

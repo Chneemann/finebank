@@ -6,7 +6,7 @@ import { ButtonComponent } from '../../shared/components/layouts/button/button.c
 import { TransactionModel } from '../../core/models/transactions.model';
 import { AccountModel } from '../../core/models/account.model';
 import { AccountService } from '../../core/services/account.service';
-import { MonthYearPickerComponent } from '../../shared/components/month-year-picker/month-year-picker.component';
+import { MonthYearPickerComponent } from './month-year-picker/month-year-picker.component';
 import { SettingsService } from '../../core/services/settings.service';
 
 @Component({
@@ -84,7 +84,14 @@ export class TransactionsComponent {
 
     if (this.selectedType !== 'all') {
       filteredTransactions = transactions.filter(
-        (tx) => tx.type === this.selectedType
+        (tx) =>
+          tx.type === this.selectedType &&
+          tx.month === this.selectedMonth &&
+          tx.year === this.selectedYear
+      );
+    } else {
+      filteredTransactions = transactions.filter(
+        (tx) => tx.year === this.selectedYear && tx.month === this.selectedMonth
       );
     }
 
@@ -100,6 +107,6 @@ export class TransactionsComponent {
   }
 
   toggleMonthYearPicker() {
-    this.monthYearPickerComponent.togglePicker();
+    this.monthYearPickerComponent.toggleDatePicker();
   }
 }
