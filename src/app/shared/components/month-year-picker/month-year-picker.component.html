@@ -1,0 +1,19 @@
+<div class="month-year-picker" *ngIf="pickerOpen">
+  <!-- Year -->
+  <div *ngIf="!yearSelected">
+    <button *ngFor="let year of years" (click)="onYearSelect(year)">
+      {{ year }}
+    </button>
+  </div>
+
+  <!-- Month -->
+  <div *ngIf="yearSelected">
+    <button
+      *ngFor="let month of filteredMonths"
+      (click)="onMonthSelect(month.value)"
+      [disabled]="month.disabled"
+    >
+      {{ month.name }}
+    </button>
+  </div>
+</div>

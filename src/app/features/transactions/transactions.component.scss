@@ -1,10 +1,38 @@
 @use "./../../../assets/styles/colors.scss" as *;
 
 .headline {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
   font-size: 22px;
   font-weight: 400;
   color: #878787;
   margin-bottom: 12px;
+}
+
+.selection {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+
+  p {
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--color-black);
+    margin-right: 6px;
+  }
+
+  &:hover {
+    filter: brightness(0) saturate(100%) invert(66%) sepia(8%) saturate(2879%)
+      hue-rotate(125deg) brightness(77%) contrast(97%);
+  }
+}
+
+app-month-year-picker {
+  position: absolute;
+  top: 24px;
+  right: 24px;
 }
 
 .transactions-button {

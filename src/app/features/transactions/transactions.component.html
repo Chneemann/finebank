@@ -1,5 +1,24 @@
 <section class="transactions">
-  <div class="headline">Recent Transaction</div>
+  <div class="headline">
+    Recent Transaction
+    <div
+      class="selection"
+      (click)="toggleMonthYearPicker(); $event.stopPropagation()"
+    >
+      <p>{{ selectedMonthName }} {{ selectedYear }}</p>
+      <img
+        class="down-arrow-icon"
+        src="assets/img/arrow-down.svg"
+        alt="arrow-down"
+      />
+    </div>
+
+    <app-month-year-picker
+      [selectedMonth]="selectedMonth"
+      [selectedYear]="selectedYear"
+      (mouseleave)="toggleMonthYearPicker()"
+    ></app-month-year-picker>
+  </div>
 
   <nav>
     <ul>
