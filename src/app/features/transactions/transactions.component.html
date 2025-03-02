@@ -128,8 +128,10 @@
       <app-button
         buttonText="Load More"
         [disabled]="
-          (allTransactions | filterTransactions : selectedType).length <= 8
+          (allTransactions | filterTransactions : selectedType).length >=
+          numberOfAllTransactions
         "
+        (buttonClick)="loadMoreTransactions()"
       />
     </div>
   </div>

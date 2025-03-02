@@ -1,1 +1,1 @@
-export const TRANSACTIONS_PER_PAGE = 1;
+export const TRANSACTIONS_PER_PAGE = 5;

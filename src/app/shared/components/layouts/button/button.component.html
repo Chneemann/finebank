@@ -1,8 +1,10 @@
-<button [disabled]="disabled" [ngClass]="getButtonClasses()">
+<button
+  [disabled]="disabled"
+  [ngClass]="getButtonClasses()"
+  (click)="handleClick($event)"
+>
   <p>{{ buttonText }}</p>
-  @if (buttonSize == "small") {
-  <!-- Icon -->
-  @if (buttonIcon == "chevron-right") {
+  @if (buttonSize == "small") { @if (buttonIcon == "chevron-right") {
   <img src="assets/img/button/chevron-right.svg" alt=">" />
   } @else if (buttonIcon == "edit") {
   <img src="assets/img/button/edit.svg" alt="edit" />

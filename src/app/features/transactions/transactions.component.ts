@@ -1,14 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, ViewChild } from '@angular/core';
-import {
-  catchError,
-  combineLatest,
-  map,
-  Observable,
-  of,
-  switchMap,
-  tap,
-} from 'rxjs';
+import { catchError, map, Observable, of, switchMap, tap } from 'rxjs';
 import { TransactionsService } from '../../core/services/transactions.service';
 import { ButtonComponent } from '../../shared/components/layouts/button/button.component';
 import { TransactionModel } from '../../core/models/transactions.model';
@@ -45,6 +37,8 @@ export class TransactionsComponent {
   selectedMonth: number = 0;
   selectedYear: number = new Date().getFullYear();
 
+  numberOfAllTransactions: any;
+
   constructor(
     private transactionsService: TransactionsService,
     private accountService: AccountService,
@@ -74,6 +68,14 @@ export class TransactionsComponent {
     );
   }
 
+  private loadNumberOfTransactions() {
+    this.transactionsService
+      .countAllTransactions(this.selectedMonth, this.selectedYear)
+      .subscribe((count) => {
+        this.numberOfAllTransactions = count;
+      });
+  }
+
   private setMonthAndYear(settings: any): void {
     if (settings && settings.selectedTransactionPeriod) {
       this.selectedMonth = parseInt(
@@ -85,6 +87,7 @@ export class TransactionsComponent {
         10
       );
     }
+    this.loadNumberOfTransactions();
   }
 
   private fetchAndProcessTransactions(): Observable<TransactionModel[]> {
@@ -156,6 +159,11 @@ export class TransactionsComponent {
     return settings?.selectedTransactionPeriod
       ? parseInt(settings.selectedTransactionPeriod.slice(2, 6), 10)
       : new Date().getFullYear();
+  }
+
+  loadMoreTransactions() {
+    this.limitTransactions += TRANSACTIONS_PER_PAGE;
+    this.transactionsData$ = this.loadTransactions();
   }
 
   toggleMonthYearPicker() {
