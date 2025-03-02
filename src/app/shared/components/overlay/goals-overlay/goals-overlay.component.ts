@@ -1,7 +1,7 @@
 import { Component, Input } from '@angular/core';
 import { OverlayService } from '../../../../core/services/overlay.service';
 import { ButtonComponent } from '../../layouts/button/button.component';
-import { BehaviorSubject, map, Observable, Subject, take } from 'rxjs';
+import { Observable, Subject, take } from 'rxjs';
 import { GoalsService } from '../../../../core/services/goals.service';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';

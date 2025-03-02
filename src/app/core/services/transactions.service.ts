@@ -14,16 +14,7 @@ import {
   query,
   where,
 } from '@angular/fire/firestore';
-import {
-  catchError,
-  concatMap,
-  from,
-  map,
-  Observable,
-  of,
-  switchMap,
-  toArray,
-} from 'rxjs';
+import { catchError, from, map, Observable, of, switchMap } from 'rxjs';
 import { AuthService } from './auth.service';
 
 @Injectable({

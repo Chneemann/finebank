@@ -8,7 +8,6 @@ import {
 import { NgxChartsModule } from '@swimlane/ngx-charts';
 import { BalancesService } from '../../../core/services/balances.service';
 import { CommonModule } from '@angular/common';
-import { AccountService } from '../../../core/services/account.service';
 
 @Component({
   selector: 'app-line-chart',

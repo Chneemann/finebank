@@ -1,20 +1,11 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import {
-  Observable,
-  Subject,
-  takeUntil,
-  map,
-  take,
-  combineLatest,
-  BehaviorSubject,
-} from 'rxjs';
+import { Observable, Subject, map } from 'rxjs';
 import { ButtonComponent } from '../../shared/components/layouts/button/button.component';
 import { RouterLink } from '@angular/router';
 import { AccountModel } from '../../core/models/account.model';
 import { TransactionModel } from '../../core/models/transactions.model';
 import { BalancesService } from '../../core/services/balances.service';
-import { TransactionsService } from '../../core/services/transactions.service';
 import { AccountService } from '../../core/services/account.service';
 
 @Component({

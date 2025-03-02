@@ -5,7 +5,6 @@ import { GoalModel } from '../../../core/models/goal.model';
 import { BalancesService } from '../../../core/services/balances.service';
 import { GoalsService } from '../../../core/services/goals.service';
 import { OverlayService } from '../../../core/services/overlay.service';
-import { AccountModel } from '../../../core/models/account.model';
 
 @Component({
   selector: 'app-savings-target',

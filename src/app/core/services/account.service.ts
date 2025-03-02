@@ -14,16 +14,7 @@ import {
   query,
   where,
 } from '@angular/fire/firestore';
-import {
-  catchError,
-  EMPTY,
-  filter,
-  from,
-  map,
-  Observable,
-  of,
-  switchMap,
-} from 'rxjs';
+import { catchError, filter, from, map, Observable, of, switchMap } from 'rxjs';
 import { AccountModel } from '../models/account.model';
 import { AuthService } from './auth.service';
 
