@@ -22,8 +22,8 @@ interface YearMonths {
   styleUrls: ['./month-year-picker.component.scss'],
 })
 export class MonthYearPickerComponent implements OnChanges {
-  @Input() selectedYear = 0;
-  @Input() selectedMonth = 0;
+  @Input() selectedMonth: number = 1;
+  @Input() selectedYear: number = new Date().getFullYear();
 
   years: number[] = [];
   months: Months[] = [

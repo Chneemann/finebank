@@ -17,6 +17,7 @@ import { AccountService } from '../../core/services/account.service';
 import { MonthYearPickerComponent } from './month-year-picker/month-year-picker.component';
 import { SettingsService } from '../../core/services/settings.service';
 import { FilterTransactionsPipe } from '../../core/pipes/filter-transactions.pipe';
+import { TRANSACTIONS_PER_PAGE } from '../../core/config/settings';
 
 @Component({
   selector: 'app-transactions',
@@ -34,29 +35,15 @@ export class TransactionsComponent {
   monthYearPickerComponent!: MonthYearPickerComponent;
 
   accountsData$!: Observable<AccountModel[]>;
-  settingsData$!: Observable<any[]>;
+  settingsData$!: Observable<any>;
   transactionsData$!: Observable<TransactionModel[]>;
 
-  months: string[] = [
-    'Jan',
-    'Feb',
-    'Mar',
-    'Apr',
-    'May',
-    'Jun',
-    'Jul',
-    'Aug',
-    'Sep',
-    'Oct',
-    'Nov',
-    'Dec',
-  ];
-  noTransactionsAvailable: boolean = false;
-  loadMoreDisabled: boolean = false;
+  isLoading: boolean = false;
+  errorMessage: string = '';
   selectedType: 'all' | 'revenue' | 'expense' = 'all';
-  limitTransactions: number = 1;
+  limitTransactions: number = TRANSACTIONS_PER_PAGE;
   selectedMonth: number = 0;
-  selectedYear: number = 0;
+  selectedYear: number = new Date().getFullYear();
 
   constructor(
     private transactionsService: TransactionsService,
@@ -65,17 +52,23 @@ export class TransactionsComponent {
   ) {}
 
   ngOnInit() {
+    this.settingsData$ = this.settingsService.settingsData$;
     this.accountsData$ = this.accountService.getAllUserAccounts();
     this.transactionsData$ = this.loadTransactions();
   }
 
   private loadTransactions(): Observable<TransactionModel[]> {
-    return this.settingsService.settingsData$.pipe(
+    this.isLoading = true;
+    return this.settingsData$.pipe(
       tap((settings) => this.setMonthAndYear(settings)),
       switchMap(() => this.fetchAndProcessTransactions()),
-      tap((transactions) => this.updateFlags(transactions)),
-      catchError((error) => {
-        console.error('Error loading transactions:', error);
+      tap(() => {
+        this.isLoading = false;
+        this.errorMessage = '';
+      }),
+      catchError(() => {
+        this.isLoading = false;
+        this.errorMessage = 'Error when loading the transactions';
         return of([]);
       })
     );
@@ -95,38 +88,74 @@ export class TransactionsComponent {
   }
 
   private fetchAndProcessTransactions(): Observable<TransactionModel[]> {
-    return combineLatest([
-      this.transactionsService.getTransactionsByTypeAndMonthYearLimit(
+    return this.transactionsService
+      .getTransactionsByTypeAndMonthYearLimit(
         'revenue',
         this.selectedMonth,
         this.selectedYear,
         this.limitTransactions
-      ),
-      this.transactionsService.getTransactionsByTypeAndMonthYearLimit(
-        'expense',
-        this.selectedMonth,
-        this.selectedYear,
-        this.limitTransactions
-      ),
-    ]).pipe(
-      map(([revenue, expenses]) =>
-        [...revenue, ...expenses].map((tx) => new TransactionModel(tx))
-      ),
-      map((transactions) => transactions.sort((a, b) => b.date - a.date))
-    );
-  }
-
-  private updateFlags(transactions: TransactionModel[]): void {
-    this.noTransactionsAvailable = transactions.length === 0;
-    this.loadMoreDisabled = transactions.length <= 8;
+      )
+      .pipe(
+        switchMap((revenue) =>
+          this.transactionsService
+            .getTransactionsByTypeAndMonthYearLimit(
+              'expense',
+              this.selectedMonth,
+              this.selectedYear,
+              this.limitTransactions
+            )
+            .pipe(
+              map((expenses) => [...revenue, ...expenses]),
+              map((transactions) =>
+                transactions.map((tx) => new TransactionModel(tx))
+              ),
+              map((transactions) =>
+                transactions.sort((a, b) => b.date - a.date)
+              )
+            )
+        )
+      );
   }
 
   setFilter(type: 'all' | 'revenue' | 'expense') {
     this.selectedType = type;
   }
 
-  get selectedMonthName(): string {
-    return this.months[this.selectedMonth - 1];
+  trackByTransactionId(transaction: TransactionModel): string {
+    return transaction.id || 'unknown';
+  }
+
+  getSettingsMonth(settings: any): number {
+    return settings?.selectedTransactionPeriod
+      ? parseInt(settings.selectedTransactionPeriod.slice(0, 2), 10)
+      : 1;
+  }
+
+  getSettingsMonthName(settings: any): string {
+    const month = settings?.selectedTransactionPeriod
+      ? parseInt(settings.selectedTransactionPeriod.slice(0, 2), 10)
+      : 1;
+    const monthNames = [
+      'Jan',
+      'Feb',
+      'Mar',
+      'Apr',
+      'May',
+      'Jun',
+      'Jul',
+      'Aug',
+      'Sep',
+      'Oct',
+      'Nov',
+      'Dec',
+    ];
+    return monthNames[month - 1];
+  }
+
+  getSettingsYear(settings: any): number {
+    return settings?.selectedTransactionPeriod
+      ? parseInt(settings.selectedTransactionPeriod.slice(2, 6), 10)
+      : new Date().getFullYear();
   }
 
   toggleMonthYearPicker() {

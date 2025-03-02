@@ -5,18 +5,28 @@
       class="selection"
       (click)="toggleMonthYearPicker(); $event.stopPropagation()"
     >
-      <p>{{ selectedMonthName }} {{ selectedYear }}</p>
+      <!-- Checks whether the settingsData$ observable has emitted a value -->
+      @if (settingsData$ | async; as settings) {
+      <p>
+        {{ getSettingsMonthName(settings) }}
+        {{ getSettingsYear(settings) }}
+      </p>
+      }
       <img
         class="down-arrow-icon"
         src="assets/img/arrow-down.svg"
         alt="arrow-down"
       />
     </div>
+
+    <!-- Checks whether the settingsData$ observable has emitted a value -->
+    @if (settingsData$ | async; as settings) {
     <app-month-year-picker
-      [selectedMonth]="selectedMonth"
-      [selectedYear]="selectedYear"
+      [selectedMonth]="getSettingsMonth(settings)"
+      [selectedYear]="getSettingsYear(settings)"
       (mouseleave)="toggleMonthYearPicker()"
     ></app-month-year-picker>
+    }
   </div>
 
   <nav>
@@ -45,10 +55,9 @@
     </ul>
   </nav>
 
-  <div
-    class="transactions-content"
-    *ngIf="transactionsData$ | async as allTransactions"
-  >
+  <!-- Checks whether the transactionsData$ observable has emitted a value -->
+  @if (transactionsData$ | async; as allTransactions) {
+  <div class="transactions-content">
     <table>
       <thead>
         <tr>
@@ -59,20 +68,28 @@
           <th class="right">Amount</th>
         </tr>
       </thead>
+
+      <!-- Checks whether the data is not loaded -->
+      @if (!isLoading) {
       <tbody>
-        <tr
-          *ngFor="
-            let transaction of allTransactions
-              | filterTransactions : selectedType
-          "
-        >
+        <!-- Iterates over the filtered transactions using trackBy for performance optimization -->
+        @for (transaction of allTransactions | filterTransactions :
+        selectedType; track trackByTransactionId(transaction)) {
+        <tr>
           <td class="left">{{ transaction.item }}</td>
           <td class="center">{{ transaction.shop }}</td>
           <td class="center">{{ transaction.formattedDate }}</td>
-          @for(account of accountsData$ | async; track account.id) { @if
-          (account.id == transaction.accountId) {
+
+          <!-- Checks whether the accountsData$ observable has emitted a value -->
+          @if (accountsData$ | async; as accounts) {
+
+          <!-- Iterates over the account data. -->
+          @for (account of accounts; track account.id) {
+
+          <!-- Checks whether the account matches the transaction -->
+          @if (account.id == transaction.accountId) {
           <td class="center">{{ account.type }}</td>
-          } }
+          } } }
           <td class="right">
             <div class="amount">
               <img
@@ -89,14 +106,23 @@
             </div>
           </td>
         </tr>
+        }
       </tbody>
+      }
     </table>
-    <div
-      class="no-transactions"
-      *ngIf="(allTransactions | filterTransactions : selectedType).length === 0"
-    >
-      No transactions available
-    </div>
+
+    <!-- Checks for no transactions, loading complete, and no error message -->
+    @if ((allTransactions | filterTransactions : selectedType).length === 0 &&
+    !isLoading && errorMessage === "") {
+    <div class="no-transactions">No transactions available</div>
+    }
+
+    <!-- Checks for loading state or error message after loading -->
+    @if (isLoading) {
+    <div class="no-transactions">Loading...</div>
+    } @else if (errorMessage !== "") {
+    <div class="no-transactions">{{ errorMessage }}</div>
+    }
 
     <div class="transactions-button">
       <app-button
@@ -107,4 +133,5 @@
       />
     </div>
   </div>
+  }
 </section>

@@ -37,12 +37,12 @@ export class SettingsService {
 
   private readonly userId$: Observable<string | null>;
 
-  private settingsSubject = new BehaviorSubject<any>(null); // Initialwert null
+  private settingsSubject = new BehaviorSubject<any>(null);
   settingsData$ = this.settingsSubject.asObservable();
 
   constructor() {
     this.userId$ = this.authService.getUserId();
-    this.loadInitialSettings(); // Laden der initialen Einstellungen beim Service-Start
+    this.loadInitialSettings();
   }
 
   private loadInitialSettings(): void {
@@ -107,8 +107,8 @@ export class SettingsService {
               )
             : throwError(() => new Error('No settings found for the user.'))
         ),
-        switchMap(() => this.getAllSettings()), // Neue Einstellungen abrufen
-        tap((settings) => this.settingsSubject.next(settings)), // Observable aktualisieren
+        switchMap(() => this.getAllSettings()),
+        tap((settings) => this.settingsSubject.next(settings)),
         map(() => undefined),
         catchError((error) =>
           throwError(() => {
@@ -136,6 +136,4 @@ export class SettingsService {
       );
     });
   }
-
-  // ... withUserId Methode ...
 }
