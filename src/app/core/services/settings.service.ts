@@ -1,9 +1,4 @@
-import {
-  EnvironmentInjector,
-  inject,
-  Injectable,
-  Injector,
-} from '@angular/core';
+import { EnvironmentInjector, inject, Injectable } from '@angular/core';
 import {
   Observable,
   from,
@@ -22,7 +17,6 @@ import {
   where,
   updateDoc,
   getDocs,
-  doc,
 } from '@angular/fire/firestore';
 import { runInInjectionContext } from '@angular/core';
 import { AuthService } from './auth.service';

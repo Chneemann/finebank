@@ -90,7 +90,7 @@ export class SavingsTargetComponent {
   }
 
   getSelectedYear() {
-    this.goalsService.allGoals$.subscribe((goals) => {
+    this.allGoals$.subscribe((goals) => {
       if (goals.length > 0) {
         this.selectedYear = goals[0].selectedYear;
       }

@@ -73,6 +73,10 @@ export class GoalsService {
         const q = query(collectionRef, where('userId', '==', userId));
 
         return collectionData(q, { idField: 'id' }).pipe(
+          catchError((error) => {
+            console.error('Error fetching goals:', error);
+            return of([]);
+          }),
           tap((documents) =>
             this.processFetchedGoals(documents as DocumentGoal[], userId)
           )
@@ -87,21 +91,23 @@ export class GoalsService {
       return;
     }
 
-    const { id, goal, amount, selectedYear } = documents[0];
-
-    const formattedGoals = goal.map((g: string, index: number) => ({
-      id,
-      selectedYear,
-      goal: g,
-      amount: amount[index],
-      userId,
-      index,
-    }));
+    const formattedGoals = documents.flatMap(
+      ({ id, goal, amount, selectedYear }) =>
+        goal.map((g: string, index: number) => ({
+          id,
+          selectedYear,
+          goal: g,
+          amount: amount[index],
+          userId,
+          index,
+        }))
+    );
 
     this.allGoalsSubject.next(formattedGoals);
   }
 
   // Update Goals
+
   updateUserGoalAmount(index: number, newAmount: number): Observable<void> {
     return this.withUserId((userId) =>
       this.queryUserGoals(userId).pipe(
@@ -110,13 +116,14 @@ export class GoalsService {
           const amounts = [...(data?.amount ?? [])];
           amounts[index] = newAmount;
 
-          return from(
-            runInInjectionContext(this.injector, () =>
-              updateDoc(docRef, { amount: amounts })
-            )
+          return runInInjectionContext(this.injector, () =>
+            updateDoc(docRef, { amount: amounts }).then(() => {})
           );
         }),
-        catchError((error) => throwError(() => error))
+        catchError((error) => {
+          console.error('Failed to update goal amount:', error);
+          return throwError(() => error);
+        })
       )
     );
   }
@@ -124,19 +131,20 @@ export class GoalsService {
   updateUserGoalSelectedYear(year: number): Observable<void> {
     return this.withUserId((userId) =>
       this.queryUserGoals(userId).pipe(
-        switchMap((goalDocs) =>
-          from(
-            Promise.all(
-              goalDocs.map(({ docRef }) =>
-                runInInjectionContext(this.injector, () =>
-                  updateDoc(docRef, { selectedYear: +year })
-                )
-              )
+        switchMap((goalDocs) => {
+          const updatePromises = goalDocs.map(({ docRef }) =>
+            runInInjectionContext(this.injector, () =>
+              updateDoc(docRef, { selectedYear: +year })
             )
-          )
-        ),
-        map(() => void 0),
-        catchError((error) => throwError(() => error))
+          );
+
+          return Promise.all(updatePromises);
+        }),
+        map(() => {}),
+        catchError((error) => {
+          console.error('Failed to update year:', error);
+          return throwError(() => error);
+        })
       )
     );
   }
