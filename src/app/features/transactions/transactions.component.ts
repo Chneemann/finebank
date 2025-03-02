@@ -1,6 +1,14 @@
 import { CommonModule } from '@angular/common';
-import { Component, Input, ViewChild } from '@angular/core';
-import { combineLatest, map, Observable } from 'rxjs';
+import { Component, ViewChild } from '@angular/core';
+import {
+  catchError,
+  combineLatest,
+  map,
+  Observable,
+  of,
+  switchMap,
+  tap,
+} from 'rxjs';
 import { TransactionsService } from '../../core/services/transactions.service';
 import { ButtonComponent } from '../../shared/components/layouts/button/button.component';
 import { TransactionModel } from '../../core/models/transactions.model';
@@ -8,10 +16,16 @@ import { AccountModel } from '../../core/models/account.model';
 import { AccountService } from '../../core/services/account.service';
 import { MonthYearPickerComponent } from './month-year-picker/month-year-picker.component';
 import { SettingsService } from '../../core/services/settings.service';
+import { FilterTransactionsPipe } from '../../core/pipes/filter-transactions.pipe';
 
 @Component({
   selector: 'app-transactions',
-  imports: [ButtonComponent, CommonModule, MonthYearPickerComponent],
+  imports: [
+    ButtonComponent,
+    CommonModule,
+    MonthYearPickerComponent,
+    FilterTransactionsPipe,
+  ],
   templateUrl: './transactions.component.html',
   styleUrl: './transactions.component.scss',
 })
@@ -20,6 +34,7 @@ export class TransactionsComponent {
   monthYearPickerComponent!: MonthYearPickerComponent;
 
   accountsData$!: Observable<AccountModel[]>;
+  settingsData$!: Observable<any[]>;
   transactionsData$!: Observable<TransactionModel[]>;
 
   months: string[] = [
@@ -36,7 +51,10 @@ export class TransactionsComponent {
     'Nov',
     'Dec',
   ];
+  noTransactionsAvailable: boolean = false;
+  loadMoreDisabled: boolean = false;
   selectedType: 'all' | 'revenue' | 'expense' = 'all';
+  limitTransactions: number = 1;
   selectedMonth: number = 0;
   selectedYear: number = 0;
 
@@ -47,25 +65,24 @@ export class TransactionsComponent {
   ) {}
 
   ngOnInit() {
-    this.loadAllTransactions();
-    this.loadTransactionPeriodSettings();
     this.accountsData$ = this.accountService.getAllUserAccounts();
+    this.transactionsData$ = this.loadTransactions();
   }
 
-  private loadAllTransactions() {
-    this.transactionsData$ = combineLatest([
-      this.transactionsService.getAllTransactionsByType('revenue'),
-      this.transactionsService.getAllTransactionsByType('expense'),
-    ]).pipe(
-      map(([revenue, expenses]) => {
-        const transactions = [...revenue, ...expenses];
-        return transactions.map((tx) => new TransactionModel(tx));
+  private loadTransactions(): Observable<TransactionModel[]> {
+    return this.settingsService.settingsData$.pipe(
+      tap((settings) => this.setMonthAndYear(settings)),
+      switchMap(() => this.fetchAndProcessTransactions()),
+      tap((transactions) => this.updateFlags(transactions)),
+      catchError((error) => {
+        console.error('Error loading transactions:', error);
+        return of([]);
       })
     );
   }
 
-  loadTransactionPeriodSettings() {
-    this.settingsService.getAllSettings().subscribe((settings) => {
+  private setMonthAndYear(settings: any): void {
+    if (settings && settings.selectedTransactionPeriod) {
       this.selectedMonth = parseInt(
         settings.selectedTransactionPeriod.slice(0, 2),
         10
@@ -74,28 +91,34 @@ export class TransactionsComponent {
         settings.selectedTransactionPeriod.slice(2, 6),
         10
       );
-    });
+    }
   }
 
-  getFilteredTransactions(
-    transactions: TransactionModel[]
-  ): TransactionModel[] {
-    let filteredTransactions = transactions;
+  private fetchAndProcessTransactions(): Observable<TransactionModel[]> {
+    return combineLatest([
+      this.transactionsService.getTransactionsByTypeAndMonthYearLimit(
+        'revenue',
+        this.selectedMonth,
+        this.selectedYear,
+        this.limitTransactions
+      ),
+      this.transactionsService.getTransactionsByTypeAndMonthYearLimit(
+        'expense',
+        this.selectedMonth,
+        this.selectedYear,
+        this.limitTransactions
+      ),
+    ]).pipe(
+      map(([revenue, expenses]) =>
+        [...revenue, ...expenses].map((tx) => new TransactionModel(tx))
+      ),
+      map((transactions) => transactions.sort((a, b) => b.date - a.date))
+    );
+  }
 
-    if (this.selectedType !== 'all') {
-      filteredTransactions = transactions.filter(
-        (tx) =>
-          tx.type === this.selectedType &&
-          tx.month === this.selectedMonth &&
-          tx.year === this.selectedYear
-      );
-    } else {
-      filteredTransactions = transactions.filter(
-        (tx) => tx.year === this.selectedYear && tx.month === this.selectedMonth
-      );
-    }
-
-    return filteredTransactions.sort((a, b) => b.date - a.date);
+  private updateFlags(transactions: TransactionModel[]): void {
+    this.noTransactionsAvailable = transactions.length === 0;
+    this.loadMoreDisabled = transactions.length <= 8;
   }
 
   setFilter(type: 'all' | 'revenue' | 'expense') {

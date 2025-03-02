@@ -8,11 +8,23 @@ import {
   Firestore,
   collection,
   collectionData,
+  doc,
+  getDoc,
   limit,
   query,
   where,
 } from '@angular/fire/firestore';
-import { Observable } from 'rxjs';
+import {
+  catchError,
+  concatMap,
+  from,
+  map,
+  Observable,
+  of,
+  switchMap,
+  toArray,
+} from 'rxjs';
+import { AuthService } from './auth.service';
 
 @Injectable({
   providedIn: 'root',
@@ -20,6 +32,31 @@ import { Observable } from 'rxjs';
 export class TransactionsService {
   private readonly firestore = inject(Firestore);
   private readonly injector = inject(EnvironmentInjector);
+  private readonly authService = inject(AuthService);
+
+  private readonly userId$: Observable<string | null>;
+
+  constructor() {
+    this.userId$ = this.authService.getUserId();
+  }
+
+  // Auxiliary method for repeated logic with userId$
+  private withUserId<T>(
+    operation: (userId: string) => Observable<T>
+  ): Observable<T> {
+    return this.userId$.pipe(
+      switchMap((userId) => {
+        if (!userId) {
+          return of(null as T);
+        }
+        return operation(userId);
+      }),
+      catchError((error) => {
+        console.error('Operation failed:', error);
+        return of(null as T);
+      })
+    );
+  }
 
   getAllTransactions(): Observable<any[]> {
     return runInInjectionContext(this.injector, () => {
@@ -50,6 +87,66 @@ export class TransactionsService {
       const collectionRef = collection(this.firestore, 'transactions');
       let q = query(collectionRef, where('type', '==', type), limit(number));
       return collectionData(q, { idField: 'id' });
+    });
+  }
+
+  // Transaction periods
+
+  getTransactionsByTypeAndMonthYearLimit(
+    type: string,
+    month: number,
+    year: number,
+    quantity: number
+  ): Observable<any[]> {
+    return runInInjectionContext(this.injector, () => {
+      const collectionRef = collection(this.firestore, 'transactions');
+      let q = query(
+        collectionRef,
+        where('type', '==', type),
+        where('month', '==', month),
+        where('year', '==', year),
+        limit(quantity)
+      );
+      return collectionData(q, { idField: 'id' });
+    });
+  }
+
+  getTransactionsPeriodsByAccount(accountId: string): Observable<string[]> {
+    return runInInjectionContext(this.injector, () => {
+      const accountDocRef = doc(this.firestore, 'accounts', accountId);
+      return from(getDoc(accountDocRef)).pipe(
+        map((docSnapshot) => {
+          if (docSnapshot.exists()) {
+            const accountData = docSnapshot.data();
+            const transactionPeriods: string[] =
+              accountData['transactionPeriods'] || [];
+            return transactionPeriods;
+          } else {
+            return [];
+          }
+        })
+      );
+    });
+  }
+
+  getAllAccountsTransactionsPeriods(): Observable<string[]> {
+    return this.withUserId((userId) => {
+      return runInInjectionContext(this.injector, () => {
+        const collectionRef = collection(this.firestore, 'accounts');
+        const q = query(collectionRef, where('userId', '==', userId));
+        return collectionData(q, { idField: 'id' }).pipe(
+          map((accounts: any[]) => {
+            const allPeriods: string[] = [];
+            accounts.forEach((account) => {
+              if (account['transactionPeriods']) {
+                allPeriods.push(...account['transactionPeriods']);
+              }
+            });
+            const uniquePeriods = [...new Set(allPeriods)];
+            return uniquePeriods;
+          })
+        );
+      });
     });
   }
 }

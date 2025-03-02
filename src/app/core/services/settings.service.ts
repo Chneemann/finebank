@@ -2,26 +2,29 @@ import {
   EnvironmentInjector,
   inject,
   Injectable,
-  runInInjectionContext,
+  Injector,
 } from '@angular/core';
+import {
+  Observable,
+  from,
+  of,
+  switchMap,
+  catchError,
+  throwError,
+  BehaviorSubject,
+  map,
+  tap,
+} from 'rxjs';
 import {
   Firestore,
   collection,
-  collectionData,
-  getDocs,
   query,
-  updateDoc,
   where,
+  updateDoc,
+  getDocs,
+  doc,
 } from '@angular/fire/firestore';
-import {
-  catchError,
-  from,
-  map,
-  Observable,
-  of,
-  switchMap,
-  throwError,
-} from 'rxjs';
+import { runInInjectionContext } from '@angular/core';
 import { AuthService } from './auth.service';
 
 @Injectable({
@@ -34,11 +37,20 @@ export class SettingsService {
 
   private readonly userId$: Observable<string | null>;
 
+  private settingsSubject = new BehaviorSubject<any>(null); // Initialwert null
+  settingsData$ = this.settingsSubject.asObservable();
+
   constructor() {
     this.userId$ = this.authService.getUserId();
+    this.loadInitialSettings(); // Laden der initialen Einstellungen beim Service-Start
   }
 
-  // Auxiliary method for repeated logic with userId$
+  private loadInitialSettings(): void {
+    this.getAllSettings().subscribe((settings) => {
+      this.settingsSubject.next(settings);
+    });
+  }
+
   private withUserId<T>(
     operation: (userId: string) => Observable<T>
   ): Observable<T> {
@@ -56,16 +68,16 @@ export class SettingsService {
     );
   }
 
-  getAllSettings() {
+  getAllSettings(): Observable<any> {
     return this.withUserId((userId) =>
       runInInjectionContext(this.injector, () => {
         const accountsRef = collection(this.firestore, 'settings');
         const q = query(accountsRef, where('userId', '==', userId));
 
-        return collectionData(q, { idField: 'id' }).pipe(
-          switchMap((settings: any[]) => {
-            if (settings && settings.length > 0) {
-              return of(settings[0]);
+        return from(getDocs(q)).pipe(
+          switchMap((querySnapshot) => {
+            if (!querySnapshot.empty) {
+              return of(querySnapshot.docs[0].data());
             } else {
               return of(null);
             }
@@ -95,6 +107,8 @@ export class SettingsService {
               )
             : throwError(() => new Error('No settings found for the user.'))
         ),
+        switchMap(() => this.getAllSettings()), // Neue Einstellungen abrufen
+        tap((settings) => this.settingsSubject.next(settings)), // Observable aktualisieren
         map(() => undefined),
         catchError((error) =>
           throwError(() => {
@@ -107,16 +121,21 @@ export class SettingsService {
   }
 
   private queryUserSettings(userId: string): Observable<{ docRef: any }[]> {
-    return from(
-      runInInjectionContext(this.injector, async () => {
-        const q = query(
-          collection(this.firestore, 'settings'),
-          where('userId', '==', userId)
-        );
-        const snapshot = await getDocs(q);
-        if (snapshot.empty) throw new Error('No settings found for the user.');
-        return snapshot.docs.map((doc) => ({ docRef: doc.ref }));
-      })
-    );
+    return runInInjectionContext(this.injector, () => {
+      const accountsRef = collection(this.firestore, 'settings');
+      const q = query(accountsRef, where('userId', '==', userId));
+
+      return from(getDocs(q)).pipe(
+        map((querySnapshot) => {
+          return querySnapshot.docs.map((doc) => ({ docRef: doc.ref }));
+        }),
+        catchError((error) => {
+          console.error('Error querying settings:', error);
+          return of([]);
+        })
+      );
+    });
   }
+
+  // ... withUserId Methode ...
 }

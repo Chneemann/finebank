@@ -2,15 +2,15 @@ import { CommonModule } from '@angular/common';
 import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { SettingsService } from '../../../core/services/settings.service';
-import { TransactionModel } from '../../../core/models/transactions.model';
+import { TransactionsService } from '../../../core/services/transactions.service';
 
-export interface Months {
+interface Months {
   name: string;
   value: number;
   disabled?: boolean;
 }
 
-export interface YearMonths {
+interface YearMonths {
   year: number;
   months: number[];
 }
@@ -19,12 +19,11 @@ export interface YearMonths {
   selector: 'app-month-year-picker',
   imports: [CommonModule, FormsModule],
   templateUrl: './month-year-picker.component.html',
-  styleUrl: './month-year-picker.component.scss',
+  styleUrls: ['./month-year-picker.component.scss'],
 })
 export class MonthYearPickerComponent implements OnChanges {
   @Input() selectedYear = 0;
   @Input() selectedMonth = 0;
-  @Input() allTransactions: TransactionModel[] = [];
 
   years: number[] = [];
   months: Months[] = [
@@ -49,32 +48,33 @@ export class MonthYearPickerComponent implements OnChanges {
   filteredMonths: Months[] = [];
   yearsWithMonths: YearMonths[] = [];
 
-  constructor(private settingsService: SettingsService) {}
+  constructor(
+    private settingsService: SettingsService,
+    private transactionsService: TransactionsService
+  ) {}
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['selectedYear'] || changes['selectedMonth']) {
       this.transferredYear = this.selectedYear;
     }
-    if (changes['allTransactions']?.currentValue) {
-      this.updateAvailableYearsAndMonths();
-    }
+    this.getAllAccountsTransactionsPeriods();
   }
 
-  private updateAvailableYearsAndMonths(): void {
-    if (!this.allTransactions?.length) {
-      this.yearsWithMonths = [];
-      this.years = [];
-      return;
-    }
-
-    const yearMonthMap = this.createYearMonthMap();
-    this.mapYearsToMonths(yearMonthMap);
+  getAllAccountsTransactionsPeriods() {
+    this.transactionsService
+      .getAllAccountsTransactionsPeriods()
+      .subscribe((periods: string[]) => {
+        const yearMonthMap = this.createYearMonthMap(periods);
+        this.mapYearsToMonths(yearMonthMap);
+      });
   }
 
-  private createYearMonthMap(): Map<number, Set<number>> {
+  private createYearMonthMap(periods: string[]): Map<number, Set<number>> {
     const yearMonthMap = new Map<number, Set<number>>();
 
-    for (const { year, month } of this.allTransactions) {
+    for (const period of periods) {
+      const month = parseInt(period.substring(0, 2), 10);
+      const year = parseInt(period.substring(2), 10);
       if (!yearMonthMap.has(year)) {
         yearMonthMap.set(year, new Set());
       }

@@ -1,4 +1,4 @@
-<section class="transactions" *ngIf="transactionsData$ | async as transactions">
+<section class="transactions">
   <div class="headline">
     Recent Transaction
     <div
@@ -15,7 +15,6 @@
     <app-month-year-picker
       [selectedMonth]="selectedMonth"
       [selectedYear]="selectedYear"
-      [allTransactions]="transactions"
       (mouseleave)="toggleMonthYearPicker()"
     ></app-month-year-picker>
   </div>
@@ -23,30 +22,33 @@
   <nav>
     <ul>
       <li>
-        <a (click)="setFilter('all')" [class.active]="selectedType === 'all'">
-          All
-        </a>
+        <a
+          (click)="selectedType = 'all'"
+          [class.active]="selectedType === 'all'"
+          >All</a
+        >
       </li>
       <li>
         <a
-          (click)="setFilter('revenue')"
+          (click)="selectedType = 'revenue'"
           [class.active]="selectedType === 'revenue'"
+          >Revenue</a
         >
-          Revenue
-        </a>
       </li>
       <li>
         <a
-          (click)="setFilter('expense')"
+          (click)="selectedType = 'expense'"
           [class.active]="selectedType === 'expense'"
+          >Expenses</a
         >
-          Expenses
-        </a>
       </li>
     </ul>
   </nav>
 
-  <div class="transactions-content">
+  <div
+    class="transactions-content"
+    *ngIf="transactionsData$ | async as allTransactions"
+  >
     <table>
       <thead>
         <tr>
@@ -58,13 +60,17 @@
         </tr>
       </thead>
       <tbody>
-        <tr *ngFor="let transaction of getFilteredTransactions(transactions)">
+        <tr
+          *ngFor="
+            let transaction of allTransactions
+              | filterTransactions : selectedType
+          "
+        >
           <td class="left">{{ transaction.item }}</td>
           <td class="center">{{ transaction.shop }}</td>
           <td class="center">{{ transaction.formattedDate }}</td>
-          @for(account of accountsData$ | async; track account.id) {
-          <!-- Payment method -->
-          @if (account.id == transaction.accountId) {
+          @for(account of accountsData$ | async; track account.id) { @if
+          (account.id == transaction.accountId) {
           <td class="center">{{ account.type }}</td>
           } }
           <td class="right">
@@ -87,7 +93,7 @@
     </table>
     <div
       class="no-transactions"
-      *ngIf="getFilteredTransactions(transactions).length === 0"
+      *ngIf="(allTransactions | filterTransactions : selectedType).length === 0"
     >
       No transactions available
     </div>
@@ -95,7 +101,9 @@
     <div class="transactions-button">
       <app-button
         buttonText="Load More"
-        [disabled]="getFilteredTransactions(transactions).length <= 8"
+        [disabled]="
+          (allTransactions | filterTransactions : selectedType).length <= 8
+        "
       />
     </div>
   </div>
