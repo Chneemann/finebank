@@ -4,6 +4,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
+  position: relative;
   font-size: 22px;
   font-weight: 400;
   color: #878787;
@@ -39,8 +40,8 @@
 
 app-month-year-picker {
   position: absolute;
-  top: 24px;
-  right: 24px;
+  top: 0;
+  right: 0;
 }
 
 .transactions-button {

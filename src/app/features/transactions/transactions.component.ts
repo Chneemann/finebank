@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component } from '@angular/core';
 import { TransactionsListComponent } from './transactions-list/transactions-list.component';
 
 @Component({

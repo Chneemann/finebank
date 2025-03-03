@@ -7,12 +7,6 @@
 </section>
 
 <section class="transaction-history">
-  <div class="headline">Transactions History</div>
-  <div class="transaction-history-content">
-    <app-history
-      [currentAccountData$]="currentAccountData$"
-      [currentTransactionsData$]="currentTransactionsData$"
-    ></app-history>
-  </div>
+  <app-transactions-list [headline]="headline" [accountId]="accountId" />
 </section>
 }

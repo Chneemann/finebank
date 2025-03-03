@@ -1,31 +1,29 @@
 import { Component } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { DetailsComponent } from './details/details.component';
-import { HistoryComponent } from './history/history.component';
 import { AccountService } from '../../core/services/account.service';
 import { CommonModule } from '@angular/common';
 import { catchError, filter, map, Observable, of, switchMap, tap } from 'rxjs';
 import { AccountModel } from '../../core/models/account.model';
-import { TransactionModel } from '../../core/models/transactions.model';
-import { TransactionsService } from '../../core/services/transactions.service';
+import { TransactionsListComponent } from '../transactions/transactions-list/transactions-list.component';
 
 @Component({
   selector: 'app-account-details',
-  imports: [CommonModule, DetailsComponent, HistoryComponent],
+  imports: [CommonModule, DetailsComponent, TransactionsListComponent],
   templateUrl: './account-details.component.html',
   styleUrl: './account-details.component.scss',
 })
 export class AccountDetailsComponent {
   currentAccountData$!: Observable<AccountModel>;
-  currentTransactionsData$!: Observable<TransactionModel[]>;
 
+  headline = 'Transactions History';
+  accountId = '';
   accountExists = false;
 
   constructor(
     private router: Router,
     private route: ActivatedRoute,
-    private accountService: AccountService,
-    private transactionsService: TransactionsService
+    private accountService: AccountService
   ) {}
 
   ngOnInit() {
@@ -40,6 +38,7 @@ export class AccountDetailsComponent {
           accountId
             ? this.accountService.accountExists(accountId).pipe(
                 tap((exists) => {
+                  this.accountId = accountId;
                   this.accountExists = exists;
                   if (!exists) this.redirectToBalance();
                 }),
@@ -56,7 +55,6 @@ export class AccountDetailsComponent {
       .subscribe((accountId) => {
         if (accountId) {
           this.loadAccountData(accountId);
-          this.loadTransactionsData(accountId);
         }
       });
   }
@@ -68,22 +66,6 @@ export class AccountDetailsComponent {
         catchError((error) => {
           console.error('Error loading account data', error);
           return of(new AccountModel());
-        })
-      );
-  }
-
-  private loadTransactionsData(accountId: string) {
-    this.currentTransactionsData$ = this.transactionsService
-      .getTransactionDataByAccountId(accountId)
-      .pipe(
-        map((transactions: TransactionModel[]) =>
-          transactions.sort(
-            (a: TransactionModel, b: TransactionModel) => b.date - a.date
-          )
-        ),
-        catchError((error) => {
-          console.error('Error loading transaction data', error);
-          return of([]);
         })
       );
   }
