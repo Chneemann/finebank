@@ -9,6 +9,7 @@ import {
   collection,
   collectionData,
   doc,
+  docData,
   getDoc,
   limit,
   query,
@@ -150,23 +151,32 @@ export class TransactionsService {
     });
   }
 
-  getAllAccountsTransactionsPeriods(): Observable<string[]> {
+  getTransactionPeriods(accountId?: string): Observable<string[]> {
     return this.withUserId((userId) => {
       return runInInjectionContext(this.injector, () => {
-        const collectionRef = collection(this.firestore, 'accounts');
-        const q = query(collectionRef, where('userId', '==', userId));
-        return collectionData(q, { idField: 'id' }).pipe(
-          map((accounts: any[]) => {
-            const allPeriods: string[] = [];
-            accounts.forEach((account) => {
-              if (account['transactionPeriods']) {
-                allPeriods.push(...account['transactionPeriods']);
-              }
-            });
-            const uniquePeriods = [...new Set(allPeriods)];
-            return uniquePeriods;
-          })
-        );
+        if (accountId) {
+          const docRef = doc(this.firestore, `accounts/${accountId}`);
+          return docData(docRef).pipe(
+            map((account: any) => {
+              const periods: string[] = account?.transactionPeriods || [];
+              return [...new Set(periods)];
+            })
+          );
+        } else {
+          const collectionRef = collection(this.firestore, 'accounts');
+          const q = query(collectionRef, where('userId', '==', userId));
+          return collectionData(q, { idField: 'id' }).pipe(
+            map((accounts: any[]) => {
+              const allPeriods: string[] = [];
+              accounts.forEach((account) => {
+                if (Array.isArray(account?.transactionPeriods)) {
+                  allPeriods.push(...account.transactionPeriods);
+                }
+              });
+              return [...new Set(allPeriods)];
+            })
+          );
+        }
       });
     });
   }

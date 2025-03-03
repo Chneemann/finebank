@@ -22,6 +22,7 @@ interface YearMonths {
   styleUrls: ['./month-year-picker.component.scss'],
 })
 export class MonthYearPickerComponent implements OnChanges {
+  @Input() accountId: string = '';
   @Input() selectedMonth: number = 1;
   @Input() selectedYear: number = new Date().getFullYear();
 
@@ -57,12 +58,12 @@ export class MonthYearPickerComponent implements OnChanges {
     if (changes['selectedYear'] || changes['selectedMonth']) {
       this.transferredYear = this.selectedYear;
     }
-    this.getAllAccountsTransactionsPeriods();
+    this.getTransactionPeriods();
   }
 
-  getAllAccountsTransactionsPeriods() {
+  getTransactionPeriods() {
     this.transactionsService
-      .getAllAccountsTransactionsPeriods()
+      .getTransactionPeriods(this.accountId)
       .subscribe((periods: string[]) => {
         const yearMonthMap = this.createYearMonthMap(periods);
         this.mapYearsToMonths(yearMonthMap);

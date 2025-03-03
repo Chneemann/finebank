@@ -22,6 +22,7 @@
     <!-- Checks whether the settingsData$ observable has emitted a value -->
     @if (settingsData$ | async; as settings) {
     <app-month-year-picker
+      [accountId]="this.accountId"
       [selectedMonth]="getSettingsMonth(settings)"
       [selectedYear]="getSettingsYear(settings)"
       (mouseleave)="toggleMonthYearPicker()"
