@@ -1,8 +1,8 @@
 import { CommonModule } from '@angular/common';
 import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { SettingsService } from '../../../core/services/settings.service';
-import { TransactionsService } from '../../../core/services/transactions.service';
+import { SettingsService } from '../../../../core/services/settings.service';
+import { TransactionsService } from '../../../../core/services/transactions.service';
 
 interface Months {
   name: string;

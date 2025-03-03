@@ -83,16 +83,24 @@ export class TransactionsService {
 
   // Transaction periods
 
-  countAllTransactions(month: number, year: number): Observable<number> {
+  countAllTransactions(
+    month: number,
+    year: number,
+    accountId?: string
+  ): Observable<number> {
     return this.withUserId((userId) => {
       return runInInjectionContext(this.injector, () => {
         const collectionRef = collection(this.firestore, 'transactions');
-        const q = query(
+        let q = query(
           collectionRef,
           where('userId', '==', userId),
           where('month', '==', month),
           where('year', '==', year)
         );
+
+        if (accountId) {
+          q = query(q, where('accountId', '==', accountId));
+        }
 
         return collectionData(q).pipe(
           map((transactions) => transactions.length)
@@ -105,7 +113,8 @@ export class TransactionsService {
     type: string,
     month: number,
     year: number,
-    quantity: number
+    quantity: number,
+    accountId?: string
   ): Observable<any[]> {
     return runInInjectionContext(this.injector, () => {
       const collectionRef = collection(this.firestore, 'transactions');
@@ -116,6 +125,9 @@ export class TransactionsService {
         where('year', '==', year),
         limit(quantity)
       );
+      if (accountId) {
+        q = query(q, where('accountId', '==', accountId));
+      }
       return collectionData(q, { idField: 'id' });
     });
   }
