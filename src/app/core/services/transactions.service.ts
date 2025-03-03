@@ -6,6 +6,7 @@ import {
 } from '@angular/core';
 import {
   Firestore,
+  QueryConstraint,
   collection,
   collectionData,
   doc,
@@ -110,25 +111,30 @@ export class TransactionsService {
     });
   }
 
-  getTransactionsByTypeAndMonthYearLimit(
+  getTransactionsByFilters(
     type: string,
-    month: number,
     year: number,
     quantity: number,
+    month?: number,
     accountId?: string
   ): Observable<any[]> {
     return runInInjectionContext(this.injector, () => {
       const collectionRef = collection(this.firestore, 'transactions');
-      let q = query(
-        collectionRef,
+      let queryConstraints: QueryConstraint[] = [
         where('type', '==', type),
-        where('month', '==', month),
         where('year', '==', year),
-        limit(quantity)
-      );
-      if (accountId) {
-        q = query(q, where('accountId', '==', accountId));
+        limit(quantity),
+      ];
+
+      if (month !== undefined && month !== null && month !== 0) {
+        queryConstraints.push(where('month', '==', month));
       }
+
+      if (accountId) {
+        queryConstraints.push(where('accountId', '==', accountId));
+      }
+
+      const q = query(collectionRef, ...queryConstraints);
       return collectionData(q, { idField: 'id' });
     });
   }

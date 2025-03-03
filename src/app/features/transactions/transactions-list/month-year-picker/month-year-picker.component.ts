@@ -136,6 +136,17 @@ export class MonthYearPickerComponent implements OnChanges {
     this.toggleDatePicker();
   }
 
+  handleChooseAllMonts(): void {
+    const formattedDate = `00${this.selectedYear}`;
+    this.settingsService
+      .saveSettings('selectedTransactionPeriod', formattedDate)
+      .subscribe({
+        error: (err: string) =>
+          console.error('Failed to update settings:', err),
+      });
+    this.toggleDatePicker();
+  }
+
   toggleDatePicker(): void {
     this.yearSelected = false;
     this.pickerOpen = !this.pickerOpen;

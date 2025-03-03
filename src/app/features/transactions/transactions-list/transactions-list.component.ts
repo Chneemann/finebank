@@ -1,6 +1,15 @@
 import { CommonModule } from '@angular/common';
 import { Component, Input, ViewChild } from '@angular/core';
-import { catchError, map, Observable, of, switchMap, tap } from 'rxjs';
+import {
+  catchError,
+  combineLatest,
+  forkJoin,
+  map,
+  Observable,
+  of,
+  switchMap,
+  tap,
+} from 'rxjs';
 import { TransactionsService } from '../../../core/services/transactions.service';
 import { ButtonComponent } from '../../../shared/components/layouts/button/button.component';
 import { TransactionModel } from '../../../core/models/transactions.model';
@@ -85,48 +94,40 @@ export class TransactionsListComponent {
 
   private setMonthAndYear(settings: any): void {
     if (settings && settings.selectedTransactionPeriod) {
-      this.selectedMonth = parseInt(
-        settings.selectedTransactionPeriod.slice(0, 2),
-        10
-      );
+      const monthString = settings.selectedTransactionPeriod.slice(0, 2);
       this.selectedYear = parseInt(
         settings.selectedTransactionPeriod.slice(2, 6),
         10
       );
+
+      if (monthString === '00') {
+        this.selectedMonth = 0;
+      } else {
+        this.selectedMonth = parseInt(monthString, 10);
+      }
     }
     this.loadNumberOfTransactions();
   }
 
   private fetchAndProcessTransactions(): Observable<TransactionModel[]> {
-    return this.transactionsService
-      .getTransactionsByTypeAndMonthYearLimit(
-        'revenue',
-        this.selectedMonth,
+    const fetchTransactions = (type: string) => {
+      return this.transactionsService.getTransactionsByFilters(
+        type,
         this.selectedYear,
         this.limitTransactions,
+        this.selectedMonth === 0 ? undefined : this.selectedMonth,
         this.accountId
-      )
-      .pipe(
-        switchMap((revenue) =>
-          this.transactionsService
-            .getTransactionsByTypeAndMonthYearLimit(
-              'expense',
-              this.selectedMonth,
-              this.selectedYear,
-              this.limitTransactions,
-              this.accountId
-            )
-            .pipe(
-              map((expenses) => [...revenue, ...expenses]),
-              map((transactions) =>
-                transactions.map((tx) => new TransactionModel(tx))
-              ),
-              map((transactions) =>
-                transactions.sort((a, b) => b.date - a.date)
-              )
-            )
-        )
       );
+    };
+
+    return combineLatest([
+      fetchTransactions('revenue'),
+      fetchTransactions('expense'),
+    ]).pipe(
+      map(([revenue, expense]) => [...revenue, ...expense]),
+      map((transactions) => transactions.map((tx) => new TransactionModel(tx))),
+      map((transactions) => transactions.sort((a, b) => b.date - a.date))
+    );
   }
 
   setFilter(type: 'all' | 'revenue' | 'expense') {
