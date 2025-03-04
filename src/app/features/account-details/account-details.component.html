@@ -1,12 +1,12 @@
 @if (accountExists) {
-<section class="account-details">
+<div class="account-details">
   <div class="headline">Account Details</div>
-  <div class="account-details-content">
+  <div class="content">
     <app-details [currentAccountData$]="currentAccountData$"></app-details>
   </div>
-</section>
+</div>
 
-<section class="transaction-history">
+<div class="transaction-history">
   <app-transactions-list [headline]="headline" [accountId]="accountId" />
-</section>
+</div>
 }

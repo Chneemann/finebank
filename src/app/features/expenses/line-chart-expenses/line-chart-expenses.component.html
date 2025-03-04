@@ -1,0 +1,20 @@
+<div class="line-chart">
+  <ngx-charts-bar-vertical
+    *ngIf="hasData"
+    [view]="[1056, 200]"
+    [results]="saleData"
+    [legend]="false"
+    [showGridLines]="false"
+    [showXAxisLabel]="false"
+    [showYAxisLabel]="false"
+    [xAxis]="true"
+    [yAxis]="true"
+    [gradient]="false"
+    [customColors]="customColors"
+  >
+  </ngx-charts-bar-vertical>
+
+  <div class="loading-spinner" *ngIf="!hasData">
+    <img src="assets/img/sync.svg" alt="sync" (click)="reloadData()" />
+  </div>
+</div>

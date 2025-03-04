@@ -6,6 +6,7 @@ import {
 } from '@angular/core';
 import {
   Firestore,
+  QueryConstraint,
   collection,
   collectionData,
   query,
@@ -128,12 +129,21 @@ export class BalancesService {
 
   // Specific month and year balance
 
-  getBalanceForMonthAndYear(month: number, year: number): Observable<number> {
+  getBalanceForMonthAndYear(
+    month: number,
+    year: number,
+    onlyExpenses?: boolean
+  ): Observable<number> {
     return this.getUserAccountIds().pipe(
       switchMap((accountIds) =>
         combineLatest(
           accountIds.map((accountId) =>
-            this.getTransactionsForMonthAndYear(accountId, month, year).pipe(
+            this.getTransactionsForMonthAndYear(
+              accountId,
+              month,
+              year,
+              onlyExpenses
+            ).pipe(
               map((transactions) => this.calculateAccountBalance(transactions))
             )
           )
@@ -146,20 +156,27 @@ export class BalancesService {
   private getTransactionsForMonthAndYear(
     accountId: string,
     month: number,
-    year: number
+    year: number,
+    onlyExpenses?: boolean
   ): Observable<any[]> {
     return this.withUserId((userId) =>
       runInInjectionContext(this.injector, () => {
         const collectionRef = collection(this.firestore, 'transactions');
 
-        const q = query(
-          collectionRef,
+        let queryConstraints: QueryConstraint[] = [
           where('accountId', '==', accountId),
           where('userId', '==', userId),
           where('year', '==', year),
-          where('month', '==', month)
-        );
+          where('month', '==', month),
+        ];
 
+        if (onlyExpenses) {
+          queryConstraints.push(where('type', '==', 'expense'));
+        } else if (!onlyExpenses) {
+          queryConstraints.push(where('type', '==', 'revenue'));
+        }
+
+        const q = query(collectionRef, ...queryConstraints);
         return collectionData(q, { idField: 'id' });
       })
     );
