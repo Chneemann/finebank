@@ -1,7 +1,7 @@
 <div class="line-chart" *ngIf="selectedYear != 0">
   <ngx-charts-bar-vertical-2d
     *ngIf="hasData"
-    [view]="[1056, 200]"
+    [view]="view"
     [results]="saleData"
     [legend]="false"
     [showGridLines]="false"

@@ -19,6 +19,7 @@ import { catchError, firstValueFrom, of } from 'rxjs';
 })
 export class LineChartExpensesComponent implements OnInit, OnChanges {
   @Input() selectedYear = 0;
+  @Input() view: [number, number] = [0, 0];
   hasData = false;
 
   saleData = [

@@ -77,6 +77,10 @@ export class LineChartComponent implements OnInit, OnChanges {
     return '#299d91';
   };
 
+  formatYAxisTick(value: number): string {
+    return '$' + value.toLocaleString('en-US');
+  }
+
   get hasData(): boolean {
     return this.loadedMonths === 12;
   }

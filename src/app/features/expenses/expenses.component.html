@@ -1,7 +1,7 @@
 <section class="expenses">
-  <div class="expenses-comparison">
+  <div class="comparison-revenue-expenses">
     <div class="header">
-      <div class="headline">Expenses Comparison</div>
+      <div class="headline">Comparing Revenue vs. Expenses</div>
       <div class="select-container">
         <select
           [(ngModel)]="selectedYear"
@@ -21,7 +21,10 @@
       </div>
     </div>
     <div class="content">
-      <app-line-chart-expenses [selectedYear]="+selectedYear" />
+      <app-line-chart-expenses
+        [view]="[1056, 200]"
+        [selectedYear]="+selectedYear"
+      />
     </div>
   </div>
 
