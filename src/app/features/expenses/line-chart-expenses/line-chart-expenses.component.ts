@@ -8,6 +8,7 @@ import {
 import { NgxChartsModule } from '@swimlane/ngx-charts';
 import { BalancesService } from '../../../core/services/balances.service';
 import { CommonModule } from '@angular/common';
+import { catchError, firstValueFrom, of } from 'rxjs';
 
 @Component({
   selector: 'app-line-chart-expenses',
@@ -18,21 +19,93 @@ import { CommonModule } from '@angular/common';
 })
 export class LineChartExpensesComponent implements OnInit, OnChanges {
   @Input() selectedYear = 0;
-  private loadedMonths = 0;
+  hasData = false;
 
   saleData = [
-    { name: 'Jan', value: 0 },
-    { name: 'Feb', value: 0 },
-    { name: 'Mar', value: 0 },
-    { name: 'Apr', value: 0 },
-    { name: 'May', value: 0 },
-    { name: 'Jun', value: 0 },
-    { name: 'Jul', value: 0 },
-    { name: 'Aug', value: 0 },
-    { name: 'Sep', value: 0 },
-    { name: 'Oct', value: 0 },
-    { name: 'Nov', value: 0 },
-    { name: 'Dec', value: 0 },
+    {
+      name: 'Jan',
+      series: [
+        { name: 'Revenue', value: 0 },
+        { name: 'Expense', value: 0 },
+      ],
+    },
+    {
+      name: 'Feb',
+      series: [
+        { name: 'Revenue', value: 0 },
+        { name: 'Expense', value: 0 },
+      ],
+    },
+    {
+      name: 'Mar',
+      series: [
+        { name: 'Revenue', value: 0 },
+        { name: 'Expense', value: 0 },
+      ],
+    },
+    {
+      name: 'Apr',
+      series: [
+        { name: 'Revenue', value: 0 },
+        { name: 'Expense', value: 0 },
+      ],
+    },
+    {
+      name: 'May',
+      series: [
+        { name: 'Revenue', value: 0 },
+        { name: 'Expense', value: 0 },
+      ],
+    },
+    {
+      name: 'Jun',
+      series: [
+        { name: 'Revenue', value: 0 },
+        { name: 'Expense', value: 0 },
+      ],
+    },
+    {
+      name: 'Jul',
+      series: [
+        { name: 'Revenue', value: 0 },
+        { name: 'Expense', value: 0 },
+      ],
+    },
+    {
+      name: 'Aug',
+      series: [
+        { name: 'Revenue', value: 0 },
+        { name: 'Expense', value: 0 },
+      ],
+    },
+    {
+      name: 'Sep',
+      series: [
+        { name: 'Revenue', value: 0 },
+        { name: 'Expense', value: 0 },
+      ],
+    },
+    {
+      name: 'Oct',
+      series: [
+        { name: 'Revenue', value: 0 },
+        { name: 'Expense', value: 0 },
+      ],
+    },
+    {
+      name: 'Nov',
+      series: [
+        { name: 'Revenue', value: 0 },
+        { name: 'Expense', value: 0 },
+      ],
+    },
+    {
+      name: 'Dec',
+      series: [
+        { name: 'Revenue', value: 0 },
+        { name: 'Expense', value: 0 },
+      ],
+    },
   ];
 
   constructor(private balancesService: BalancesService) {}
@@ -46,30 +119,44 @@ export class LineChartExpensesComponent implements OnInit, OnChanges {
       const previousYear = changes['selectedYear'].previousValue;
       const currentYear = changes['selectedYear'].currentValue;
 
-      if (previousYear !== currentYear) {
+      if (previousYear !== currentYear && previousYear !== undefined) {
         this.reloadData();
       }
     }
   }
 
-  loadYearlyBalances(): void {
+  async loadYearlyBalances(): Promise<void> {
+    const promises = [];
     for (let month = 1; month <= 12; month++) {
-      this.balancesService
-        .getBalanceForMonthAndYear(month, +this.selectedYear, true)
-        .subscribe((balance) => {
-          this.saleData[month - 1].value = Math.abs(balance / 100);
-          this.loadedMonths++;
+      promises.push(this.loadMonthData(month));
+    }
+    await Promise.all(promises);
+    this.saleData = [...this.saleData];
+    this.hasData = true;
+  }
 
-          if (month >= 12) {
-            this.loadedMonths = 12;
-            this.saleData = [...this.saleData];
-          }
-        });
+  async loadMonthData(month: number): Promise<void> {
+    try {
+      const revenue = await firstValueFrom(
+        this.balancesService
+          .getBalanceForMonthAndYear(month, +this.selectedYear, 'revenue')
+          .pipe(catchError(() => of(0)))
+      );
+      const expense = await firstValueFrom(
+        this.balancesService
+          .getBalanceForMonthAndYear(month, +this.selectedYear, 'expense')
+          .pipe(catchError(() => of(0)))
+      );
+
+      this.saleData[month - 1].series[0].value = Math.abs(revenue / 100);
+      this.saleData[month - 1].series[1].value = Math.abs(expense / 100);
+    } catch (error) {
+      console.error('Error loading month data:', error);
     }
   }
 
   reloadData() {
-    this.loadedMonths = 0;
+    this.hasData = false;
     this.loadYearlyBalances();
   }
 
@@ -77,7 +164,7 @@ export class LineChartExpensesComponent implements OnInit, OnChanges {
     return '#299d91';
   };
 
-  get hasData(): boolean {
-    return this.loadedMonths === 12;
+  formatYAxisTick(value: number): string {
+    return '$' + value.toLocaleString('en-US');
   }
 }

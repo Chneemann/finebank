@@ -132,7 +132,7 @@ export class BalancesService {
   getBalanceForMonthAndYear(
     month: number,
     year: number,
-    onlyExpenses?: boolean
+    type?: string
   ): Observable<number> {
     return this.getUserAccountIds().pipe(
       switchMap((accountIds) =>
@@ -142,7 +142,7 @@ export class BalancesService {
               accountId,
               month,
               year,
-              onlyExpenses
+              type
             ).pipe(
               map((transactions) => this.calculateAccountBalance(transactions))
             )
@@ -157,7 +157,7 @@ export class BalancesService {
     accountId: string,
     month: number,
     year: number,
-    onlyExpenses?: boolean
+    type?: string
   ): Observable<any[]> {
     return this.withUserId((userId) =>
       runInInjectionContext(this.injector, () => {
@@ -170,9 +170,9 @@ export class BalancesService {
           where('month', '==', month),
         ];
 
-        if (onlyExpenses) {
+        if (type === 'expense') {
           queryConstraints.push(where('type', '==', 'expense'));
-        } else if (!onlyExpenses) {
+        } else if (type === 'revenue') {
           queryConstraints.push(where('type', '==', 'revenue'));
         }
 

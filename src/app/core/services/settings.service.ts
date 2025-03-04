@@ -85,7 +85,7 @@ export class SettingsService {
     );
   }
 
-  saveSettings(key: string, value: string): Observable<void> {
+  saveSettings(key: string, value: string | number): Observable<void> {
     return this.withUserId((userId) =>
       this.queryUserSettings(userId).pipe(
         switchMap((goalDocs) =>

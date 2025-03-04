@@ -1,5 +1,5 @@
-<div class="line-chart">
-  <ngx-charts-bar-vertical
+<div class="line-chart" *ngIf="selectedYear != 0">
+  <ngx-charts-bar-vertical-2d
     *ngIf="hasData"
     [view]="[1056, 200]"
     [results]="saleData"
@@ -7,12 +7,14 @@
     [showGridLines]="false"
     [showXAxisLabel]="false"
     [showYAxisLabel]="false"
+    [yAxisTickFormatting]="formatYAxisTick"
     [xAxis]="true"
     [yAxis]="true"
     [gradient]="false"
     [customColors]="customColors"
+    [groupPadding]="4"
   >
-  </ngx-charts-bar-vertical>
+  </ngx-charts-bar-vertical-2d>
 
   <div class="loading-spinner" *ngIf="!hasData">
     <img src="assets/img/sync.svg" alt="sync" (click)="reloadData()" />
