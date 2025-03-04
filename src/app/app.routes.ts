@@ -6,6 +6,7 @@ import { TransactionsComponent } from './features/transactions/transactions.comp
 import { AccountDetailsComponent } from './features/account-details/account-details.component';
 import { GoalsComponent } from './features/goals/goals.component';
 import { AuthGuard } from './core/guards/auth.guard';
+import { ExpensesComponent } from './features/expenses/expenses.component';
 
 export const routes: Routes = [
   // { path: 'login', component: LoginComponent },
@@ -19,7 +20,7 @@ export const routes: Routes = [
       { path: 'account-details/:id', component: AccountDetailsComponent },
       { path: 'transactions', component: TransactionsComponent },
       { path: 'bills', component: OverviewComponent },
-      { path: 'expenses', component: OverviewComponent },
+      { path: 'expenses', component: ExpensesComponent },
       { path: 'goals', component: GoalsComponent },
       { path: 'settings', component: OverviewComponent },
       { path: '', redirectTo: 'overview', pathMatch: 'full' },
