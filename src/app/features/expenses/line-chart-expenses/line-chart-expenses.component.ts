@@ -133,7 +133,9 @@ export class LineChartExpensesComponent implements OnInit, OnChanges {
     }
     await Promise.all(promises);
     this.saleData = [...this.saleData];
-    this.hasData = true;
+    setTimeout(() => {
+      this.hasData = true;
+    }, 10);
   }
 
   async loadMonthData(month: number): Promise<void> {
