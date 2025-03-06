@@ -3,7 +3,6 @@ import { Component, Input, ViewChild } from '@angular/core';
 import {
   catchError,
   combineLatest,
-  forkJoin,
   map,
   Observable,
   of,
@@ -126,7 +125,7 @@ export class TransactionsListComponent {
     ]).pipe(
       map(([revenue, expense]) => [...revenue, ...expense]),
       map((transactions) => transactions.map((tx) => new TransactionModel(tx))),
-      map((transactions) => transactions.sort((a, b) => b.date - a.date))
+      map((transactions) => transactions.sort((a, b) => b.added - a.added))
     );
   }
 

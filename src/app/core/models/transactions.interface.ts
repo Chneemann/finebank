@@ -6,7 +6,7 @@ export interface Transaction {
   type: string;
   amount: number;
   category: string;
-  date: number;
+  added: number;
   month: number;
   year: number;
 }

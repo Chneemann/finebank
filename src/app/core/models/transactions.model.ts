@@ -8,7 +8,7 @@ export class TransactionModel implements Transaction {
   type: string;
   amount: number;
   category: string;
-  date: number;
+  added: number;
   month: number;
   year: number;
 
@@ -20,7 +20,7 @@ export class TransactionModel implements Transaction {
     this.type = data.type ?? '';
     this.amount = data.amount ?? 0;
     this.category = data.category ?? '';
-    this.date = data.date ?? 0;
+    this.added = data.added ?? 0;
     this.month = data.month ?? 0;
     this.year = data.year ?? 0;
   }
@@ -28,7 +28,7 @@ export class TransactionModel implements Transaction {
   // Getter for the formatted date
   // Example: 'Sep 8, 2024'
   get formattedDate(): string {
-    const date = new Date(this.date);
+    const date = new Date(this.added);
     return date.toLocaleDateString('en-US', {
       day: 'numeric',
       month: 'short',

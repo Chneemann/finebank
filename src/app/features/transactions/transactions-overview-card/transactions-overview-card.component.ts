@@ -52,7 +52,7 @@ export class TransactionsOverviewCardComponent implements OnInit {
 
     return filteredTransactions
       .slice(0, this.transactionFetchLimit)
-      .sort((a, b) => b.date - a.date);
+      .sort((a, b) => b.added - a.added);
   }
 
   setFilter(type: 'all' | 'revenue' | 'expense') {
