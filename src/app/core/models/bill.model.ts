@@ -9,7 +9,7 @@ export class BillModel implements Bill {
   description: string;
   frequency: string;
   item: string;
-  executionDate: number;
+  executionDay: number;
   lastExecution: number;
   shop: string;
   userId: string;
@@ -23,16 +23,15 @@ export class BillModel implements Bill {
     this.description = data.description ?? '';
     this.frequency = data.frequency ?? 'monthly';
     this.item = data.item ?? '';
-    this.executionDate = data.executionDate ?? 1;
+    this.executionDay = data.executionDay ?? 1;
     this.lastExecution = data.lastExecution ?? 0;
     this.shop = data.shop ?? '';
     this.userId = data.userId ?? '';
   }
 
-  // Getter for the formatted date
-  get formattedAddedDate(): string {
-    const date = new Date(this.added);
-
+  // Hilfsmethode für die Datumformatierung
+  private formatDate(timestamp: number): string {
+    const date = new Date(timestamp);
     return date.toLocaleDateString('en-US', {
       day: 'numeric',
       month: 'short',
@@ -42,15 +41,34 @@ export class BillModel implements Bill {
     });
   }
 
-  // Getter for the formatted amount (in USD)
-  // Example: '$10.00'
+  // Getter für das formatierte Hinzufügedatum
+  get formattedAddedDate(): string {
+    return this.formatDate(this.added);
+  }
+
+  // Getter für das formatierte Last Execution Datum
+  get formattedLastExecution(): string {
+    return this.formatDate(this.lastExecution);
+  }
+
+  // Getter für den formatierten Betrag (in USD)
   get formattedAmount(): string {
     const amountInUSD = this.amount / 100;
+    return `$${amountInUSD.toFixed(2)}`;
+  }
 
-    return new Intl.NumberFormat('en-US', {
-      style: 'currency',
-      currency: 'USD',
-      minimumFractionDigits: 2,
-    }).format(amountInUSD);
+  // Berechne den nächsten fälligen Monat, wenn die frequency "monthly" ist
+  get nextExecutionDate(): string {
+    if (this.frequency === 'monthly') {
+      const currentExecutionDate = new Date(this.executionDay);
+      currentExecutionDate.setMonth(currentExecutionDate.getMonth() + 1);
+
+      const month = currentExecutionDate.toLocaleString('en-US', {
+        month: 'short',
+      });
+      return `${month}`;
+    }
+
+    return this.formatDate(this.executionDay);
   }
 }

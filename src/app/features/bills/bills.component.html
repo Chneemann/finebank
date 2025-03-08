@@ -13,18 +13,24 @@
       </thead>
 
       <tbody>
-        <tr>
+        <tr *ngFor="let bill of allUserBills$ | async">
           <td class="center">
             <div class="date">
-              <p>May</p>
-              <span>15</span>
+              <p>{{ bill.nextExecutionDate }}</p>
+              <span>{{ bill.executionDay }}</span>
             </div>
           </td>
-          <td class="center"><div class="item">Figma</div></td>
-          <td class="left">For advanced security and more...</td>
-          <td class="center"><div class="last-charge">14. May, 2024</div></td>
           <td class="center">
-            <div class="amount"><p>$150</p></div>
+            <div class="item">{{ bill.item }}</div>
+          </td>
+          <td class="left">{{ bill.description }}</td>
+          <td class="center">
+            <div class="last-charge">{{ bill.formattedLastExecution }}</div>
+          </td>
+          <td class="center">
+            <div class="amount">
+              <p>{{ bill.formattedAmount }}</p>
+            </div>
           </td>
         </tr>
       </tbody>

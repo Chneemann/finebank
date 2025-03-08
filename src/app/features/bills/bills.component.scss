@@ -35,7 +35,7 @@ table {
 
     @for $i from 1 through 5 {
       &:nth-child(#{$i}) {
-        width: nth(10% 20% 40% 18% 12%, $i);
+        width: nth(10% 20% 38% 20% 12%, $i);
       }
     }
   }

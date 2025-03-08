@@ -7,7 +7,7 @@ export interface Bill {
   description: string;
   frequency: string;
   item: string;
-  executionDate: number;
+  executionDay: number;
   lastExecution: number;
   shop: string;
   userId: string;
