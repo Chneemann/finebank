@@ -5,6 +5,7 @@ import {
   runInInjectionContext,
 } from '@angular/core';
 import {
+  DocumentData,
   Firestore,
   collection,
   collectionData,
@@ -18,8 +19,10 @@ import {
   catchError,
   of,
   tap,
+  map,
 } from 'rxjs';
 import { AuthService } from './auth.service';
+import { BillModel } from '../models/bill.model';
 
 @Injectable({
   providedIn: 'root',
@@ -31,7 +34,7 @@ export class BillsService {
 
   private readonly userId$: Observable<string | null>;
 
-  private allUserBillsSubject = new BehaviorSubject<any[]>([]);
+  private allUserBillsSubject = new BehaviorSubject<BillModel[]>([]);
   allUserBills$ = this.allUserBillsSubject.asObservable();
 
   constructor() {
@@ -70,7 +73,10 @@ export class BillsService {
             console.error('Error fetching bills:', error);
             return of([]);
           }),
-          tap((bills) => {
+          map((rawBills: DocumentData[]) => {
+            return rawBills.map((rawBill) => new BillModel(rawBill));
+          }),
+          tap((bills: BillModel[]) => {
             this.allUserBillsSubject.next(bills);
           })
         );
