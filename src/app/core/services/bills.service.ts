@@ -60,7 +60,7 @@ export class BillsService {
     );
   }
 
-  // Balances
+  // Bills
 
   private loadAllUserBills(): void {
     this.withUserId((userId) => {

@@ -1,5 +1,28 @@
 <section class="bills">
-  <div class="headline">Upcoming Bills</div>
+  <div class="header">
+    <div class="headline">Upcoming Bills</div>
+    <div class="select-container">
+      <select
+        [(ngModel)]="selectedAccount"
+        (change)="setSelectedAccount()"
+        id="selectedAccount"
+        name="selectedAccount"
+      >
+        <option
+          *ngFor="let account of accountsData$ | async"
+          [ngValue]="account.id"
+        >
+          {{ account.name }}
+        </option>
+      </select>
+      <img
+        class="down-arrow-icon"
+        src="assets/img/arrow-down.svg"
+        alt="arrow-down"
+      />
+    </div>
+  </div>
+
   <div class="content">
     <table>
       <thead>
@@ -13,7 +36,12 @@
       </thead>
 
       <tbody>
-        <tr *ngFor="let bill of allUserBills$ | async">
+        <!-- Iterates over the bills array asynchronously -->
+        @for (bill of allUserBills$ | async; track bill.id) {
+
+        <!-- Checks if the bill belongs to the selected account -->
+        @if (bill.accountId === selectedAccount) {
+        <tr>
           <td class="center">
             <div class="date">
               <p>{{ bill.nextExecutionDate }}</p>
@@ -33,6 +61,7 @@
             </div>
           </td>
         </tr>
+        }}
       </tbody>
     </table>
   </div>
