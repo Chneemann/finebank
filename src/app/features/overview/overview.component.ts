@@ -4,10 +4,12 @@ import { TransactionsOverviewCardComponent } from '../transactions/transactions-
 import { GoalsOverviewCardComponent } from '../goals/goals-overview-card/goals-overview-card.component';
 import { LineChartExpensesComponent } from '../expenses/line-chart-expenses/line-chart-expenses.component';
 import { BillsOverviewCardComponent } from '../bills/bills-overview-card/bills-overview-card.component';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-overview',
   imports: [
+    RouterLink,
     BalanceOverviewCardComponent,
     TransactionsOverviewCardComponent,
     GoalsOverviewCardComponent,

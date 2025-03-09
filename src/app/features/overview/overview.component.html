@@ -13,7 +13,17 @@
       </div>
     </div>
     <div class="bills">
-      <div class="headline">Upcoming Bill</div>
+      <div class="header">
+        <div class="headline">Upcoming Bill</div>
+        <div class="view-all-container" routerLink="/bills">
+          <p>View All</p>
+          <img
+            class="chevron-right-icon"
+            src="assets/img/button/chevron-right.svg"
+            alt="chevron-right"
+          />
+        </div>
+      </div>
       <div class="content">
         <app-bills-overview-card />
       </div>
@@ -21,7 +31,17 @@
   </div>
   <div class="overview-bottom">
     <div class="transactions">
-      <div class="headline">Recent Transactions</div>
+      <div class="header">
+        <div class="headline">Recent Transactions</div>
+        <div class="view-all-container" routerLink="/transactions">
+          <p>View All</p>
+          <img
+            class="chevron-right-icon"
+            src="assets/img/button/chevron-right.svg"
+            alt="chevron-right"
+          />
+        </div>
+      </div>
       <div class="content">
         <app-transactions-overview-card />
       </div>
