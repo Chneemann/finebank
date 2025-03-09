@@ -1,0 +1,80 @@
+@use "./../../../../assets/styles/colors.scss" as *;
+
+.bill {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 94px;
+}
+
+.divider {
+  border-top: 1px solid rgba(#000, 0.05);
+}
+
+.date {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 66px;
+  width: 44px;
+  border-radius: 8px;
+  gap: 2px;
+  background-color: #f4f4f4;
+
+  p {
+    font-size: 16px;
+    font-weight: 400;
+    color: #878787;
+  }
+
+  span {
+    font-size: 22px;
+    font-weight: 600;
+    color: #525256;
+  }
+}
+
+.content {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+
+  .item {
+    font-size: 16px;
+    font-weight: 400;
+    color: #666666;
+  }
+
+  .frequency {
+    font-size: 16px;
+    font-weight: 700;
+    color: #525256;
+
+    &:first-letter {
+      text-transform: uppercase;
+    }
+  }
+
+  .last-charge {
+    font-size: 12px;
+    font-weight: 400;
+    color: #9f9f9f;
+  }
+}
+
+.amount {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 40px;
+  width: 68px;
+  border-radius: 8px;
+  border: 1px solid #e8e8e8;
+
+  p {
+    font-size: 16px;
+    font-weight: 700;
+  }
+}

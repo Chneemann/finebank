@@ -9,6 +9,7 @@ import {
   Firestore,
   collection,
   collectionData,
+  limit,
   query,
   where,
 } from '@angular/fire/firestore';
@@ -34,12 +35,12 @@ export class BillsService {
 
   private readonly userId$: Observable<string | null>;
 
-  private allUserBillsSubject = new BehaviorSubject<BillModel[]>([]);
-  allUserBills$ = this.allUserBillsSubject.asObservable();
+  private userBillsSubject = new BehaviorSubject<BillModel[]>([]);
+  userBills$ = this.userBillsSubject.asObservable();
 
   constructor() {
     this.userId$ = this.authService.getUserId();
-    this.loadAllUserBills();
+    this.loadUserBills();
   }
 
   // Auxiliary method for repeated logic with userId$
@@ -62,22 +63,33 @@ export class BillsService {
 
   // Bills
 
-  private loadAllUserBills(): void {
+  getLimitedUserBills(limitCount: number): Observable<BillModel[]> {
+    return this.userBills$.pipe(map((bills) => bills.slice(0, limitCount)));
+  }
+
+  private loadUserBills(limitCount?: number): void {
     this.withUserId((userId) => {
       return runInInjectionContext(this.injector, () => {
         const collectionRef = collection(this.firestore, 'bills');
-        const q = query(collectionRef, where('userId', '==', userId));
+
+        const q = limitCount
+          ? query(
+              collectionRef,
+              where('userId', '==', userId),
+              limit(limitCount)
+            )
+          : query(collectionRef, where('userId', '==', userId));
 
         return collectionData(q, { idField: 'id' }).pipe(
           catchError((error) => {
             console.error('Error fetching bills:', error);
             return of([]);
           }),
-          map((rawBills: DocumentData[]) => {
-            return rawBills.map((rawBill) => new BillModel(rawBill));
-          }),
+          map((rawBills: DocumentData[]) =>
+            rawBills.map((rawBill) => new BillModel(rawBill))
+          ),
           tap((bills: BillModel[]) => {
-            this.allUserBillsSubject.next(bills);
+            this.userBillsSubject.next(bills);
           })
         );
       });

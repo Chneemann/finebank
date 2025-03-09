@@ -1,1 +1,23 @@
-<p>bills-overview-card works!</p>
+<!-- Iterates over the bills array asynchronously -->
+@for (bill of limitedUserBills$ | async; track bill.id) {
+<div class="bill">
+  <div class="date">
+    <p>{{ bill.nextExecutionDate }}</p>
+    <span>{{ bill.executionDay }}</span>
+  </div>
+
+  <div class="content">
+    <div class="item">{{ bill.item }}</div>
+    <div class="frequency">{{ bill.frequency }}</div>
+    <div class="last-charge">
+      Last Charge - {{ bill.formattedLastExecutionShort }}
+    </div>
+  </div>
+
+  <div class="amount">
+    <p>{{ bill.formattedAmountShort }}</p>
+  </div>
+</div>
+
+<div *ngIf="!$last" class="divider"></div>
+}

@@ -14,7 +14,7 @@ import { FormsModule } from '@angular/forms';
   styleUrl: './bills.component.scss',
 })
 export class BillsComponent implements OnInit {
-  allUserBills$!: Observable<BillModel[]>;
+  userBills$!: Observable<BillModel[]>;
   accountsData$!: Observable<AccountModel[]>;
 
   selectedAccount: string = '';
@@ -25,7 +25,7 @@ export class BillsComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.allUserBills$ = this.billsService.allUserBills$;
+    this.userBills$ = this.billsService.userBills$;
     this.accountsData$ = this.accountService.getAllUserAccounts();
 
     this.accountsData$.subscribe((accounts) => {

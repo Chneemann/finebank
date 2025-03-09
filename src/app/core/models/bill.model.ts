@@ -29,7 +29,7 @@ export class BillModel implements Bill {
     this.userId = data.userId ?? '';
   }
 
-  // Hilfsmethode für die Datumformatierung
+  // Auxiliary method for date formatting
   private formatDate(timestamp: number): string {
     const date = new Date(timestamp);
     return date.toLocaleDateString('en-US', {
@@ -41,34 +41,60 @@ export class BillModel implements Bill {
     });
   }
 
-  // Getter für das formatierte Hinzufügedatum
+  // Auxiliary method for date formatting (short)
+  private formatDateShort(timestamp: number): string {
+    const date = new Date(timestamp);
+    return date.toLocaleDateString('en-US', {
+      day: 'numeric',
+      month: 'short',
+      year: 'numeric',
+    });
+  }
+
+  // Getter for the formatted add date
   get formattedAddedDate(): string {
     return this.formatDate(this.added);
   }
 
-  // Getter für das formatierte Last Execution Datum
+  // Getter for the formatted last execution date
   get formattedLastExecution(): string {
     return this.formatDate(this.lastExecution);
   }
 
-  // Getter für den formatierten Betrag (in USD)
+  // Getter for the formatted last execution date (short)
+  get formattedLastExecutionShort(): string {
+    return this.formatDateShort(this.lastExecution);
+  }
+
+  // Getter for the formatted amount (in USD)
   get formattedAmount(): string {
     const amountInUSD = this.amount / 100;
     return `$${amountInUSD.toFixed(2)}`;
   }
 
-  // Berechne den nächsten fälligen Monat, wenn die frequency "monthly" ist
-  get nextExecutionDate(): string {
-    if (this.frequency === 'monthly') {
-      const currentExecutionDate = new Date(this.executionDay);
-      currentExecutionDate.setMonth(currentExecutionDate.getMonth() + 1);
+  // Getter for the formatted amount (in USD) (short)
+  get formattedAmountShort(): string {
+    const amountInUSD = this.amount / 100;
+    return `$${amountInUSD.toFixed(0)}`;
+  }
 
-      const month = currentExecutionDate.toLocaleString('en-US', {
-        month: 'short',
-      });
-      return `${month}`;
+  // Calculate the next month due if the frequency is “monthly” or “yearly”
+  get nextExecutionDate(): string {
+    const currentExecutionDate = new Date(this.lastExecution);
+
+    if (this.frequency === 'monthly') {
+      currentExecutionDate.setMonth(currentExecutionDate.getMonth() + 1);
     }
 
-    return this.formatDate(this.executionDay);
+    if (this.frequency === 'yearly') {
+      currentExecutionDate.setFullYear(currentExecutionDate.getFullYear() + 1);
+      currentExecutionDate.setMonth(currentExecutionDate.getMonth() + 1);
+    }
+
+    const month = currentExecutionDate.toLocaleString('en-US', {
+      month: 'short',
+    });
+
+    return month;
   }
 }

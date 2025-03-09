@@ -37,7 +37,7 @@
 
       <tbody>
         <!-- Iterates over the bills array asynchronously -->
-        @for (bill of allUserBills$ | async; track bill.id) {
+        @for (bill of userBills$ | async; track bill.id) {
 
         <!-- Checks if the bill belongs to the selected account -->
         @if (bill.accountId === selectedAccount) {
