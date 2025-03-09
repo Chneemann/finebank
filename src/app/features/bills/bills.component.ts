@@ -1,4 +1,4 @@
-import { Component, OnInit, SimpleChanges } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { BillsService } from '../../core/services/bills.service';
 import { Observable } from 'rxjs';
 import { BillModel } from '../../core/models/bill.model';
@@ -30,7 +30,11 @@ export class BillsComponent implements OnInit {
 
     this.accountsData$.subscribe((accounts) => {
       if (accounts && accounts.length > 0) {
-        this.selectedAccount = accounts[0].id ?? '';
+        if (this.selectedAccount === '') {
+          this.selectedAccount = '';
+        } else {
+          this.selectedAccount = accounts[0].id ?? '';
+        }
       }
     });
   }

@@ -8,6 +8,7 @@
         id="selectedAccount"
         name="selectedAccount"
       >
+        <option [ngValue]="''" selected>All Accounts</option>
         <option
           *ngFor="let account of accountsData$ | async"
           [ngValue]="account.id"
@@ -40,7 +41,7 @@
         @for (bill of userBills$ | async; track bill.id) {
 
         <!-- Checks if the bill belongs to the selected account -->
-        @if (bill.accountId === selectedAccount) {
+        @if (selectedAccount === '' || bill.accountId === selectedAccount) {
         <tr>
           <td class="center">
             <div class="date">
