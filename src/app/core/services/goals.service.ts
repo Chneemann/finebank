@@ -93,14 +93,16 @@ export class GoalsService {
 
     const formattedGoals = documents.flatMap(
       ({ id, goal, amount, selectedYear }) =>
-        goal.map((g: string, index: number) => ({
-          id,
-          selectedYear,
-          goal: g,
-          amount: amount[index],
-          userId,
-          index,
-        }))
+        goal.map((g: string, index: number) => {
+          return new GoalModel({
+            id,
+            selectedYear,
+            goal: g,
+            amount: amount[index],
+            userId,
+            index,
+          });
+        })
     );
 
     this.allGoalsSubject.next(formattedGoals);

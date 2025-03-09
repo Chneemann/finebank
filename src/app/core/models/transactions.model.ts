@@ -40,6 +40,15 @@ export class TransactionModel implements Transaction {
   // Example: '$10.00'
   get formattedAmount(): string {
     const amountInUSD = this.amount / 100;
-    return `$${amountInUSD.toFixed(2)}`;
+    const formattedAmount = amountInUSD.toLocaleString('en-US', {
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2,
+    });
+
+    return `$${
+      formattedAmount.endsWith('.00')
+        ? formattedAmount.slice(0, -3)
+        : formattedAmount
+    }`;
   }
 }

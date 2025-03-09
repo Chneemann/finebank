@@ -69,7 +69,7 @@ export class BillModel implements Bill {
   // Getter for the formatted amount (in USD)
   get formattedAmount(): string {
     const amountInUSD = this.amount / 100;
-    return `$${amountInUSD.toFixed(0)}`;
+    return `$${amountInUSD.toLocaleString()}`;
   }
 
   // Calculate the next month due if the frequency is “monthly” or “yearly”

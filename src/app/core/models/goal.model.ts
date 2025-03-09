@@ -16,4 +16,10 @@ export class GoalModel implements Goal {
     this.userId = data.userId ?? '';
     this.index = data.index ?? 0;
   }
+
+  // Getter for the formatted amount (in USD)
+  get formattedAmount(): string {
+    const amountInUSD = this.amount / 100;
+    return `$${amountInUSD.toLocaleString()}`;
+  }
 }
