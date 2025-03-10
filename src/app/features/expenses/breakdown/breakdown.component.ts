@@ -1,11 +1,10 @@
+import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 
 @Component({
   selector: 'app-breakdown',
-  imports: [],
+  imports: [CommonModule],
   templateUrl: './breakdown.component.html',
-  styleUrl: './breakdown.component.scss'
+  styleUrl: './breakdown.component.scss',
 })
-export class BreakdownComponent {
-
-}
+export class BreakdownComponent {}
