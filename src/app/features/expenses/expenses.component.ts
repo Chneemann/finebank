@@ -4,10 +4,16 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { SettingsService } from '../../core/services/settings.service';
 import { Observable, Subject, takeUntil } from 'rxjs';
+import { BreakdownComponent } from './breakdown/breakdown.component';
 
 @Component({
   selector: 'app-expenses',
-  imports: [CommonModule, FormsModule, LineChartExpensesComponent],
+  imports: [
+    CommonModule,
+    FormsModule,
+    LineChartExpensesComponent,
+    BreakdownComponent,
+  ],
   templateUrl: './expenses.component.html',
   styleUrl: './expenses.component.scss',
 })
