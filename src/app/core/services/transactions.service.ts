@@ -13,11 +13,21 @@ import {
   docData,
   getDoc,
   limit,
+  orderBy,
   query,
   where,
 } from '@angular/fire/firestore';
-import { catchError, from, map, Observable, of, switchMap } from 'rxjs';
+import {
+  catchError,
+  combineLatest,
+  from,
+  map,
+  Observable,
+  of,
+  switchMap,
+} from 'rxjs';
 import { AuthService } from './auth.service';
+import { TransactionModel } from '../models/transactions.model';
 
 @Injectable({
   providedIn: 'root',
@@ -183,6 +193,35 @@ export class TransactionsService {
             })
           );
         }
+      });
+    });
+  }
+
+  getLastTransactionsByCategories(
+    categories: string[] = []
+  ): Observable<{ category: string; transactions: TransactionModel[] }[]> {
+    return this.withUserId((userId) => {
+      return runInInjectionContext(this.injector, () => {
+        const collectionRef = collection(this.firestore, 'transactions');
+
+        const observables = categories.map((category) => {
+          const q = query(
+            collectionRef,
+            where('userId', '==', userId),
+            where('category', '==', category),
+            limit(2)
+          );
+
+          return collectionData(q, { idField: 'id' }).pipe(
+            map((transactions) => ({
+              category,
+              transactions: transactions.map((t) => new TransactionModel(t)),
+            })),
+            catchError(() => of({ category, transactions: [] }))
+          );
+        });
+
+        return combineLatest(observables);
       });
     });
   }
