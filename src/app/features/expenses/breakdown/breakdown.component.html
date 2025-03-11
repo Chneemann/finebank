@@ -9,7 +9,8 @@
         </div>
       </div>
       <div class="content">
-        @for (transaction of data.transactions; track transaction.id) {
+        @if (data.transactions.length > 0) { @for (transaction of
+        data.transactions; track transaction.id) {
         <div class="container">
           <div class="item">{{ transaction.item }}</div>
           <div class="amount-date">
@@ -20,7 +21,9 @@
 
         @if (!$last) {
         <div class="divider"></div>
-        } }
+        } } } @else {
+        <div class="no-expenses">No expenses found</div>
+        }
       </div>
     </div>
   </div>

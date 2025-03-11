@@ -52,6 +52,16 @@
   }
 }
 
+.no-expenses {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  font-weight: 600;
+  font-size: 16px;
+  color: #525256;
+}
+
 .content {
   display: flex;
   flex-direction: column;
