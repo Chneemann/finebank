@@ -198,7 +198,8 @@ export class TransactionsService {
   }
 
   getLastTransactionsByCategories(
-    categories: string[] = []
+    categories: string[] = [],
+    year: number
   ): Observable<{ category: string; transactions: TransactionModel[] }[]> {
     return this.withUserId((userId) => {
       return runInInjectionContext(this.injector, () => {
@@ -209,6 +210,7 @@ export class TransactionsService {
             collectionRef,
             where('userId', '==', userId),
             where('category', '==', category),
+            where('year', '==', year),
             limit(2)
           );
 
