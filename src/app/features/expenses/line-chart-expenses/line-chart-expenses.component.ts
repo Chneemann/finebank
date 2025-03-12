@@ -1,14 +1,17 @@
-import {
-  Component,
-  Input,
-  OnChanges,
-  OnInit,
-  SimpleChanges,
-} from '@angular/core';
+import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { NgxChartsModule } from '@swimlane/ngx-charts';
 import { BalancesService } from '../../../core/services/balances.service';
 import { CommonModule } from '@angular/common';
-import { catchError, firstValueFrom, of } from 'rxjs';
+import {
+  catchError,
+  firstValueFrom,
+  Observable,
+  of,
+  Subject,
+  switchMap,
+  takeUntil,
+} from 'rxjs';
+import { SettingsService } from '../../../core/services/settings.service';
 
 @Component({
   selector: 'app-line-chart-expenses',
@@ -17,11 +20,15 @@ import { catchError, firstValueFrom, of } from 'rxjs';
   templateUrl: './line-chart-expenses.component.html',
   styleUrl: './line-chart-expenses.component.scss',
 })
-export class LineChartExpensesComponent implements OnInit, OnChanges {
-  @Input() selectedYear = 0;
-  @Input() view: [number, number] = [0, 0];
-  hasData = false;
+export class LineChartExpensesComponent implements OnInit, OnDestroy {
+  private destroy$ = new Subject<void>();
 
+  @Input() view: [number, number] = [0, 0];
+
+  settingsData$!: Observable<any>;
+
+  hasData = false;
+  selectedYear: number = 0;
   saleData = [
     {
       name: 'Jan',
@@ -109,47 +116,62 @@ export class LineChartExpensesComponent implements OnInit, OnChanges {
     },
   ];
 
-  constructor(private balancesService: BalancesService) {}
+  constructor(
+    private balancesService: BalancesService,
+    private settingsService: SettingsService
+  ) {}
 
   ngOnInit() {
-    this.loadYearlyBalances();
+    this.settingsData$ = this.settingsService.settingsData$;
+    this.initializeSettings();
   }
 
-  ngOnChanges(changes: SimpleChanges): void {
-    if (changes['selectedYear']) {
-      const previousYear = changes['selectedYear'].previousValue;
-      const currentYear = changes['selectedYear'].currentValue;
-
-      if (previousYear !== currentYear && previousYear !== undefined) {
-        this.reloadData();
-      }
-    }
+  initializeSettings() {
+    this.settingsData$
+      .pipe(
+        takeUntil(this.destroy$),
+        switchMap((settings) => {
+          if (settings?.selectedExpensesYear != null) {
+            this.selectedYear = settings.selectedExpensesYear;
+            this.loadYearlyBalances();
+            return of(settings);
+          } else {
+            return of([]);
+          }
+        }),
+        catchError((err) => {
+          console.error('Error when retrieving settings:', err);
+          return of([]);
+        })
+      )
+      .subscribe();
   }
 
   async loadYearlyBalances(): Promise<void> {
+    this.hasData = false;
     const promises = [];
     for (let month = 1; month <= 12; month++) {
       promises.push(this.loadMonthData(month));
     }
     await Promise.all(promises);
     this.saleData = [...this.saleData];
-    setTimeout(() => {
-      this.hasData = true;
-    }, 10);
+    this.hasData = true;
   }
 
   async loadMonthData(month: number): Promise<void> {
     try {
-      const revenue = await firstValueFrom(
-        this.balancesService
-          .getBalanceForMonthAndYear(month, +this.selectedYear, 'revenue')
-          .pipe(catchError(() => of(0)))
-      );
-      const expense = await firstValueFrom(
-        this.balancesService
-          .getBalanceForMonthAndYear(month, +this.selectedYear, 'expense')
-          .pipe(catchError(() => of(0)))
-      );
+      const [revenue, expense] = await Promise.all([
+        firstValueFrom(
+          this.balancesService
+            .getBalanceForMonthAndYear(month, +this.selectedYear, 'revenue')
+            .pipe(catchError(() => of(0)))
+        ),
+        firstValueFrom(
+          this.balancesService
+            .getBalanceForMonthAndYear(month, +this.selectedYear, 'expense')
+            .pipe(catchError(() => of(0)))
+        ),
+      ]);
 
       this.saleData[month - 1].series[0].value = Math.abs(revenue / 100);
       this.saleData[month - 1].series[1].value = Math.abs(expense / 100);
@@ -169,5 +191,10 @@ export class LineChartExpensesComponent implements OnInit, OnChanges {
 
   formatYAxisTick(value: number): string {
     return '$' + value.toLocaleString('en-US');
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 }

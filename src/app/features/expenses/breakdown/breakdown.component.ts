@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { TransactionsService } from '../../../core/services/transactions.service';
 import {
   catchError,
@@ -18,7 +18,7 @@ import { SettingsService } from '../../../core/services/settings.service';
   templateUrl: './breakdown.component.html',
   styleUrl: './breakdown.component.scss',
 })
-export class BreakdownComponent implements OnInit {
+export class BreakdownComponent implements OnInit, OnDestroy {
   private destroy$ = new Subject<void>();
 
   settingsData$!: Observable<any>;
@@ -64,5 +64,10 @@ export class BreakdownComponent implements OnInit {
         return of([]);
       })
     );
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 }
