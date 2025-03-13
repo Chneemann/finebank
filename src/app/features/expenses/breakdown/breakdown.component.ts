@@ -26,6 +26,9 @@ export class BreakdownComponent implements OnInit, OnDestroy {
     { category: string; transactions: TransactionModel[] }[]
   >;
 
+  selectedMonth: number = 0;
+  selectedYear: number = new Date().getFullYear();
+
   constructor(
     private transactionsService: TransactionsService,
     private settingsService: SettingsService
@@ -50,10 +53,12 @@ export class BreakdownComponent implements OnInit, OnDestroy {
       takeUntil(this.destroy$),
       switchMap((settings) => {
         if (settings?.selectedExpensesYear != null) {
-          const selectedYear = settings.selectedExpensesYear;
+          this.setMonthAndYear(settings);
+
           return this.transactionsService.getLastTransactionsByCategories(
             categories,
-            selectedYear
+            this.selectedMonth,
+            this.selectedYear
           );
         } else {
           return of([]);
@@ -64,6 +69,22 @@ export class BreakdownComponent implements OnInit, OnDestroy {
         return of([]);
       })
     );
+  }
+
+  private setMonthAndYear(settings: any): void {
+    if (settings && settings.selectedTransactionPeriod) {
+      const monthString = settings.selectedTransactionPeriod.slice(0, 2);
+      this.selectedYear = parseInt(
+        settings.selectedTransactionPeriod.slice(2, 6),
+        10
+      );
+
+      if (monthString === '00') {
+        this.selectedMonth = 0;
+      } else {
+        this.selectedMonth = parseInt(monthString, 10);
+      }
+    }
   }
 
   ngOnDestroy(): void {

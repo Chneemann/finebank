@@ -199,6 +199,7 @@ export class TransactionsService {
 
   getLastTransactionsByCategories(
     categories: string[] = [],
+    month: number,
     year: number
   ): Observable<{ category: string; transactions: TransactionModel[] }[]> {
     return this.withUserId((userId) => {
@@ -210,6 +211,7 @@ export class TransactionsService {
             collectionRef,
             where('userId', '==', userId),
             where('category', '==', category),
+            where('month', '==', month),
             where('year', '==', year),
             limit(2)
           );
