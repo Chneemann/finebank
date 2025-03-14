@@ -54,7 +54,8 @@ export class BreakdownComponent implements OnInit, OnDestroy {
 
     this.transactionsData$ = this.loadData(
       categories,
-      this.transactionsService.getTransactionsByCategory
+      this.transactionsService.getTransactionsByCategory,
+      2
     );
     this.totalTransactionsData$ = this.loadData(
       categories,
@@ -64,22 +65,29 @@ export class BreakdownComponent implements OnInit, OnDestroy {
 
   private loadData<T>(
     categories: string[],
-    dataFn: (categories: string[], month: number, year: number) => Observable<T>
+    dataFn: (
+      categories: string[],
+      month: number,
+      year: number,
+      limit?: number
+    ) => Observable<T>,
+    limit?: number
   ): Observable<T> {
     return this.settingsData$.pipe(
       takeUntil(this.destroy$),
       switchMap((settings) => {
-        if (settings?.selectedExpensesYear != null) {
-          this.setMonthAndYear(settings);
-          return dataFn.call(
-            this.transactionsService,
-            categories,
-            this.selectedMonth,
-            this.selectedYear
-          );
-        } else {
+        if (!settings?.selectedExpensesYear) {
           return of([] as T);
         }
+
+        this.setMonthAndYear(settings);
+        return dataFn.call(
+          this.transactionsService,
+          categories,
+          this.selectedMonth,
+          this.selectedYear,
+          limit
+        );
       }),
       catchError((err) => {
         console.error('Error loading data:', err);
