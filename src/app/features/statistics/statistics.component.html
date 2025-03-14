@@ -1,1 +1,25 @@
-<p>statistics works!</p>
+<div class="comparison-revenue-expenses">
+  <div class="header">
+    <div class="headline">Comparing Revenue vs. Expenses</div>
+    <div class="select-container">
+      <select
+        [(ngModel)]="selectedYear"
+        (change)="setSelectedYear()"
+        id="selectedYearSummary"
+        name="selectedYearSummary"
+      >
+        @for (year of years; track year) {
+        <option [value]="year">{{ year }}</option>
+        }
+      </select>
+      <img
+        class="down-arrow-icon"
+        src="assets/img/arrow-down.svg"
+        alt="arrow-down"
+      />
+    </div>
+  </div>
+  <div class="content">
+    <app-line-chart-statistic [view]="[1056, 200]" />
+  </div>
+</div>

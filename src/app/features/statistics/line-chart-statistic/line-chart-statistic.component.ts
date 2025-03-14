@@ -14,13 +14,13 @@ import {
 import { SettingsService } from '../../../core/services/settings.service';
 
 @Component({
-  selector: 'app-line-chart-expenses',
+  selector: 'app-line-chart-statistic',
   standalone: true,
   imports: [CommonModule, NgxChartsModule],
-  templateUrl: './line-chart-expenses.component.html',
-  styleUrl: './line-chart-expenses.component.scss',
+  templateUrl: './line-chart-statistic.component.html',
+  styleUrl: './line-chart-statistic.component.scss',
 })
-export class LineChartExpensesComponent implements OnInit, OnDestroy {
+export class LineChartStatisticComponent implements OnInit, OnDestroy {
   private destroy$ = new Subject<void>();
 
   @Input() view: [number, number] = [0, 0];
