@@ -8,6 +8,7 @@ import { GoalsComponent } from './features/goals/goals.component';
 import { AuthGuard } from './core/guards/auth.guard';
 import { ExpensesComponent } from './features/expenses/expenses.component';
 import { BillsComponent } from './features/bills/bills.component';
+import { StatisticsComponent } from './features/statistics/statistics.component';
 
 export const routes: Routes = [
   // { path: 'login', component: LoginComponent },
@@ -18,6 +19,7 @@ export const routes: Routes = [
     children: [
       { path: 'overview', component: OverviewComponent },
       { path: 'balances', component: BalancesComponent },
+      { path: 'statistics', component: StatisticsComponent },
       { path: 'account-details/:id', component: AccountDetailsComponent },
       { path: 'transactions', component: TransactionsComponent },
       { path: 'bills', component: BillsComponent },
