@@ -131,8 +131,8 @@ export class LineChartStatisticComponent implements OnInit, OnDestroy {
       .pipe(
         takeUntil(this.destroy$),
         switchMap((settings) => {
-          if (settings?.selectedExpensesYear != null) {
-            this.selectedYear = settings.selectedExpensesYear;
+          if (settings?.selectedStatisticYear != null) {
+            this.selectedYear = settings.selectedStatisticYear;
             this.loadYearlyBalances();
             return of(settings);
           } else {

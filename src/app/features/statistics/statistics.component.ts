@@ -31,10 +31,10 @@ export class StatisticsComponent {
     this.settingsData$.subscribe((data) => {
       if (
         data &&
-        data.selectedExpensesYear !== undefined &&
-        data.selectedExpensesYear !== null
+        data.selectedStatisticYear !== undefined &&
+        data.selectedStatisticYear !== null
       ) {
-        this.selectedYear = data.selectedExpensesYear;
+        this.selectedYear = data.selectedStatisticYear;
       } else {
         this.selectedYear = new Date().getFullYear();
       }
@@ -43,7 +43,7 @@ export class StatisticsComponent {
 
   setSelectedYear(): void {
     this.settingsService
-      .saveSettings('selectedExpensesYear', +this.selectedYear)
+      .saveSettings('selectedStatisticYear', +this.selectedYear)
       .subscribe({
         error: (err) => console.error('Error updating year:', err),
       });
