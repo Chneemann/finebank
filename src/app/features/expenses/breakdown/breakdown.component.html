@@ -1,21 +1,35 @@
 <div class="breakdowns">
   <!-- Iterates over the transactionsData -->
-  @for (data of transactionsData$ | async; track data.category) {
+  @for (categoryData of transactionsData$ | async; track categoryData.category)
+  {
   <div class="breakdown">
     <div>
       <div class="header">
-        <img [src]="'assets/img/goals/housing.svg'" alt="" />
+        <img
+          [src]="
+            'assets/img/goals/' + categoryData.category.toLowerCase() + '.svg'
+          "
+          alt=""
+        />
         <div class="container">
-          <div class="category">{{ data.category }}</div>
-          <div class="amount">$250.00</div>
+          <!-- Finds matching category total -->
+          @for (totalData of totalTransactionsData$ | async; track
+          totalData.category) { @if (categoryData.category ===
+          totalData.category) {
+          <div class="category">{{ categoryData.category }}</div>
+          <div class="amount">
+            ${{ totalData.totalAmount / 100 | number : "1.2-2" }}
+          </div>
+          } }
         </div>
       </div>
-      <div class="content">
-        <!-- Checks whether transactions exist -->
-        @if (data.transactions.length > 0) {
 
-        <!-- Iterates over the transactions -->
-        @for (transaction of data.transactions; track transaction.id) {
+      <div class="content">
+        <!-- Checks if there are any transactions -->
+        @if (categoryData.transactions.length > 0) {
+
+        <!-- Iterates over each transaction -->
+        @for (transaction of categoryData.transactions; track transaction.id) {
         <div class="container">
           <div class="item">{{ transaction.item }}</div>
           <div class="amount-date">
@@ -24,13 +38,10 @@
           </div>
         </div>
 
-        <!-- Adds a separator if it is not the last transaction -->
+        <!-- Adds a separator except for the last transaction -->
         @if (!$last) {
         <div class="divider"></div>
-        } } }
-
-        <!-- If no transactions are available -->
-        @else {
+        } } } @else {
         <div class="no-expenses">No expenses found</div>
         }
       </div>

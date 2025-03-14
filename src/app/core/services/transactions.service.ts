@@ -197,26 +197,30 @@ export class TransactionsService {
     });
   }
 
-  getLastTransactionsByCategories(
+  getTransactionsByCategory(
     categories: string[] = [],
     month: number,
-    year: number
+    year: number,
+    limitCount?: number
   ): Observable<{ category: string; transactions: TransactionModel[] }[]> {
     return this.withUserId((userId) => {
       return runInInjectionContext(this.injector, () => {
         const collectionRef = collection(this.firestore, 'transactions');
 
         const observables = categories.map((category) => {
-          const q = query(
+          let queryRef = query(
             collectionRef,
             where('userId', '==', userId),
             where('category', '==', category),
             where('month', '==', month),
-            where('year', '==', year),
-            limit(2)
+            where('year', '==', year)
           );
 
-          return collectionData(q, { idField: 'id' }).pipe(
+          if (limitCount) {
+            queryRef = query(queryRef, limit(limitCount));
+          }
+
+          return collectionData(queryRef, { idField: 'id' }).pipe(
             map((transactions) => ({
               category,
               transactions: transactions.map((t) => new TransactionModel(t)),
@@ -228,5 +232,28 @@ export class TransactionsService {
         return combineLatest(observables);
       });
     });
+  }
+
+  getTotalAmountByCategory(
+    categories: string[] = [],
+    month: number,
+    year: number
+  ): Observable<{ category: string; totalAmount: number }[]> {
+    return this.getTransactionsByCategory(
+      categories,
+      month,
+      year,
+      undefined
+    ).pipe(
+      map((results) =>
+        results.map(({ category, transactions }) => ({
+          category,
+          totalAmount: transactions.reduce(
+            (sum, transaction) => sum + transaction.amount,
+            0
+          ),
+        }))
+      )
+    );
   }
 }

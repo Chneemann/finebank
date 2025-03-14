@@ -25,9 +25,12 @@ export class BreakdownComponent implements OnInit, OnDestroy {
   transactionsData$!: Observable<
     { category: string; transactions: TransactionModel[] }[]
   >;
+  totalTransactionsData$!: Observable<
+    { category: string; totalAmount: number }[]
+  >;
 
-  selectedMonth: number = 0;
-  selectedYear: number = new Date().getFullYear();
+  selectedMonth = 0;
+  selectedYear = new Date().getFullYear();
 
   constructor(
     private transactionsService: TransactionsService,
@@ -49,41 +52,50 @@ export class BreakdownComponent implements OnInit, OnDestroy {
       'Others',
     ];
 
-    this.transactionsData$ = this.settingsData$.pipe(
+    this.transactionsData$ = this.loadData(
+      categories,
+      this.transactionsService.getTransactionsByCategory
+    );
+    this.totalTransactionsData$ = this.loadData(
+      categories,
+      this.transactionsService.getTotalAmountByCategory
+    );
+  }
+
+  private loadData<T>(
+    categories: string[],
+    dataFn: (categories: string[], month: number, year: number) => Observable<T>
+  ): Observable<T> {
+    return this.settingsData$.pipe(
       takeUntil(this.destroy$),
       switchMap((settings) => {
         if (settings?.selectedExpensesYear != null) {
           this.setMonthAndYear(settings);
-
-          return this.transactionsService.getLastTransactionsByCategories(
+          return dataFn.call(
+            this.transactionsService,
             categories,
             this.selectedMonth,
             this.selectedYear
           );
         } else {
-          return of([]);
+          return of([] as T);
         }
       }),
       catchError((err) => {
-        console.error('Error when retrieving transactions:', err);
-        return of([]);
+        console.error('Error loading data:', err);
+        return of([] as T);
       })
     );
   }
 
   private setMonthAndYear(settings: any): void {
-    if (settings && settings.selectedTransactionPeriod) {
+    if (settings?.selectedTransactionPeriod) {
       const monthString = settings.selectedTransactionPeriod.slice(0, 2);
       this.selectedYear = parseInt(
         settings.selectedTransactionPeriod.slice(2, 6),
         10
       );
-
-      if (monthString === '00') {
-        this.selectedMonth = 0;
-      } else {
-        this.selectedMonth = parseInt(monthString, 10);
-      }
+      this.selectedMonth = monthString === '00' ? 0 : parseInt(monthString, 10);
     }
   }
 
