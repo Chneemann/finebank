@@ -67,8 +67,8 @@ export class BreakdownComponent implements OnInit, OnDestroy {
     categories: string[],
     dataFn: (
       categories: string[],
-      month: number,
       year: number,
+      month?: number,
       limit?: number
     ) => Observable<T>,
     limit?: number
@@ -76,7 +76,7 @@ export class BreakdownComponent implements OnInit, OnDestroy {
     return this.settingsData$.pipe(
       takeUntil(this.destroy$),
       switchMap((settings) => {
-        if (!settings?.selectedExpensesYear) {
+        if (!settings?.selectedStatisticYear) {
           return of([] as T);
         }
 
@@ -84,8 +84,8 @@ export class BreakdownComponent implements OnInit, OnDestroy {
         return dataFn.call(
           this.transactionsService,
           categories,
-          this.selectedMonth,
           this.selectedYear,
+          this.selectedMonth,
           limit
         );
       }),

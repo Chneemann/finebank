@@ -199,8 +199,8 @@ export class TransactionsService {
 
   getTransactionsByCategory(
     categories: string[] = [],
-    month: number,
     year: number,
+    month?: number,
     limitCount?: number
   ): Observable<{ category: string; transactions: TransactionModel[] }[]> {
     return this.withUserId((userId) => {
@@ -212,9 +212,12 @@ export class TransactionsService {
             collectionRef,
             where('userId', '==', userId),
             where('category', '==', category),
-            where('month', '==', month),
             where('year', '==', year)
           );
+
+          if (month) {
+            queryRef = query(queryRef, where('month', '==', month));
+          }
 
           if (limitCount) {
             queryRef = query(queryRef, limit(limitCount));
@@ -236,13 +239,13 @@ export class TransactionsService {
 
   getTotalAmountByCategory(
     categories: string[] = [],
-    month: number,
-    year: number
+    year: number,
+    month?: number
   ): Observable<{ category: string; totalAmount: number }[]> {
     return this.getTransactionsByCategory(
       categories,
-      month,
       year,
+      month,
       undefined
     ).pipe(
       map((results) =>

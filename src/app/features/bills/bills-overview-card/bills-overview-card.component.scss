@@ -38,6 +38,7 @@
 .content {
   display: flex;
   flex-direction: column;
+  width: 160px;
   gap: 6px;
 
   .item {
@@ -69,7 +70,7 @@
   justify-content: center;
   align-items: center;
   height: 40px;
-  width: 68px;
+  width: 82px;
   border-radius: 8px;
   border: 1px solid #e8e8e8;
 

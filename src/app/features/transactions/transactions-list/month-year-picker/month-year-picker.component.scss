@@ -3,16 +3,19 @@
 .month-year-picker {
   width: 270px;
   text-align: center;
+  background-color: var(--color-white);
+  box-shadow: 0px 20px 25px 0px #4c67641a;
+  border-radius: 8px;
 }
 
 .content {
   display: flex;
   flex-direction: column;
-  border: 1px solid var(--color-black);
   border-radius: 8px;
   background-color: var(--color-background);
   padding: 16px 6px;
   margin-bottom: 6px;
+  box-shadow: 0px 10px 15px rgba(0, 0, 0, 0.1);
 
   .months-years {
     display: block;
@@ -30,6 +33,7 @@
     font-weight: 400;
     color: var(--color-black);
     cursor: pointer;
+    transition: color 0.3s ease;
 
     &:hover {
       color: var(--color-primary);
@@ -39,31 +43,37 @@
 
 button {
   min-width: 60px;
-  background-color: #f9f9f9;
-  color: black;
   border: none;
   padding: 9px 12px;
+  margin: 6px;
   font-size: 14px;
   font-weight: 400;
   color: var(--color-black);
-  background-color: var(--color-background);
-  transition: color 0.3s ease;
+  background-color: var(--color-white);
+  transition: all 0.3s ease;
   cursor: pointer;
+  box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.1);
+  border-radius: 4px;
 
   &:hover {
+    background-color: var(--color-primary-light);
     color: var(--color-primary);
   }
 
   &:disabled {
     color: #bcbcbc;
+    background-color: #f0f0f0;
     cursor: default;
   }
 
   &:focus {
     outline: none;
+    box-shadow: 0px 0px 5px var(--color-primary);
   }
 }
 
 .selected-month {
-  color: var(--color-primary) !important;
+  background-color: var(--color-primary) !important;
+  color: var(--color-white) !important;
+  box-shadow: 0px 0px 10px rgba(var(--color-primary), 0.5) !important;
 }
