@@ -6,7 +6,9 @@ import {
   map,
   Observable,
   of,
+  Subject,
   switchMap,
+  takeUntil,
   tap,
 } from 'rxjs';
 import { TransactionsService } from '../../../core/services/transactions.service';
@@ -14,7 +16,7 @@ import { ButtonComponent } from '../../../shared/components/layouts/button/butto
 import { TransactionModel } from '../../../core/models/transactions.model';
 import { AccountModel } from '../../../core/models/account.model';
 import { AccountService } from '../../../core/services/account.service';
-import { MonthYearPickerComponent } from './month-year-picker/month-year-picker.component';
+import { MonthYearPickerComponent } from '../../../shared/components/month-year-picker/month-year-picker.component';
 import { SettingsService } from '../../../core/services/settings.service';
 import { FilterTransactionsPipe } from '../../../core/pipes/filter-transactions.pipe';
 import { TRANSACTIONS_PER_PAGE } from '../../../core/config/settings';
@@ -34,9 +36,7 @@ export class TransactionsListComponent {
   @Input() headline: string = '';
   @Input() accountId: string = '';
 
-  @ViewChild(MonthYearPickerComponent)
-  monthYearPickerComponent!: MonthYearPickerComponent;
-
+  private destroy$ = new Subject<void>();
   accountsData$!: Observable<AccountModel[]>;
   settingsData$!: Observable<any>;
   transactionsData$!: Observable<TransactionModel[]>;
@@ -57,9 +57,31 @@ export class TransactionsListComponent {
   ) {}
 
   ngOnInit() {
-    this.settingsData$ = this.settingsService.settingsData$;
+    this.initializeSettings();
     this.accountsData$ = this.accountService.getAllUserAccounts();
     this.transactionsData$ = this.loadTransactions();
+  }
+
+  initializeSettings() {
+    this.settingsData$ = this.settingsService.settingsData$.pipe(
+      takeUntil(this.destroy$),
+      tap((settings) => {
+        this.selectedMonth = this.getSettingsMonth(settings);
+        this.selectedYear = this.getSettingsYear(settings);
+      })
+    );
+  }
+
+  getSettingsMonth(settings: any): number {
+    return settings?.selectedPickerMonthYear
+      ? parseInt(settings.selectedPickerMonthYear.slice(0, 2), 10)
+      : 1;
+  }
+
+  getSettingsYear(settings: any): number {
+    return settings?.selectedPickerMonthYear
+      ? parseInt(settings.selectedPickerMonthYear.slice(2, 6), 10)
+      : new Date().getFullYear();
   }
 
   private loadTransactions(): Observable<TransactionModel[]> {
@@ -80,22 +102,24 @@ export class TransactionsListComponent {
   }
 
   private loadNumberOfTransactions() {
-    this.transactionsService
-      .countAllTransactions(
-        this.selectedMonth,
-        this.selectedYear,
-        this.accountId
-      )
-      .subscribe((count) => {
-        this.numberOfAllTransactions = count;
-      });
+    if (this.selectedMonth !== 0) {
+      this.transactionsService
+        .countAllTransactions(
+          this.selectedMonth,
+          this.selectedYear,
+          this.accountId
+        )
+        .subscribe((count) => {
+          this.numberOfAllTransactions = count;
+        });
+    }
   }
 
   private setMonthAndYear(settings: any): void {
-    if (settings && settings.selectedTransactionPeriod) {
-      const monthString = settings.selectedTransactionPeriod.slice(0, 2);
+    if (settings && settings.selectedPickerMonthYear) {
+      const monthString = settings.selectedPickerMonthYear.slice(0, 2);
       this.selectedYear = parseInt(
-        settings.selectedTransactionPeriod.slice(2, 6),
+        settings.selectedPickerMonthYear.slice(2, 6),
         10
       );
 
@@ -137,45 +161,8 @@ export class TransactionsListComponent {
     return transaction.id || 'unknown';
   }
 
-  getSettingsMonth(settings: any): number {
-    return settings?.selectedTransactionPeriod
-      ? parseInt(settings.selectedTransactionPeriod.slice(0, 2), 10)
-      : 1;
-  }
-
-  getSettingsMonthName(settings: any): string {
-    const month = settings?.selectedTransactionPeriod
-      ? parseInt(settings.selectedTransactionPeriod.slice(0, 2), 10)
-      : 1;
-    const monthNames = [
-      'Jan',
-      'Feb',
-      'Mar',
-      'Apr',
-      'May',
-      'Jun',
-      'Jul',
-      'Aug',
-      'Sep',
-      'Oct',
-      'Nov',
-      'Dec',
-    ];
-    return monthNames[month - 1];
-  }
-
-  getSettingsYear(settings: any): number {
-    return settings?.selectedTransactionPeriod
-      ? parseInt(settings.selectedTransactionPeriod.slice(2, 6), 10)
-      : new Date().getFullYear();
-  }
-
   loadMoreTransactions() {
     this.limitTransactions += TRANSACTIONS_PER_PAGE;
     this.transactionsData$ = this.loadTransactions();
-  }
-
-  toggleMonthYearPicker() {
-    this.monthYearPickerComponent.toggleDatePicker();
   }
 }

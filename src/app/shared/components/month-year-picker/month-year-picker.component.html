@@ -1,5 +1,5 @@
 @if (pickerOpen) {
-<div class="month-year-picker">
+<div class="month-year-picker" (mouseleave)="toggleDatePicker()">
   <!-- Year selection -->
   @if (!yearSelected) {
   <div class="content">
@@ -48,5 +48,20 @@
     <span (click)="handleSelectAllMonths()">Select all months</span>
   </div>
   }
+</div>
+} @else {
+<div class="selection" (click)="toggleDatePicker(); $event.stopPropagation()">
+  <!-- Checks whether the settingsData$ observable has emitted a value -->
+  @if (settingsData$ | async; as settings) {
+  <p>
+    {{ getSettingsMonthName(settings) }}
+    {{ getSettingsYear(settings) }}
+  </p>
+  }
+  <img
+    class="down-arrow-icon"
+    src="assets/img/arrow-down.svg"
+    alt="arrow-down"
+  />
 </div>
 }

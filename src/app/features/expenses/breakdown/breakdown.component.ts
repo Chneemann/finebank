@@ -80,12 +80,11 @@ export class BreakdownComponent implements OnInit, OnDestroy {
           return of([] as T);
         }
 
-        this.setMonthAndYear(settings);
         return dataFn.call(
           this.transactionsService,
           categories,
-          this.selectedYear,
-          this.selectedMonth,
+          this.getSettingsYear(settings),
+          this.getSettingsMonth(settings),
           limit
         );
       }),
@@ -96,15 +95,16 @@ export class BreakdownComponent implements OnInit, OnDestroy {
     );
   }
 
-  private setMonthAndYear(settings: any): void {
-    if (settings?.selectedTransactionPeriod) {
-      const monthString = settings.selectedTransactionPeriod.slice(0, 2);
-      this.selectedYear = parseInt(
-        settings.selectedTransactionPeriod.slice(2, 6),
-        10
-      );
-      this.selectedMonth = monthString === '00' ? 0 : parseInt(monthString, 10);
-    }
+  getSettingsMonth(settings: any): number {
+    return settings?.selectedPickerMonthYear
+      ? parseInt(settings.selectedPickerMonthYear.slice(0, 2), 10)
+      : 1;
+  }
+
+  getSettingsYear(settings: any): number {
+    return settings?.selectedPickerMonthYear
+      ? parseInt(settings.selectedPickerMonthYear.slice(2, 6), 10)
+      : new Date().getFullYear();
   }
 
   ngOnDestroy(): void {

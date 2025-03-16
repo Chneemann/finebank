@@ -1,8 +1,9 @@
 import { CommonModule } from '@angular/common';
 import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { SettingsService } from '../../../../core/services/settings.service';
-import { TransactionsService } from '../../../../core/services/transactions.service';
+import { SettingsService } from '../../../core/services/settings.service';
+import { TransactionsService } from '../../../core/services/transactions.service';
+import { Observable, Subject, takeUntil, tap } from 'rxjs';
 
 interface Months {
   name: string;
@@ -21,11 +22,12 @@ interface YearMonths {
   templateUrl: './month-year-picker.component.html',
   styleUrls: ['./month-year-picker.component.scss'],
 })
-export class MonthYearPickerComponent implements OnChanges {
+export class MonthYearPickerComponent {
   @Input() accountId: string = '';
-  @Input() selectedMonth: number = 1;
-  @Input() selectedYear: number = new Date().getFullYear();
   @Input() hideSelectAllMonths: boolean = false;
+
+  private destroy$ = new Subject<void>();
+  settingsData$!: Observable<any>;
 
   years: number[] = [];
   months: Months[] = [
@@ -45,21 +47,33 @@ export class MonthYearPickerComponent implements OnChanges {
 
   pickerOpen = false;
   yearSelected = false;
-  transferredYear = 0;
   confirmedDate: Date | null = null;
   filteredMonths: Months[] = [];
   yearsWithMonths: YearMonths[] = [];
+
+  selectedMonth = 1;
+  selectedYear = new Date().getFullYear();
+  transferredYear = 0;
 
   constructor(
     private settingsService: SettingsService,
     private transactionsService: TransactionsService
   ) {}
 
-  ngOnChanges(changes: SimpleChanges): void {
-    if (changes['selectedYear'] || changes['selectedMonth']) {
-      this.transferredYear = this.selectedYear;
-    }
-    this.getTransactionPeriods();
+  ngOnInit() {
+    this.initializeSettings();
+  }
+
+  initializeSettings() {
+    this.settingsData$ = this.settingsService.settingsData$.pipe(
+      takeUntil(this.destroy$),
+      tap((settings) => {
+        this.selectedMonth = this.getSettingsMonth(settings);
+        this.selectedYear = this.getSettingsYear(settings);
+        this.transferredYear = this.getSettingsYear(settings);
+        this.getTransactionPeriods();
+      })
+    );
   }
 
   getTransactionPeriods() {
@@ -128,7 +142,7 @@ export class MonthYearPickerComponent implements OnChanges {
         this.selectedYear
       }`;
       this.settingsService
-        .saveSettings('selectedTransactionPeriod', formattedDate)
+        .saveSettings('selectedPickerMonthYear', formattedDate)
         .subscribe({
           error: (err: string) =>
             console.error('Failed to update settings:', err),
@@ -140,7 +154,7 @@ export class MonthYearPickerComponent implements OnChanges {
   handleSelectAllMonths(): void {
     const formattedDate = `00${this.selectedYear}`;
     this.settingsService
-      .saveSettings('selectedTransactionPeriod', formattedDate)
+      .saveSettings('selectedPickerMonthYear', formattedDate)
       .subscribe({
         error: (err: string) =>
           console.error('Failed to update settings:', err),
@@ -151,5 +165,38 @@ export class MonthYearPickerComponent implements OnChanges {
   toggleDatePicker(): void {
     this.yearSelected = false;
     this.pickerOpen = !this.pickerOpen;
+  }
+
+  getSettingsMonth(settings: any): number {
+    return settings?.selectedPickerMonthYear
+      ? parseInt(settings.selectedPickerMonthYear.slice(0, 2), 10)
+      : 1;
+  }
+
+  getSettingsMonthName(settings: any): string {
+    const month = settings?.selectedPickerMonthYear
+      ? parseInt(settings.selectedPickerMonthYear.slice(0, 2), 10)
+      : 1;
+    const monthNames = [
+      'Jan',
+      'Feb',
+      'Mar',
+      'Apr',
+      'May',
+      'Jun',
+      'Jul',
+      'Aug',
+      'Sep',
+      'Oct',
+      'Nov',
+      'Dec',
+    ];
+    return monthNames[month - 1];
+  }
+
+  getSettingsYear(settings: any): number {
+    return settings?.selectedPickerMonthYear
+      ? parseInt(settings.selectedPickerMonthYear.slice(2, 6), 10)
+      : new Date().getFullYear();
   }
 }

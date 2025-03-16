@@ -1,33 +1,7 @@
 <section class="transactions">
   <div class="headline">
     {{ headline }}
-    <div
-      class="selection"
-      (click)="toggleMonthYearPicker(); $event.stopPropagation()"
-    >
-      <!-- Checks whether the settingsData$ observable has emitted a value -->
-      @if (settingsData$ | async; as settings) {
-      <p>
-        {{ getSettingsMonthName(settings) }}
-        {{ getSettingsYear(settings) }}
-      </p>
-      }
-      <img
-        class="down-arrow-icon"
-        src="assets/img/arrow-down.svg"
-        alt="arrow-down"
-      />
-    </div>
-
-    <!-- Checks whether the settingsData$ observable has emitted a value -->
-    @if (settingsData$ | async; as settings) {
-    <app-month-year-picker
-      [accountId]="this.accountId"
-      [selectedMonth]="getSettingsMonth(settings)"
-      [selectedYear]="getSettingsYear(settings)"
-      (mouseleave)="toggleMonthYearPicker()"
-    ></app-month-year-picker>
-    }
+    <app-month-year-picker [accountId]="this.accountId"></app-month-year-picker>
   </div>
 
   <nav>

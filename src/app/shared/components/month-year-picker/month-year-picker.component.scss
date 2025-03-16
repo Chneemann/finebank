@@ -1,4 +1,4 @@
-@use "./../../../../../assets/styles/colors.scss" as *;
+@use "./../../../../assets/styles/colors.scss" as *;
 
 .month-year-picker {
   width: 270px;
@@ -76,4 +76,25 @@ button {
   background-color: var(--color-primary) !important;
   color: var(--color-white) !important;
   box-shadow: 0px 0px 10px rgba(var(--color-primary), 0.5) !important;
+}
+
+// Select field
+
+.selection {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+
+  p {
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--color-black);
+    margin-right: 6px;
+  }
+
+  &:hover {
+    filter: brightness(0) saturate(100%) invert(66%) sepia(8%) saturate(2879%)
+      hue-rotate(125deg) brightness(77%) contrast(97%);
+  }
 }
