@@ -20,6 +20,7 @@ import {
 } from '@angular/fire/firestore';
 import { runInInjectionContext } from '@angular/core';
 import { AuthService } from './auth.service';
+import { Settings } from '../models/settings.interface';
 
 @Injectable({
   providedIn: 'root',
@@ -31,7 +32,7 @@ export class SettingsService {
 
   private readonly userId$: Observable<string | null>;
 
-  private settingsSubject = new BehaviorSubject<any>(null);
+  private settingsSubject = new BehaviorSubject<Settings>({} as Settings);
   settingsData$ = this.settingsSubject.asObservable();
 
   constructor() {
@@ -62,7 +63,7 @@ export class SettingsService {
     );
   }
 
-  getAllSettings(): Observable<any> {
+  getAllSettings(): Observable<Settings> {
     return this.withUserId((userId) =>
       runInInjectionContext(this.injector, () => {
         const accountsRef = collection(this.firestore, 'settings');
@@ -71,14 +72,14 @@ export class SettingsService {
         return from(getDocs(q)).pipe(
           switchMap((querySnapshot) => {
             if (!querySnapshot.empty) {
-              return of(querySnapshot.docs[0].data());
+              return of(querySnapshot.docs[0].data() as Settings);
             } else {
-              return of(null);
+              return of({} as Settings);
             }
           }),
           catchError((error) => {
             console.error('Failed to fetch settings:', error);
-            return of(null);
+            return of({} as Settings);
           })
         );
       })

@@ -20,6 +20,7 @@ import { MonthYearPickerComponent } from '../../../shared/components/month-year-
 import { SettingsService } from '../../../core/services/settings.service';
 import { FilterTransactionsPipe } from '../../../core/pipes/filter-transactions.pipe';
 import { TRANSACTIONS_PER_PAGE } from '../../../core/config/settings';
+import { Settings } from '../../../core/models/settings.interface';
 
 @Component({
   selector: 'app-transactions-list',
@@ -38,7 +39,7 @@ export class TransactionsListComponent {
 
   private destroy$ = new Subject<void>();
   accountsData$!: Observable<AccountModel[]>;
-  settingsData$!: Observable<any>;
+  settingsData$!: Observable<Settings>;
   transactionsData$!: Observable<TransactionModel[]>;
 
   isLoading: boolean = false;
@@ -72,13 +73,13 @@ export class TransactionsListComponent {
     );
   }
 
-  getSettingsMonth(settings: any): number {
+  getSettingsMonth(settings: Settings): number {
     return settings?.selectedPickerMonthYear
       ? parseInt(settings.selectedPickerMonthYear.slice(0, 2), 10)
       : 1;
   }
 
-  getSettingsYear(settings: any): number {
+  getSettingsYear(settings: Settings): number {
     return settings?.selectedPickerMonthYear
       ? parseInt(settings.selectedPickerMonthYear.slice(2, 6), 10)
       : new Date().getFullYear();
@@ -115,7 +116,7 @@ export class TransactionsListComponent {
     }
   }
 
-  private setMonthAndYear(settings: any): void {
+  private setMonthAndYear(settings: Settings): void {
     if (settings && settings.selectedPickerMonthYear) {
       const monthString = settings.selectedPickerMonthYear.slice(0, 2);
       this.selectedYear = parseInt(
