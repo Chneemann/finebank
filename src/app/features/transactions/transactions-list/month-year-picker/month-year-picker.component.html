@@ -1,19 +1,30 @@
-<div class="month-year-picker" *ngIf="pickerOpen">
-  <!-- Year -->
-  <div *ngIf="!yearSelected" class="content">
+@if (pickerOpen) {
+<div class="month-year-picker">
+  <!-- Year selection -->
+  @if (!yearSelected) {
+  <div class="content">
     <div class="months-years">
       <p>Select Year:</p>
-      <button *ngFor="let year of years" (click)="handleYearSelection(year)">
+
+      <!-- Iterates over the list of years and creates buttons for selection -->
+      @for (year of years; track $index) {
+      <button (click)="handleYearSelection(year)">
         {{ year }}
       </button>
+      }
     </div>
   </div>
-  <!-- Month -->
-  <div *ngIf="yearSelected" class="content">
+  }
+
+  <!-- Month selection, is only displayed when a year has been selected -->
+  @if (yearSelected) {
+  <div class="content">
     <div class="months-years">
       <p>Select Month:</p>
+
+      <!-- Iterates over the list of months and creates buttons for selection -->
+      @for (month of filteredMonths; track month.value) {
       <button
-        *ngFor="let month of filteredMonths"
         (click)="handleMonthSelection(month.value)"
         [disabled]="
           month.disabled ||
@@ -26,9 +37,16 @@
       >
         {{ month.name }}
       </button>
+      }
     </div>
   </div>
-  <div *ngIf="yearSelected" class="content">
-    <span (click)="handleChooseAllMonths()">Choose all months</span>
+  }
+
+  <!-- Option to select all months if this is not deactivated -->
+  @if (yearSelected && !hideSelectAllMonths) {
+  <div class="content">
+    <span (click)="handleSelectAllMonths()">Select all months</span>
   </div>
+  }
 </div>
+}
