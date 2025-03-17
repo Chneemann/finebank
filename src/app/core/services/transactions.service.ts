@@ -170,29 +170,28 @@ export class TransactionsService {
   getTransactionPeriods(accountId?: string): Observable<string[]> {
     return this.withUserId((userId) => {
       return runInInjectionContext(this.injector, () => {
+        let transactionsQuery;
+
         if (accountId) {
-          const docRef = doc(this.firestore, `accounts/${accountId}`);
-          return docData(docRef).pipe(
-            map((account: any) => {
-              const periods: string[] = account?.transactionPeriods || [];
-              return [...new Set(periods)];
-            })
+          transactionsQuery = query(
+            collection(this.firestore, 'transactions'),
+            where('accountId', '==', accountId)
           );
         } else {
-          const collectionRef = collection(this.firestore, 'accounts');
-          const q = query(collectionRef, where('userId', '==', userId));
-          return collectionData(q, { idField: 'id' }).pipe(
-            map((accounts: any[]) => {
-              const allPeriods: string[] = [];
-              accounts.forEach((account) => {
-                if (Array.isArray(account?.transactionPeriods)) {
-                  allPeriods.push(...account.transactionPeriods);
-                }
-              });
-              return [...new Set(allPeriods)];
-            })
+          transactionsQuery = query(
+            collection(this.firestore, 'transactions'),
+            where('userId', '==', userId)
           );
         }
+
+        return collectionData(transactionsQuery).pipe(
+          map((transactions: any[]) => {
+            const periods = transactions.map(
+              (t) => `${t.month.toString().padStart(2, '0')}${t.year}`
+            );
+            return [...new Set(periods)].sort();
+          })
+        );
       });
     });
   }
