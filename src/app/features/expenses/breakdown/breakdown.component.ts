@@ -29,9 +29,6 @@ export class BreakdownComponent implements OnInit, OnDestroy {
     { category: string; totalAmount: number }[]
   >;
 
-  selectedMonth = 0;
-  selectedYear = new Date().getFullYear();
-
   constructor(
     private transactionsService: TransactionsService,
     private settingsService: SettingsService
@@ -76,7 +73,7 @@ export class BreakdownComponent implements OnInit, OnDestroy {
     return this.settingsData$.pipe(
       takeUntil(this.destroy$),
       switchMap((settings) => {
-        if (!settings?.selectedStatisticYear) {
+        if (!settings?.selectedPickerMonthYear) {
           return of([] as T);
         }
 
@@ -105,6 +102,13 @@ export class BreakdownComponent implements OnInit, OnDestroy {
     return settings?.selectedPickerMonthYear
       ? parseInt(settings.selectedPickerMonthYear.slice(2, 6), 10)
       : new Date().getFullYear();
+  }
+
+  isValidMonthYear(settings: any): boolean {
+    if (!settings?.selectedPickerMonthYear) {
+      return false;
+    }
+    return !/^00/.test(settings.selectedPickerMonthYear.toString());
   }
 
   ngOnDestroy(): void {

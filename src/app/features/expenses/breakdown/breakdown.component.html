@@ -1,3 +1,6 @@
+@if (settingsData$ | async; as settings) {
+<!-- Checks whether selectedPickerMonthYear is valid -->
+@if (isValidMonthYear(settings)) {
 <div class="breakdowns">
   <!-- Iterates over the transactionsData -->
   @for (categoryData of transactionsData$ | async; track categoryData.category)
@@ -49,3 +52,4 @@
   </div>
   }
 </div>
+}}

@@ -111,6 +111,15 @@ export class MonthYearPickerComponent {
     this.years = this.yearsWithMonths
       .map(({ year }) => year)
       .sort((a, b) => a - b);
+
+    if (this.selectedMonth === 0 && this.hideSelectAllMonths) {
+      const lastEntry = this.yearsWithMonths[this.yearsWithMonths.length - 1];
+      this.selectedYear = lastEntry.year;
+      this.transferredYear = lastEntry.year;
+      this.selectedMonth = lastEntry.months[lastEntry.months.length - 1];
+      this.handleMonthSelection(this.selectedMonth);
+      this.toggleDatePicker();
+    }
   }
 
   private updateFilteredMonths(): void {
