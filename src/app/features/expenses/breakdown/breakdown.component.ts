@@ -11,6 +11,8 @@ import {
 } from 'rxjs';
 import { TransactionModel } from '../../../core/models/transactions.model';
 import { SettingsService } from '../../../core/services/settings.service';
+import { GoalModel } from '../../../core/models/goal.model';
+import { GoalsService } from '../../../core/services/goals.service';
 
 @Component({
   selector: 'app-breakdown',
@@ -22,6 +24,7 @@ export class BreakdownComponent implements OnInit, OnDestroy {
   private destroy$ = new Subject<void>();
 
   settingsData$!: Observable<any>;
+  allGoals$!: Observable<GoalModel[]>;
   transactionsData$!: Observable<
     { category: string; transactions: TransactionModel[] }[]
   >;
@@ -31,11 +34,13 @@ export class BreakdownComponent implements OnInit, OnDestroy {
 
   constructor(
     private transactionsService: TransactionsService,
-    private settingsService: SettingsService
+    private settingsService: SettingsService,
+    private goalsService: GoalsService
   ) {}
 
   ngOnInit() {
     this.settingsData$ = this.settingsService.settingsData$;
+    this.allGoals$ = this.goalsService.allGoals$;
     this.loadTransactions();
   }
 
