@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { SettingsService } from '../../../core/services/settings.service';
 import { TransactionsService } from '../../../core/services/transactions.service';
@@ -24,6 +24,7 @@ interface YearMonths {
 })
 export class MonthYearPickerComponent {
   @Input() accountId: string = '';
+  @Input() transactionTypeFilter: string | undefined = undefined;
   @Input() hideSelectAllMonths: boolean = false;
 
   private destroy$ = new Subject<void>();
@@ -77,8 +78,13 @@ export class MonthYearPickerComponent {
   }
 
   getTransactionPeriods() {
+    const validTypes: ('expense' | 'revenue')[] = ['expense', 'revenue'];
+    const typeFilter = validTypes.includes(this.transactionTypeFilter as any)
+      ? (this.transactionTypeFilter as 'expense' | 'revenue')
+      : undefined;
+
     this.transactionsService
-      .getTransactionPeriods(this.accountId)
+      .getTransactionPeriods(this.accountId, typeFilter)
       .subscribe((periods: string[]) => {
         const yearMonthMap = this.createYearMonthMap(periods);
         this.mapYearsToMonths(yearMonthMap);

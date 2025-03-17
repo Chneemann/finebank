@@ -167,24 +167,24 @@ export class TransactionsService {
     });
   }
 
-  getTransactionPeriods(accountId?: string): Observable<string[]> {
+  getTransactionPeriods(
+    accountId?: string,
+    type?: 'expense' | 'revenue'
+  ): Observable<string[]> {
     return this.withUserId((userId) => {
       return runInInjectionContext(this.injector, () => {
-        let transactionsQuery;
+        let transactionsQuery = collection(this.firestore, 'transactions');
+        let conditions = [where('userId', '==', userId)];
 
         if (accountId) {
-          transactionsQuery = query(
-            collection(this.firestore, 'transactions'),
-            where('accountId', '==', accountId)
-          );
-        } else {
-          transactionsQuery = query(
-            collection(this.firestore, 'transactions'),
-            where('userId', '==', userId)
-          );
+          conditions.push(where('accountId', '==', accountId));
         }
 
-        return collectionData(transactionsQuery).pipe(
+        if (type) {
+          conditions.push(where('type', '==', type));
+        }
+
+        return collectionData(query(transactionsQuery, ...conditions)).pipe(
           map((transactions: any[]) => {
             const periods = transactions.map(
               (t) => `${t.month.toString().padStart(2, '0')}${t.year}`
