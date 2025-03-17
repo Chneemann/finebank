@@ -1,4 +1,5 @@
 @if (settingsData$ | async; as settings) {
+
 <!-- Checks whether selectedPickerMonthYear is valid -->
 @if (isValidMonthYear(settings)) {
 <div class="breakdowns">
@@ -16,30 +17,43 @@
             alt=""
           />
         </div>
-        <!-- Finds matching category total -->
+
+        <!-- Searches for the matching category total -->
         @for (totalData of totalTransactionsData$ | async; track
-        totalData.category) { @if (categoryData.category === totalData.category)
-        {
+        totalData.category) {
+
+        <!-- Checks whether the categories match -->
+        @if (categoryData.category === totalData.category) {
         <div class="container">
           <div class="category">{{ categoryData.category }}</div>
           <div class="amount">
             ${{ totalData.totalAmount / 100 | number : "1.2-2" }}
           </div>
         </div>
-        @if(allGoals$ | async; as allGoals) { @for (goal of allGoals; track
-        goal.index) { @if(goal.goal == totalData.category) {
+
+        <!-- Checks whether targets are available -->
+        @if(allGoals$ | async; as allGoals) {
+
+        <!-- Iterates over all targets -->
+        @for (goal of allGoals; track goal.index) {
+
+        <!-- Checks whether the destination belongs to the current category -->
+        @if(goal.goal == totalData.category) {
         <div class="comparison" *ngIf="totalData.totalAmount / goal.amount">
           {{ (totalData.totalAmount / goal.amount) * 100 | number : "1.0-0" }}%
+
+          <!-- Checks whether the amount is below the target -->
+          @if (totalData.totalAmount / goal.amount < 1) {
           <img
-            *ngIf="totalData.totalAmount / goal.amount < 1"
             src="assets/img/transactions/revenue.svg"
             alt="comparison icon"
           />
+          } @else {
           <img
-            *ngIf="totalData.totalAmount / goal.amount >= 1"
             src="assets/img/transactions/expense.svg"
             alt="comparison icon"
           />
+          }
         </div>
         } } } } }
       </div>
