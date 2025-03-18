@@ -10,6 +10,7 @@ import { LineChartComponent } from './line-chart/line-chart.component';
 import { FormsModule } from '@angular/forms';
 import { GoalModel } from '../../core/models/goal.model';
 import { SavingsTargetComponent } from './savings-target/savings-target.component';
+import { HeadlineComponent } from '../../shared/components/layouts/headline/headline.component';
 
 @Component({
   selector: 'app-goals',
@@ -21,6 +22,7 @@ import { SavingsTargetComponent } from './savings-target/savings-target.componen
     ManometerComponent,
     LineChartComponent,
     SavingsTargetComponent,
+    HeadlineComponent,
   ],
   templateUrl: './goals.component.html',
   styleUrl: './goals.component.scss',

@@ -4,10 +4,16 @@ import { SettingsService } from '../../core/services/settings.service';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { LineChartStatisticComponent } from './line-chart-statistic/line-chart-statistic.component';
+import { HeadlineComponent } from '../../shared/components/layouts/headline/headline.component';
 
 @Component({
   selector: 'app-statistics',
-  imports: [CommonModule, FormsModule, LineChartStatisticComponent],
+  imports: [
+    CommonModule,
+    FormsModule,
+    LineChartStatisticComponent,
+    HeadlineComponent,
+  ],
   templateUrl: './statistics.component.html',
   styleUrl: './statistics.component.scss',
 })

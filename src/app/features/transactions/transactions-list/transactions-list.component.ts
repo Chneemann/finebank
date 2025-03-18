@@ -21,6 +21,7 @@ import { SettingsService } from '../../../core/services/settings.service';
 import { FilterTransactionsPipe } from '../../../core/pipes/filter-transactions.pipe';
 import { TRANSACTIONS_PER_PAGE } from '../../../core/config/settings';
 import { Settings } from '../../../core/models/settings.interface';
+import { HeadlineComponent } from '../../../shared/components/layouts/headline/headline.component';
 
 @Component({
   selector: 'app-transactions-list',
@@ -29,6 +30,7 @@ import { Settings } from '../../../core/models/settings.interface';
     CommonModule,
     MonthYearPickerComponent,
     FilterTransactionsPipe,
+    HeadlineComponent,
   ],
   templateUrl: './transactions-list.component.html',
   styleUrl: './transactions-list.component.scss',

@@ -1,6 +1,7 @@
 <section class="transactions">
-  <div class="headline">
-    {{ headline }}
+  <div class="header">
+    <app-headline [title]="headline"></app-headline>
+
     <app-month-year-picker [accountId]="this.accountId"></app-month-year-picker>
   </div>
 

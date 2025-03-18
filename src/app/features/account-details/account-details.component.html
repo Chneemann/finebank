@@ -1,6 +1,6 @@
 @if (accountExists) {
 <div class="account-details">
-  <div class="headline">Account Details</div>
+  <app-headline [title]="'Account Details'"></app-headline>
   <div class="content">
     <app-details [currentAccountData$]="currentAccountData$"></app-details>
   </div>

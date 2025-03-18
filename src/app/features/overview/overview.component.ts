@@ -5,6 +5,7 @@ import { GoalsOverviewCardComponent } from '../goals/goals-overview-card/goals-o
 import { LineChartStatisticComponent } from '../statistics/line-chart-statistic/line-chart-statistic.component';
 import { BillsOverviewCardComponent } from '../bills/bills-overview-card/bills-overview-card.component';
 import { RouterLink } from '@angular/router';
+import { HeadlineComponent } from '../../shared/components/layouts/headline/headline.component';
 
 @Component({
   selector: 'app-overview',
@@ -15,6 +16,7 @@ import { RouterLink } from '@angular/router';
     GoalsOverviewCardComponent,
     LineChartStatisticComponent,
     BillsOverviewCardComponent,
+    HeadlineComponent,
   ],
   templateUrl: './overview.component.html',
   styleUrl: './overview.component.scss',

@@ -1,20 +1,20 @@
 <section class="overview">
   <div class="overview-top">
     <div class="balances">
-      <div class="headline">Total Balances</div>
+      <app-headline [title]="'Total Balances'"></app-headline>
       <div class="content">
         <app-balance-overview-card />
       </div>
     </div>
     <div class="goals">
-      <div class="headline">Goals</div>
+      <app-headline [title]="'Goals'"></app-headline>
       <div class="content">
         <app-goals-overview-card />
       </div>
     </div>
     <div class="bills">
       <div class="header">
-        <div class="headline">Upcoming Bill</div>
+        <app-headline [title]="'Upcoming Bill'"></app-headline>
         <div class="view-all-container" routerLink="/bills">
           <p>View All</p>
           <img
@@ -32,7 +32,7 @@
   <div class="overview-bottom">
     <div class="transactions">
       <div class="header">
-        <div class="headline">Recent Transactions</div>
+        <app-headline [title]="'Recent Transactions'"></app-headline>
         <div class="view-all-container" routerLink="/transactions">
           <p>View All</p>
           <img
@@ -48,13 +48,13 @@
     </div>
     <div class="right-column">
       <div class="statistic">
-        <div class="headline">Statistic</div>
+        <app-headline [title]="'Statistic'"></app-headline>
         <div class="content">
           <app-line-chart-statistic [view]="[680, 208]" />
         </div>
       </div>
       <div class="expenses">
-        <div class="headline">Expenses Breakdown</div>
+        <app-headline [title]="'Expenses Breakdown'"></app-headline>
         <div class="content"></div>
       </div>
     </div>

@@ -6,10 +6,16 @@ import { CommonModule } from '@angular/common';
 import { catchError, filter, map, Observable, of, switchMap, tap } from 'rxjs';
 import { AccountModel } from '../../core/models/account.model';
 import { TransactionsListComponent } from '../transactions/transactions-list/transactions-list.component';
+import { HeadlineComponent } from '../../shared/components/layouts/headline/headline.component';
 
 @Component({
   selector: 'app-account-details',
-  imports: [CommonModule, DetailsComponent, TransactionsListComponent],
+  imports: [
+    CommonModule,
+    DetailsComponent,
+    TransactionsListComponent,
+    HeadlineComponent,
+  ],
   templateUrl: './account-details.component.html',
   styleUrl: './account-details.component.scss',
 })

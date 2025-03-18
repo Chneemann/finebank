@@ -1,7 +1,7 @@
 <section class="expenses">
   <div class="expenses-breakdown">
     <div class="header">
-      <div class="headline">Expenses Breakdown</div>
+      <app-headline [title]="'Expenses Breakdown'"></app-headline>
       <app-month-year-picker
         [hideSelectAllMonths]="true"
         [transactionTypeFilter]="'expense'"

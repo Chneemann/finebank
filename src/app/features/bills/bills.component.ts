@@ -6,10 +6,11 @@ import { CommonModule } from '@angular/common';
 import { AccountService } from '../../core/services/account.service';
 import { AccountModel } from '../../core/models/account.model';
 import { FormsModule } from '@angular/forms';
+import { HeadlineComponent } from '../../shared/components/layouts/headline/headline.component';
 
 @Component({
   selector: 'app-bills',
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, HeadlineComponent],
   templateUrl: './bills.component.html',
   styleUrl: './bills.component.scss',
 })

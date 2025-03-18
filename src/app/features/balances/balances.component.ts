@@ -7,11 +7,12 @@ import { AccountModel } from '../../core/models/account.model';
 import { TransactionModel } from '../../core/models/transactions.model';
 import { BalancesService } from '../../core/services/balances.service';
 import { AccountService } from '../../core/services/account.service';
+import { HeadlineComponent } from '../../shared/components/layouts/headline/headline.component';
 
 @Component({
   selector: 'app-balances',
   standalone: true,
-  imports: [CommonModule, ButtonComponent, RouterLink],
+  imports: [CommonModule, ButtonComponent, RouterLink, HeadlineComponent],
   templateUrl: './balances.component.html',
   styleUrl: './balances.component.scss',
 })
