@@ -9,6 +9,7 @@ import { AuthGuard } from './core/guards/auth.guard';
 import { ExpensesComponent } from './features/expenses/expenses.component';
 import { BillsComponent } from './features/bills/bills.component';
 import { StatisticsComponent } from './features/statistics/statistics.component';
+import { SettingsComponent } from './features/settings/settings.component';
 
 export const routes: Routes = [
   // { path: 'login', component: LoginComponent },
@@ -25,7 +26,7 @@ export const routes: Routes = [
       { path: 'bills', component: BillsComponent },
       { path: 'expenses', component: ExpensesComponent },
       { path: 'goals', component: GoalsComponent },
-      { path: 'settings', component: OverviewComponent },
+      { path: 'settings', component: SettingsComponent },
       { path: '', redirectTo: 'overview', pathMatch: 'full' },
     ],
   },
